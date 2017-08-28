@@ -15,7 +15,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core
 ```php
 'routes' => [
     /* might key on path for speed */
-    '/api/some-resource/' => [
+    '/' . Api::ROOT . '/some-resource/' . RepositoryMiddleware::ROUTE_FIND => [
         /* Use standard route names for client simplicity */
         'name' => Api::ROOT . '.some-resource.' . RepositoryMiddleware::NAME_FIND,
         

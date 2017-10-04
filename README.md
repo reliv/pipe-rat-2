@@ -1,7 +1,7 @@
 Pipe Rat
 ========
 
-Create REST APIs with just a few lines of config. 
+Create REST APIs with just a few lines of Expressive config. 
 This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core.
 
 ## Concept ##

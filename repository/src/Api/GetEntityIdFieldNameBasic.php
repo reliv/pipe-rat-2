@@ -2,8 +2,6 @@
 
 namespace Reliv\PipeRat2\Repository\Api;
 
-use Doctrine\ORM\EntityManager;
-
 /**
  * @author James Jervis - https://github.com/jerv13
  */
@@ -15,14 +13,11 @@ class GetEntityIdFieldNameBasic implements GetEntityIdFieldName
     protected $getEntityClass;
 
     /**
-     * @param EntityManager  $entityManager
      * @param GetEntityClass $getEntityClass
      */
     public function __construct(
-        EntityManager $entityManager,
         GetEntityClass $getEntityClass
     ) {
-        $this->entityManager = $entityManager;
         $this->getEntityClass = $getEntityClass;
     }
 

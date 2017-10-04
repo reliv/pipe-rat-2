@@ -3,8 +3,6 @@
 namespace Reliv\PipeRat2\Http\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\Options\OptionsBasic;
 use Zend\Expressive\Router\RouteResult;
 
 /**
@@ -16,13 +14,13 @@ class GetOptionsExpressiveRoute implements GetOptions
      * @param ServerRequestInterface $request
      * @param string                 $serviceName
      *
-     * @return Options
+     * @return array
      * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,
         string $serviceName
-    ): Options
+    ): array
     {
         /** @var RouteResult $routeResult */
         $routeResult = $request->getAttribute(RouteResult::class);
@@ -38,7 +36,7 @@ class GetOptionsExpressiveRoute implements GetOptions
         $optionsAll = $route->getOptions();
 
         if (!array_key_exists($serviceName, $optionsAll)) {
-            return new OptionsBasic();
+            return [];
         }
 
         if (!is_array($optionsAll[$serviceName])) {
@@ -48,6 +46,6 @@ class GetOptionsExpressiveRoute implements GetOptions
             );
         }
 
-        return new OptionsBasic($optionsAll[$serviceName]);
+        return $optionsAll[$serviceName];
     }
 }

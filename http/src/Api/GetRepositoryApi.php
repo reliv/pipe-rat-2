@@ -3,22 +3,23 @@
 namespace Reliv\PipeRat2\Http\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-interface GetOptions
+interface GetRepositoryApi
 {
     /**
      * @param ServerRequestInterface $request
-     * @param string                 $serviceName
+     * @param string                 $middlewareServiceName
+     * @param string                 $repositoryInterfaceClass
      *
-     * @return array
+     * @return object
      * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,
-        string $serviceName
-    ): array ;
+        string $middlewareServiceName,
+        string $repositoryInterfaceClass
+    );
 }

@@ -3,7 +3,6 @@
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
 use Reliv\PipeRat\Exception\ExtractorException;
-use Reliv\PipeRat\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -159,9 +158,9 @@ class ExtractPropertyGetter extends ExtractAbstract implements Extract
     /**
      * getDataFromObject
      *
-     * @param string $property
+     * @param string    $property
      * @param \stdClass $dataModel
-     * @param null $default
+     * @param null      $default
      *
      * @return mixed|null
      */

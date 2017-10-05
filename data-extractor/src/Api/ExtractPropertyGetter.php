@@ -7,7 +7,7 @@ use Reliv\PipeRat\Exception\ExtractorException;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ExtractPropertyGetter extends ExtractAbstract implements Extract
+class ExtractPropertyGetter implements Extract
 {
     /**
      * const
@@ -29,14 +29,22 @@ class ExtractPropertyGetter extends ExtractAbstract implements Extract
      */
     public function __invoke($dataModel, array $options)
     {
-        $propertyList = $this->getPropertyList($options, null);
+        $propertyList = OptionsExtract::get(
+            $options,
+            OptionsExtract::PROPERTY_LIST,
+            null
+        );
 
         // If no properties are set, we get them all if we can
         if (!is_array($propertyList)) {
             $propertyList = $this->getPropertyListFromProperties($dataModel);
         }
 
-        $depthLimit = $this->getPropertyDepthLimit($options, 1);
+        $depthLimit = OptionsExtract::get(
+            $options,
+            OptionsExtract::PROPERTY_DEPTH_LIMIT,
+            1
+        );
 
         $properties = $this->getProperties($dataModel, $propertyList, 1, $depthLimit);
 

@@ -17,8 +17,8 @@ abstract class ExtractAbstract
      */
     public function getPropertyList(array $options, $default = [])
     {
-        if (array_key_exists(Options::PROPERTY_LIST, $options)) {
-            return $options[Options::PROPERTY_LIST];
+        if (array_key_exists(OptionsExtract::PROPERTY_LIST, $options)) {
+            return $options[OptionsExtract::PROPERTY_LIST];
         }
 
         return $default;
@@ -32,8 +32,8 @@ abstract class ExtractAbstract
      */
     public function getPropertyDepthLimit(array $options, $default = 1)
     {
-        if (array_key_exists(Options::PROPERTY_DEPTH_LIMIT, $options)) {
-            return (int)$options[Options::PROPERTY_DEPTH_LIMIT];
+        if (array_key_exists(OptionsExtract::PROPERTY_DEPTH_LIMIT, $options)) {
+            return (int)$options[OptionsExtract::PROPERTY_DEPTH_LIMIT];
         }
 
         return (int) $default;

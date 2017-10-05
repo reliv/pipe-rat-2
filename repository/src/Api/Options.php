@@ -8,6 +8,6 @@ namespace Reliv\PipeRat2\Repository\Api;
 class Options
 {
     const ENTITY_CLASS_NAME = 'entityName';
-    const HYDRATOR_SERVICE_NAME = 'entityName';
+    const HYDRATOR_SERVICE_NAME = 'hydrator';
     const ENTITY_ID_FIELD_NAME = 'entityIdFieldName';
 }

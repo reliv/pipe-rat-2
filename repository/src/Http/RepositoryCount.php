@@ -1,57 +1,43 @@
 <?php
 
-namespace Reliv\PipeRat2\DataExtractor\Api;
+namespace Reliv\PipeRat2\Repository\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
+use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\Options\Options;
+use Reliv\PipeRat2\Repository\Api\Count;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbstract
+class RepositoryCount extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
+    const OPTION_CRITERIA = 'criteria';
+
     /**
-     * Provide a unique config key
-     *
      * @return string
      */
     public static function configKey(): string
     {
-        return 'data-extractor';
+        return 'repository-count';
     }
-
-    /**
-     * @var GetDataModel
-     */
-    protected $getDataModel;
-
-    /**
-     * @var ResponseWithDataBody
-     */
-    protected $responseWithDataBody;
 
     /**
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
-     * @param GetDataModel                       $getDataModel
-     * @param ResponseWithDataBody               $responseWithDataBody
      */
     public function __construct(
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
-        GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
-        GetDataModel $getDataModel,
-        ResponseWithDataBody $responseWithDataBody
+        GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
     ) {
-        $this->getDataModel = $getDataModel;
-        $this->responseWithDataBody = $responseWithDataBody;
         parent::__construct(
             $getOptions,
             $getServiceFromConfigOptions,
@@ -64,43 +50,47 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return mixed
+     * @return ResponseInterface
+     * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         callable $next = null
     ) {
-        $response = $next($request);
-
         $options = $this->getOptions->__invoke(
             $request,
             self::configKey()
         );
 
-        /** @var Extract $extract */
-        $extract = $this->getServiceFromConfigOptions->__invoke(
+        /** @var Count $countApi */
+        $countApi = $this->getServiceFromConfigOptions->__invoke(
             $options,
-            Extract::class
+            Count::class
         );
 
-        $extractOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
+        $countOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
             $options
         );
 
-        $dataModel = $this->getDataModel->__invoke(
-            $response
+        $where = $request->getAttribute(
+            RequestAttributeWhere::ATTRIBUTE,
+            []
         );
 
-        if (!is_array($dataModel) && !is_object($dataModel)) {
-            return $response;
-        }
-
-        $dataArray = $extract->__invoke(
-            $request,
-            $extractOptions
+        $criteria = Options::get(
+            $countOptions,
+            self::OPTION_CRITERIA,
+            $where
         );
 
-        return $this->responseWithDataBody->__invoke($response, $dataArray);
+        $result = $countApi->__invoke(
+            $criteria,
+            $countOptions
+        );
+
+        return new DataResponseBasic(
+            $result
+        );
     }
 }

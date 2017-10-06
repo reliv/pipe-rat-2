@@ -4,7 +4,7 @@ namespace Reliv\PipeRat2\ResponseHeaders\Http;
 use DateTimeImmutable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Acl\Http\MiddlewareWithConfigOptionsAbstract;
+use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 use Reliv\PipeRat2\Options\Options;
 
 /**

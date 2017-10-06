@@ -3,7 +3,7 @@
 namespace Reliv\PipeRat2\RequestFormat\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Acl\Http\MiddlewareWithConfigOptionsAbstract;
+use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -11,14 +11,16 @@ use Reliv\PipeRat2\Options\Options;
  */
 abstract class RequestFormatAbstract extends MiddlewareWithConfigOptionsAbstract
 {
+    const OPTION_VALID_CONTENT_TYPES = 'content-types';
     /**
      * @var array
      */
-    protected $methodsWithBody = [
-        'POST',
-        'PUT',
-        'PATCH'
-    ];
+    protected $methodsWithBody
+        = [
+            'POST',
+            'PUT',
+            'PATCH'
+        ];
     /**
      * @var array
      */
@@ -54,7 +56,7 @@ abstract class RequestFormatAbstract extends MiddlewareWithConfigOptionsAbstract
 
         $validContentTypes = Options::get(
             $options,
-            'contentTypes',
+            self::OPTION_VALID_CONTENT_TYPES,
             $this->defaultContentTypes
         );
 

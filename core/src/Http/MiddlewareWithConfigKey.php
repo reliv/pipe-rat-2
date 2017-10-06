@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat2\Acl\Http;
+namespace Reliv\PipeRat2\Core\Http;
 
 /**
  * @author James Jervis - https://github.com/jerv13

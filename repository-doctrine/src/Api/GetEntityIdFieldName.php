@@ -3,7 +3,6 @@
 namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
 use Doctrine\ORM\EntityManager;
-use Reliv\PipeRat\Exception\DoctrineEntityException;
 use Reliv\PipeRat2\Repository\Api\GetEntityClass;
 use Reliv\PipeRat2\Repository\Api\Options;
 
@@ -38,7 +37,7 @@ class GetEntityIdFieldName implements \Reliv\PipeRat2\Repository\Api\GetEntityId
      * @param array $options
      *
      * @return string
-     * @throws DoctrineEntityException
+     * @throws \Exception
      */
     public function __invoke(
         array $options
@@ -53,7 +52,7 @@ class GetEntityIdFieldName implements \Reliv\PipeRat2\Repository\Api\GetEntityId
         $idFieldName = $meta->getSingleIdentifierFieldName();
 
         if (empty($idFieldName)) {
-            throw new DoctrineEntityException(
+            throw new \Exception(
                 'Could not get SingleIdentifierFieldName for entity ' . $entityClass
             );
         }

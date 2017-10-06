@@ -3,12 +3,11 @@
 namespace Reliv\PipeRat2\Core;
 
 use Psr\Http\Message\ResponseInterface;
-use Reliv\PipeRat2\Http\Response;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class BasicDataResponse extends Response implements DataResponse
+class DataResponseBasic extends Response implements DataResponse
 {
     /**
      * @var  null
@@ -16,11 +15,26 @@ class BasicDataResponse extends Response implements DataResponse
     protected $dataBody = null;
 
     /**
+     * @param mixed $dataBody
+     * @param int   $status
+     * @param array $headers
+     */
+    public function __construct(
+        $dataBody,
+        int $status = 200,
+        array $headers = []
+    ) {
+        $this->dataBody = $dataBody;
+
+        parent::__construct('php://memory', $status, $headers);
+    }
+
+    /**
      * withDataBody
      *
      * @param mixed $dataBody
      *
-     * @return \Psr\Http\Message\MessageInterface|ResponseInterface
+     * @return ResponseInterface
      */
     public function withDataBody($dataBody)
     {

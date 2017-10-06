@@ -7,6 +7,10 @@ use Reliv\PipeRat2\Acl\Http\AclMiddleware;
 use Reliv\PipeRat2\Core\Api\OptionsService;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
+use Reliv\PipeRat2\DataValidate\Api\Validate;
+use Reliv\PipeRat2\DataValidate\Http\ValidateMiddleware;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
+use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
 
@@ -38,10 +42,10 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 ResponseFormatJson::configKey() => ResponseFormatJson::class,
                 ResponseDataExtractor::configKey() => ResponseDataExtractor::class,
 
-                'data-body-parser' => '{service-name}',
+                RequestFormatJson::configKey() => RequestFormatJson::class,
                 AclMiddleware::configKey() => AclMiddleware::class,
-                'request-attribute-where' => '{service-name}',
-                'data-validate' => '{service-name}',
+                RequestAttributeWhere::configKey() => RequestAttributeWhere::class,
+                ValidateMiddleware::configKey() => ValidateMiddleware::class,
                 'controller' => '{service-name}',
             ],
 
@@ -62,17 +66,29 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                'data-body-parser' => '{service-name}',
+                RequestFormatJson::configKey() => [
+                    RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
+                ],
+
                 AclMiddleware::configKey() => [
                     OptionsService::SERVICE_NAME => IsAllowedRcmUser::class,
                     OptionsService::SERVICE_OPTIONS => [
                         IsAllowedRcmUser::OPTION_RESOURCE_ID => 'admin',
                         IsAllowedRcmUser::OPTION_PRIVILEGE => null,
                     ],
-
+                    AclMiddleware::OPTION_NOT_ALLOWED_STATUS_CODE => 401,
+                    AclMiddleware::OPTION_NOT_ALLOWED_STATUS_MESSAGE => 'No way man!',
                 ],
-                'request-attribute-where' => '{service-name}',
-                'data-validate' => '{service-name}',
+                RequestAttributeWhere::configKey() => [
+                    RequestAttributeWhere::OPTIONS_ALLOW_DEEP_WHERES => false,
+                ],
+                ValidateMiddleware::configKey() => [
+                    OptionsService::SERVICE_NAME => Validate::class,
+                    OptionsService::SERVICE_OPTIONS => [
+                        Validate::OPTION_PRIMARY_MESSAGE => 'Well, that is not good!'
+                    ],
+                    ValidateMiddleware::OPTION_FAIL_STATUS_CODE => 400,
+                ],
                 'controller' => [
                     'entity' => "[--{doctrine-entity}--]",
                 ],

@@ -3,7 +3,7 @@
 namespace Reliv\PipeRat2\Core\Api;
 
 use Psr\Http\Message\ResponseInterface;
-use Reliv\PipeRat2\Core\BasicDataResponse;
+use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\DataResponse;
 
 /**
@@ -16,7 +16,7 @@ class ResponseWithDataBodyDataResponse implements ResponseWithDataBody
         $dataModel
     ) {
         if (!$response instanceof DataResponse) {
-            $response = new BasicDataResponse(
+            $response = new DataResponseBasic(
                 $response->getBody(),
                 $response->getStatusCode(),
                 $response->getHeaders()

@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class UpdateProperties
+class RepositoryUpdateProperties
 {
     /**
      * @param ServerRequestInterface $request

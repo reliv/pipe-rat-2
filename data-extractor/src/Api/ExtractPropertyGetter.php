@@ -2,8 +2,6 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
-use Reliv\PipeRat\Exception\ExtractorException;
-
 /**
  * @author James Jervis - https://github.com/jerv13
  */
@@ -198,7 +196,7 @@ class ExtractPropertyGetter implements Extract
      * @param int                $depthLimit
      *
      * @return array
-     * @throws ExtractorException
+     * @throws \Exception
      */
     protected function getCollectionProperties(
         $collectionDataModel,
@@ -207,7 +205,9 @@ class ExtractPropertyGetter implements Extract
         $depthLimit
     ) {
         if (!$this->isTraversable($collectionDataModel)) {
-            throw new ExtractorException('Properties are not traversable, got: ' . gettype($collectionDataModel));
+            throw new \Exception(
+                'Properties are not traversable, got: ' . gettype($collectionDataModel)
+            );
         }
 
         $data = [];

@@ -25,9 +25,9 @@ class GetDataModelDataResponse implements GetDataModel
             return $response->getDataBody();
         }
 
-        if ($response instanceof JsonResponse) {
-            return $response->getPayload();
-        }
+        //if ($response instanceof JsonResponse) {
+        //    return $response->getPayload();
+        //}
 
         return $default;
     }

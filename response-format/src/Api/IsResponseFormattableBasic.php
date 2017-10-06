@@ -23,9 +23,9 @@ class IsResponseFormattableBasic implements IsResponseFormattable
             return true;
         }
 
-        if ($response instanceof JsonResponse) {
-            return true;
-        }
+        //if ($response instanceof JsonResponse) {
+        //    return true;
+        //}
 
         return false;
     }

@@ -9,6 +9,7 @@ interface RouteConfig
 {
     /**
      * @param string $resourceName
+     * @param array  $params
      * @param array  $configOverride
      * @param array  $prioritiesOverride
      *
@@ -16,6 +17,7 @@ interface RouteConfig
      */
     public static function get(
         string $resourceName,
+        array $params,
         array $configOverride,
         array $prioritiesOverride
     ): array;

@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Reliv\PipeRat2\Repository\Api\GetEntityClass;
 
 /**
  * @author James Jervis - https://github.com/jerv13

@@ -12,6 +12,7 @@ abstract class RouteConfigAbstract
 {
     /**
      * @param string $resourceName
+     * @param array  $params
      * @param array  $configOverride
      * @param array  $prioritiesOverride
      *
@@ -19,25 +20,29 @@ abstract class RouteConfigAbstract
      */
     public static function get(
         string $resourceName,
+        array $params,
         array $configOverride,
         array $prioritiesOverride
     ): array
     {
+        $params = self::prepareParams(
+            $resourceName,
+            $params
+        );
+
         $defaultConfig = self::defaultConfig();
-            
+
         $name = self::getValue(
             $configOverride,
             'name',
             $defaultConfig['name']
         );
-        $name = self::buildName($name, $resourceName);
 
         $path = self::getValue(
             $configOverride,
             'path',
             $defaultConfig['path']
         );
-        $path = self::buildName($path, $resourceName);
 
         $allowedMethods = self::getValue(
             $configOverride,
@@ -94,13 +99,138 @@ abstract class RouteConfigAbstract
             $config['middleware'][$key] = $middlewareServices[$key];
         }
 
+        $config = self::parseArrayParams(
+            $config,
+            $params
+        );
+
+        $config['name'] = self::prepareName($name);
+
         return $config;
+    }
+
+    /**
+     * @return array
+     */
+    protected static function defaultParams(): array
+    {
+        return [
+            'root-path' => RouteRoot::get(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected static function defaultConfig(): array
+    {
+        return [
+            'name' => '[--{root-path}--].[--{resource-name}--]',
+            'path' => '[--{root-path}--]/[--{resource-name}--]',
+            'middleware' => [],
+            'options' => [],
+            'allowed_methods' => ['GET'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected static function defaultPriorities(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param string $resourceName
+     * @param array  $params
+     *
+     * @return array
+     */
+    protected function prepareParams(
+        string $resourceName,
+        array $params
+    ) {
+        $params['resourceName'] = $resourceName;
+
+        $params = array_merge(self::defaultParams(), $params);
+
+        return $params;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed|string
+     */
+    protected static function prepareName(
+        string $name
+    ) {
+        // CamelCase to dash-separated
+        $name = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $name));
+        $name = str_replace('/', '.', $name);
+        $name = ltrim($name, '.');
+
+        return $name;
+    }
+
+    /**
+     * @param array $config
+     * @param array $params
+     *
+     * @return array
+     */
+    protected static function parseArrayParams(
+        array $config,
+        array $params
+    ) {
+        if (!is_array($config)) {
+            return $config;
+        }
+
+        foreach ($config as $key => $value) {
+            if (is_array($value)) {
+                $config[$key] = self::parseArrayParams(
+                    $value,
+                    $params
+                );
+
+                continue;
+            }
+
+            if (is_string($value)) {
+                $config[$key] = self::parseValue(
+                    $value,
+                    $params
+                );
+            }
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param string $value
+     * @param array  $params
+     *
+     * @return string
+     */
+    protected static function parseValue(
+        string $value,
+        array $params
+    ):string
+    {
+        foreach ($params as $key => $param) {
+            $value = str_replace('[--{' . $key . '}--]', $param, $value);
+        }
+
+        return $value;
     }
 
     /**
      * @param array  $array
      * @param string $key
-     * @param mixed $default
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -114,55 +244,5 @@ abstract class RouteConfigAbstract
         }
 
         return $default;
-    }
-
-    /**
-     * @param string $name
-     * @param string $resourceName
-     *
-     * @return string
-     */
-    protected static function buildName(
-        string $name,
-        string $resourceName
-    ) {
-        $name = str_replace('{{root}}', RouteRoot::get(), $name);
-        $name = str_replace('{{resource-name}}', $resourceName, $name);
-        $name = str_replace('/', '.', $name);
-        $name = ltrim($name, '.');
-
-        return $name;
-    }
-
-    /**
-     * @param string $path
-     * @param string $resourceName
-     *
-     * @return string
-     */
-    protected static function buildPath(
-        string $path,
-        string $resourceName
-    ) {
-        $path = str_replace('{{root}}', RouteRoot::get(), $path);
-        $path = str_replace('{{resource-name}}', $resourceName, $path);
-
-        return $path;
-    }
-    
-    protected static function defaultConfig(): array 
-    {
-        return [
-            'name' => '{{root}}.{{resource-name}}',
-            'path' => '{{root}}/{{resource-name}}',
-            'middleware' => [],
-            'options' => [],
-            'allowed_methods' => ['GET'],
-        ];
-    }
-
-    protected static function defaultPriorities(): array
-    {
-        return [];
     }
 }

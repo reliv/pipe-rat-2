@@ -7,7 +7,7 @@ namespace Reliv\PipeRat2\Core\Config;
  */
 class RouteRoot
 {
-    const DEFAULT_ROOT_PATH = '/api';
+    const DEFAULT_ROOT_PATH = '/api/resources';
 
     protected static $rootPath;
 

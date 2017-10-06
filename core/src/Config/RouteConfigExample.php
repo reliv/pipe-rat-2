@@ -15,14 +15,21 @@ use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
  */
 class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 {
+    protected static function defaultParams(): array
+    {
+        return [
+
+        ];
+    }
+
     protected static function defaultConfig(): array
     {
         return [
             /* Use standard route names for client simplicity */
-            'name' => '{{root}}.{{resource-name}}.example',
+            'name' => '[--{root}--].[--{resource-name}--].example',
 
             /* Use standard route paths for client simplicity */
-            'path' => '{{root}}/{{resource-name}}/example',
+            'path' => '[--{root}--]/[--{resource-name}--]/example',
 
             /* Wire each API independently */
             'middleware' => [
@@ -62,10 +69,13 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                         IsAllowedRcmUser::OPTION_RESOURCE_ID => 'admin',
                         IsAllowedRcmUser::OPTION_PRIVILEGE => null,
                     ],
+
                 ],
                 'request-attribute-where' => '{service-name}',
                 'data-validate' => '{service-name}',
-                'controller' => '{service-name}',
+                'controller' => [
+                    'entity' => "[--{doctrine-entity}--]",
+                ],
             ],
 
             /* Use expressive to define allowed methods */

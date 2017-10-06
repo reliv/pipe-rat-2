@@ -1,9 +1,10 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat2\RequestFormat\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Acl\Http\MiddlewareWithConfigOptionsAbstract;
+use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -46,9 +47,13 @@ abstract class RequestFormatAbstract extends MiddlewareWithConfigOptionsAbstract
      */
     public function isValidContentType(ServerRequestInterface $request)
     {
-        $options = $this->getOptions($request);
+        $options = $this->getOptions->__invoke(
+            $request,
+            self::configKey()
+        );
 
-        $validContentTypes = $options->get(
+        $validContentTypes = Options::get(
+            $options,
             'contentTypes',
             $this->defaultContentTypes
         );

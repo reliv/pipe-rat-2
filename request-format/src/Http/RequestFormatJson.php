@@ -1,16 +1,25 @@
 <?php
 
-namespace Reliv\PipeRat\Middleware\RequestFormat;
+namespace Reliv\PipeRat2\RequestFormat\Http;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Reliv\PipeRat\Middleware\Middleware;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RequestFormatJson extends AbstractRequestFormat implements Middleware
+class RequestFormatJson extends RequestFormatAbstract
 {
+    /**
+     * Provide a unique config key
+     *
+     * @return string
+     */
+    public static function configKey(): string
+    {
+        return 'request-format-json';
+    }
+
     /**
      * @var array
      */

@@ -57,7 +57,8 @@ class GetServiceFromConfigOptionsBasic implements GetServiceFromConfigOptions
 
         if (!$this->serviceContainer->has($serviceName)) {
             throw new \Exception(
-                "Service does not exist with service key: " . self::SERVICE_NAME
+                "Service does not exist: {$serviceName}"
+                . " with service key: " . self::SERVICE_NAME
                 . " in class: " . get_class($this)
             );
         }

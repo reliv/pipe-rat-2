@@ -3,6 +3,12 @@
 namespace Reliv\PipeRat2\XampleRepositoryDoctrine;
 
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigCount;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigCreate;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigDeleteById;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigExists;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFind;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFindById;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigUpsert;
 use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
 
 /**
@@ -22,7 +28,7 @@ class ModuleConfig
                         'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
                         'cache' => 'array',
                         'paths' => [
-                            __DIR__ . '/../Entity'
+                            __DIR__ . '/Entity'
                         ]
                     ],
                     'orm_default' => [
@@ -42,14 +48,68 @@ class ModuleConfig
             ],
 
             'routes' => [
-                '[--{root-path}--].xample.count'
+                'pipe-rat-2.xample.count'
                 => RouteConfigCount::get(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class
                     ],
                     []
-                )
+                ),
+
+                'pipe-rat-2.xample.create'
+                => RouteConfigCreate::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.delete'
+                => RouteConfigDeleteById::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.exists'
+                => RouteConfigExists::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.find'
+                => RouteConfigFind::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.findById'
+                => RouteConfigFindById::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.upsert'
+                => RouteConfigUpsert::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
             ]
         ];
     }

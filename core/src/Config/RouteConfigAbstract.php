@@ -25,40 +25,40 @@ abstract class RouteConfigAbstract
         array $prioritiesOverride = []
     ): array
     {
-        $params = self::prepareParams(
+        $params = static::prepareParams(
             $resourceName,
             $params
         );
 
-        self::assertHasRequiredParams($params);
+        static::assertHasRequiredParams($params);
 
-        $defaultConfig = self::defaultConfig();
+        $defaultConfig = static::defaultConfig();
 
-        $name = self::getValue(
+        $name = static::getValue(
             $configOverride,
             'name',
             $defaultConfig['name']
         );
 
-        $path = self::getValue(
+        $path = static::getValue(
             $configOverride,
             'path',
             $defaultConfig['path']
         );
 
-        $allowedMethods = self::getValue(
+        $allowedMethods = static::getValue(
             $configOverride,
             'allowed_methods',
             $defaultConfig['allowed_methods']
         );
 
-        $middlewareServices = self::getValue(
+        $middlewareServices = static::getValue(
             $configOverride,
             'middleware',
             $defaultConfig['middleware']
         );
 
-        $options = self::getValue(
+        $options = static::getValue(
             $configOverride,
             'options',
             $defaultConfig['options']
@@ -82,7 +82,7 @@ abstract class RouteConfigAbstract
         $aggregator = new ConfigAggregator([$middlewareProvider, $middlewareProviderDefault]);
         $middlewareServices = $aggregator->getMergedConfig();
 
-        $defaultPriorities = self::defaultPriorities();
+        $defaultPriorities = static::defaultPriorities();
         $priorityProvider = new ArrayProvider($prioritiesOverride);
         $priorityProviderDefault = new ArrayProvider($defaultPriorities);
         $aggregator = new ConfigAggregator([$priorityProvider, $priorityProviderDefault]);
@@ -90,23 +90,23 @@ abstract class RouteConfigAbstract
 
         $queue = new \SplPriorityQueue();
 
-        $index = 0;
+        $index = count($middlewareServices);
         foreach ($middlewareServices as $key => $middlewareService) {
             $priority = (array_key_exists($key, $priorities)) ? (int)$priorities[$key] : $index;
             $queue->insert($key, $priority);
-            $index++;
+            $index--;
         }
 
         foreach ($queue as $key) {
             $config['middleware'][$key] = $middlewareServices[$key];
         }
 
-        $config = self::parseArrayParams(
+        $config = static::parseArrayParams(
             $config,
             $params
         );
 
-        $config['name'] = self::prepareName($name);
+        $config['name'] = static::prepareName($config['name']);
 
         return $config;
     }
@@ -155,7 +155,7 @@ abstract class RouteConfigAbstract
 
     protected static function assertHasRequiredParams($params)
     {
-        foreach (self::requiredParams() as $requiredParam) {
+        foreach (static::requiredParams() as $requiredParam) {
             if (!array_key_exists($requiredParam, $params)) {
                 throw new \Exception(
                     'Required param is missing: ' . $requiredParam
@@ -171,13 +171,13 @@ abstract class RouteConfigAbstract
      *
      * @return array
      */
-    protected function prepareParams(
+    protected static function prepareParams(
         string $resourceName,
         array $params
     ) {
-        $params['resourceName'] = $resourceName;
+        $params['resource-name'] = $resourceName;
 
-        $params = array_merge(self::defaultParams(), $params);
+        $params = array_merge(static::defaultParams(), $params);
 
         return $params;
     }
@@ -214,7 +214,7 @@ abstract class RouteConfigAbstract
 
         foreach ($config as $key => $value) {
             if (is_array($value)) {
-                $config[$key] = self::parseArrayParams(
+                $config[$key] = static::parseArrayParams(
                     $value,
                     $params
                 );
@@ -223,7 +223,7 @@ abstract class RouteConfigAbstract
             }
 
             if (is_string($value)) {
-                $config[$key] = self::parseValue(
+                $config[$key] = static::parseValue(
                     $value,
                     $params
                 );

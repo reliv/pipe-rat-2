@@ -30,10 +30,10 @@ class GetEntityIdFieldNameBasic implements GetEntityIdFieldName
     public function __invoke(
         array $options
     ):string {
-        if (array_key_exists(Options::ENTITY_ID_FIELD_NAME, $options)) {
+        if (array_key_exists(self::OPTION_ENTITY_ID_FIELD_NAME, $options)) {
             throw new \Exception("Entity ID field name not found in options: " . json_encode($options, 0, 5));
         }
 
-        return $options[Options::ENTITY_ID_FIELD_NAME];
+        return $options[self::OPTION_ENTITY_ID_FIELD_NAME];
     }
 }

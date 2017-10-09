@@ -7,6 +7,8 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
  */
 class Find implements \Reliv\PipeRat2\Repository\Api\Find
 {
+    const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
+
     /**
      * @var GetEntityRepository
      */

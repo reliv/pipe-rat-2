@@ -7,6 +7,7 @@ namespace Reliv\PipeRat2\Repository\Api;
  */
 interface GetEntityClass
 {
+    const OPTION_ENTITY_CLASS_NAME = 'entity-class';
     /**
      * @param array $options
      *

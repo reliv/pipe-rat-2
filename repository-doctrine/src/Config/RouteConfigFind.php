@@ -6,9 +6,13 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
 use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
-use Reliv\PipeRat2\Repository\Http\RepositoryCount;
+use Reliv\PipeRat2\Repository\Http\RepositoryFind;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFieldsUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimitUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeOrderUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeSkipUrlEncodedFilters;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
@@ -17,7 +21,7 @@ use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
+class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
 {
     protected static function requiredParams(): array
     {
@@ -31,10 +35,10 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
     {
         return [
             /* Use standard route names for client simplicity */
-            'name' => '[--{root-path}--].[--{resource-name}--].count',
+            'name' => '[--{root-path}--].[--{resource-name}--].find',
 
             /* Use standard route paths for client simplicity */
-            'path' => '[--{root-path}--]/[--{resource-name}--]/count',
+            'path' => '[--{root-path}--]/[--{resource-name}--]',
 
             /* Wire each API independently */
             'middleware' => [
@@ -48,6 +52,18 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 RequestAttributeWhereUrlEncodedFilters::configKey()
                 => RequestAttributeWhereUrlEncodedFilters::class,
 
+                RequestAttributeFieldsUrlEncodedFilters::configKey()
+                => RequestAttributeFieldsUrlEncodedFilters::class,
+
+                RequestAttributeOrderUrlEncodedFilters::configKey()
+                => RequestAttributeOrderUrlEncodedFilters::class,
+
+                RequestAttributeSkipUrlEncodedFilters::configKey()
+                => RequestAttributeSkipUrlEncodedFilters::class,
+
+                RequestAttributeLimitUrlEncodedFilters::configKey()
+                => RequestAttributeLimitUrlEncodedFilters::class,
+
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
                 => ResponseHeadersAdd::class,
@@ -59,16 +75,15 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 => ResponseDataExtractor::class,
                 /** </response-mutators> */
 
-                RepositoryCount::configKey()
-                => RepositoryCount::class,
+                RepositoryFind::configKey()
+                => RepositoryFind::class,
             ],
 
             /* Use route to find options at runtime */
             'options' => [
                 /*'{config-key}' => ['{optionKey}'=>'{optionValue}'],*/
                 RequestFormatJson::configKey() => [
-                    RequestFormatJson::OPTION_VALID_CONTENT_TYPES
-                    => ['application/json'],
+                    RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
 
                 RequestAclMiddleware::configKey() => [
@@ -82,9 +97,16 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 RequestAttributeWhereUrlEncodedFilters::configKey() => [
-                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES
-                    => false,
+                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES => false,
                 ],
+
+                RequestAttributeFieldsUrlEncodedFilters::configKey() => [],
+
+                RequestAttributeOrderUrlEncodedFilters::configKey() => [],
+
+                RequestAttributeSkipUrlEncodedFilters::configKey() => [],
+
+                RequestAttributeLimitUrlEncodedFilters::configKey() => [],
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
@@ -93,29 +115,25 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseFormatJson::configKey() => [
-                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS
-                    => JSON_PRETTY_PRINT,
+                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
                 ],
 
                 ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
+                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractCollectionPropertyGetter::class,
                     ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST
-                        => null,
-
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT
-                        => 1,
+                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_LIST => null,
+                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
                     ],
                 ],
                 /** </response-mutators> */
 
-                RepositoryCount::configKey() => [
-                    RepositoryCount::OPTION_SERVICE_NAME
-                    => \Reliv\PipeRat2\RepositoryDoctrine\Api\Count::class,
+                RepositoryFind::configKey() => [
+                    RepositoryFind::OPTION_SERVICE_NAME
+                    => \Reliv\PipeRat2\RepositoryDoctrine\Api\Find::class,
 
-                    RepositoryCount::OPTION_SERVICE_OPTIONS => [
-                        \Reliv\PipeRat2\RepositoryDoctrine\Api\Count::OPTION_ENTITY_CLASS_NAME
-                        => '[--{entity-class}--]'
+                    RepositoryFind::OPTION_SERVICE_OPTIONS => [
+                        \Reliv\PipeRat2\RepositoryDoctrine\Api\Find::OPTION_ENTITY_CLASS_NAME
+                        => '[--{entity-class}--]',
                     ],
                 ],
             ],
@@ -128,9 +146,13 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormatJson::configKey() => 700,
-            RequestAclMiddleware::configKey() => 600,
-            RequestAttributeWhereUrlEncodedFilters::configKey() => 500,
+            RequestFormatJson::configKey() => 1100,
+            RequestAclMiddleware::configKey() => 1000,
+            RequestAttributeWhereUrlEncodedFilters::configKey() => 900,
+            RequestAttributeFieldsUrlEncodedFilters::configKey() => 800,
+            RequestAttributeOrderUrlEncodedFilters::configKey() => 700,
+            RequestAttributeSkipUrlEncodedFilters::configKey() => 600,
+            RequestAttributeLimitUrlEncodedFilters::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,
@@ -138,7 +160,7 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
             ResponseDataExtractor::configKey() => 200,
             /** </response-mutators> */
 
-            RepositoryCount::configKey() => 100,
+            RepositoryFind::configKey() => 100,
         ];
     }
 }

@@ -7,6 +7,8 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
  */
 class FindOne implements \Reliv\PipeRat2\Repository\Api\FindOne
 {
+    const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
+    
     /**
      * @var GetEntityRepository
      */

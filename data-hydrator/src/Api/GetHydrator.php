@@ -7,6 +7,8 @@ namespace Reliv\PipeRat2\DataHydrator\Api;
  */
 interface GetHydrator
 {
+    const OPTION_DATA_HYDRATE_API = 'data-hydrate-api';
+    
     /**
      * @param array $options
      *

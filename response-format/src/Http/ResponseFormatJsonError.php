@@ -50,7 +50,7 @@ class ResponseFormatJsonError extends ResponseFormatJson
         ResponseInterface $response,
         callable $next = null
     ) {
-        $response = $next($request);
+        $response = $next($request, $response);
 
         if (!$this->isError($request, $response)) {
             return $response;

@@ -49,7 +49,7 @@ class ResponseFormatFile extends ResponseFormatAbstract
         callable $next = null
     ) {
         /** @var ResponseInterface $response */
-        $response = $next($request);
+        $response = $next($request, $response);
 
         if (!$this->isValidAcceptType($request)) {
             return $response;

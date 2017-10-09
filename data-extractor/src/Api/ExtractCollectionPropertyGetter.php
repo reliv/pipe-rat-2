@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
+use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -18,9 +19,9 @@ class ExtractCollectionPropertyGetter extends ExtractPropertyGetter implements E
      */
     public function __invoke($collectionDataModel, array $options)
     {
-        $properties = OptionsExtract::get(
+        $properties = Options::get(
             $options,
-            OptionsExtract::PROPERTY_LIST,
+            Extract::OPTION_PROPERTY_LIST,
             null
         );
 
@@ -29,9 +30,9 @@ class ExtractCollectionPropertyGetter extends ExtractPropertyGetter implements E
             $properties = $this->getPropertyListByCollectionMethods($collectionDataModel);
         }
 
-        $depthLimit = OptionsExtract::get(
+        $depthLimit = Options::get(
             $options,
-            OptionsExtract::PROPERTY_DEPTH_LIMIT,
+            Extract::OPTION_PROPERTY_DEPTH_LIMIT,
             1
         );
 

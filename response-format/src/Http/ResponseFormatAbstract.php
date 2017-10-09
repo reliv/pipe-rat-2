@@ -57,7 +57,7 @@ abstract class ResponseFormatAbstract extends MiddlewareWithConfigOptionsAbstrac
     ) {
         $options = $this->getOptions->__invoke(
             $request,
-            self::configKey()
+            static::configKey()
         );
 
         $successStatusCodes = Options::get(
@@ -80,7 +80,7 @@ abstract class ResponseFormatAbstract extends MiddlewareWithConfigOptionsAbstrac
     {
         $options = $this->getOptions->__invoke(
             $request,
-            self::configKey()
+            static::configKey()
         );
 
         $validContentTypes = Options::get(

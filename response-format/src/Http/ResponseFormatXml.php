@@ -92,7 +92,7 @@ class ResponseFormatXml extends ResponseFormatAbstract
         callable $next = null
     ) {
         /** @var ResponseInterface $response */
-        $response = $next($request);
+        $response = $next($request, $response);
 
         if (!$this->isResponseFormattable->__invoke($response)) {
             return $response;

@@ -8,8 +8,8 @@ namespace Reliv\PipeRat2\Repository\Api;
 interface Create
 {
     /**
-     * @param mixed $data
-     * @param array $options
+     * @param object|array $data
+     * @param array        $options
      *
      * @return mixed $data
      */

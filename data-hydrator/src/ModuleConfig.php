@@ -2,6 +2,8 @@
 
 namespace Reliv\PipeRat2\DataHydrator;
 
+use Reliv\PipeRat2\DataHydrator\Api\GetHydrator;
+use Reliv\PipeRat2\DataHydrator\Api\GetHydratorBasicFactory;
 use Reliv\PipeRat2\DataHydrator\Api\Hydrate;
 use Reliv\PipeRat2\DataHydrator\Api\HydratePropertySetter;
 
@@ -18,6 +20,9 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    GetHydrator::class => [
+                        'factory' => GetHydratorBasicFactory::class,
+                    ],
                     Hydrate::class => [
                         'class' => HydratePropertySetter::class,
                     ],

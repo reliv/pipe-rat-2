@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @author James Jervis - https://github.com/jerv13
  *
- * @ORM\Entity (repositoryClass="Rcm\Repository\Site")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="rcm_sites")
+ * @ORM\Table(name="pipe_rat_2_xample")
  */
 class XampleEntity
 {
@@ -28,4 +28,28 @@ class XampleEntity
      * @ORM\Column(type="string", nullable=true)
      */
     protected $example;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExample(): string
+    {
+        return (string)$this->example;
+    }
+
+    /**
+     * @param string $example
+     */
+    public function setExample(string $example)
+    {
+        $this->example = $example;
+    }
 }

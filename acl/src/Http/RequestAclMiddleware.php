@@ -15,7 +15,7 @@ use Reliv\PipeRat2\Options\Options;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class AclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
+class RequestAclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_NOT_ALLOWED_STATUS_CODE = 'not-allowed-status-code';
     const OPTION_NOT_ALLOWED_STATUS_MESSAGE = 'not-allowed-status-message';
@@ -30,7 +30,7 @@ class AclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
      */
     public static function configKey(): string
     {
-        return 'acl';
+        return 'request-acl';
     }
 
     /**

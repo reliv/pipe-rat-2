@@ -8,8 +8,7 @@ use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
-use Reliv\PipeRat2\Repository\Http\RepositoryCount;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\Repository\Http\RepositoryExists;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -17,7 +16,7 @@ use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
+class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
 {
     protected static function requiredParams(): array
     {
@@ -31,10 +30,10 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
     {
         return [
             /* Use standard route names for client simplicity */
-            'name' => '[--{root-path}--].[--{resource-name}--].count',
+            'name' => '[--{root-path}--].[--{resource-name}--].{id}.exists',
 
             /* Use standard route paths for client simplicity */
-            'path' => '[--{root-path}--]/[--{resource-name}--]/count',
+            'path' => '[--{root-path}--]/[--{resource-name}--]/{id}/exists',
 
             /* Wire each API independently */
             'middleware' => [
@@ -44,9 +43,6 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
 
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
-
-                RequestAttributeWhereUrlEncodedFilters::configKey()
-                => RequestAttributeWhereUrlEncodedFilters::class,
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
@@ -59,16 +55,15 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 => ResponseDataExtractor::class,
                 /** </response-mutators> */
 
-                RepositoryCount::configKey()
-                => RepositoryCount::class,
+                RepositoryExists::configKey()
+                => RepositoryExists::class,
             ],
 
             /* Use route to find options at runtime */
             'options' => [
                 /*'{config-key}' => ['{optionKey}'=>'{optionValue}'],*/
                 RequestFormatJson::configKey() => [
-                    RequestFormatJson::OPTION_VALID_CONTENT_TYPES
-                    => ['application/json'],
+                    RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
 
                 RequestAclMiddleware::configKey() => [
@@ -81,11 +76,6 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeWhereUrlEncodedFilters::configKey() => [
-                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES
-                    => false,
-                ],
-
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
                     ResponseHeadersAdd::OPTION_HEADERS
@@ -93,29 +83,25 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseFormatJson::configKey() => [
-                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS
-                    => JSON_PRETTY_PRINT,
+                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
                 ],
 
                 ResponseDataExtractor::configKey() => [
                     ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
                     ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST
-                        => null,
-
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT
-                        => 1,
+                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => null,
+                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
                     ],
                 ],
                 /** </response-mutators> */
 
-                RepositoryCount::configKey() => [
-                    RepositoryCount::OPTION_SERVICE_NAME
-                    => \Reliv\PipeRat2\RepositoryDoctrine\Api\Count::class,
+                RepositoryExists::configKey() => [
+                    RepositoryExists::OPTION_SERVICE_NAME
+                    => \Reliv\PipeRat2\RepositoryDoctrine\Api\Exists::class,
 
-                    RepositoryCount::OPTION_SERVICE_OPTIONS => [
-                        \Reliv\PipeRat2\RepositoryDoctrine\Api\Count::OPTION_ENTITY_CLASS_NAME
-                        => '[--{entity-class}--]'
+                    RepositoryExists::OPTION_SERVICE_OPTIONS => [
+                        \Reliv\PipeRat2\RepositoryDoctrine\Api\Exists::OPTION_ENTITY_CLASS_NAME
+                        => '[--{entity-class}--]',
                     ],
                 ],
             ],
@@ -128,9 +114,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormatJson::configKey() => 700,
-            RequestAclMiddleware::configKey() => 600,
-            RequestAttributeWhereUrlEncodedFilters::configKey() => 500,
+            RequestFormatJson::configKey() => 600,
+            RequestAclMiddleware::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,
@@ -138,7 +123,7 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
             ResponseDataExtractor::configKey() => 200,
             /** </response-mutators> */
 
-            RepositoryCount::configKey() => 100,
+            RepositoryExists::configKey() => 100,
         ];
     }
 }

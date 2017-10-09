@@ -50,6 +50,22 @@ class RequestAttributeFieldsUrlEncodedFilters
         ResponseInterface $response,
         callable $next = null
     ) {
-        return $next($request->withAttribute(self::ATTRIBUTE, $this->getValue($request)), $response);
+        $fields = $this->getValue($request);
+
+        if ($fields === null) {
+            return $next(
+                $request,
+                $response
+            );
+        }
+
+        foreach ($fields as $key => $value) {
+            $fields[$key] = ($value == 'true' || $value == '1' ? true : false);
+        }
+
+        return $next(
+            $request->withAttribute(self::ATTRIBUTE, $fields),
+            $response
+        );
     }
 }

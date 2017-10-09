@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManager;
  */
 class DeleteById implements \Reliv\PipeRat2\Repository\Api\DeleteById
 {
+    const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
+
     /**
      * @var GetEntityRepository
      */
@@ -40,8 +42,7 @@ class DeleteById implements \Reliv\PipeRat2\Repository\Api\DeleteById
     public function __invoke(
         $id,
         array $options = []
-    ): bool
-    {
+    ): bool {
         $repository = $this->getEntityRepository->__invoke($options);
         $result = $repository->find($id);
 

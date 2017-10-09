@@ -51,7 +51,7 @@ abstract class RequestFormatAbstract extends MiddlewareWithConfigOptionsAbstract
     {
         $options = $this->getOptions->__invoke(
             $request,
-            self::configKey()
+            static::configKey()
         );
 
         $validContentTypes = Options::get(

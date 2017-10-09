@@ -63,7 +63,7 @@ class RequestFormatJson extends RequestFormatAbstract
             if (json_last_error() !== JSON_ERROR_NONE) {
                 $body = $response->getBody();
                 $body->write(
-                    'MIME type was "application/json" but invalid JSON in request body.'
+                    'Invalid JSON in request body for MIME types: ' . implode(', ', $this->defaultContentTypes)
                 );
 
                 return $response->withStatus(400)->withBody($body);

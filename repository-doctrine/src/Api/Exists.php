@@ -7,6 +7,8 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
  */
 class Exists implements \Reliv\PipeRat2\Repository\Api\Exists
 {
+    const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
+
     /**
      * @var GetEntityRepository
      */

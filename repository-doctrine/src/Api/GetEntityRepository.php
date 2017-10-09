@@ -11,6 +11,8 @@ use Reliv\PipeRat2\Repository\Api\GetEntityClass;
  */
 class GetEntityRepository
 {
+    const OPTION_ENTITY_CLASS_NAME = GetEntityClass::OPTION_ENTITY_CLASS_NAME;
+
     /**
      * @var EntityManager
      */

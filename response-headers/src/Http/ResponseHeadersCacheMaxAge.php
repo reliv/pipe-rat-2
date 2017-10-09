@@ -39,7 +39,7 @@ class ResponseHeadersCacheMaxAge extends MiddlewareWithConfigOptionsAbstract
         callable $next
     ) {
         /** @var ResponseInterface $response */
-        $response = $next($request);
+        $response = $next($request, $response);
 
         $options = $this->getOptions->__invoke(
             $request,

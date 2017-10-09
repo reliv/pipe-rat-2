@@ -21,7 +21,7 @@ class RepositoryUpsert extends MiddlewareWithConfigOptionsServiceOptionAbstract
      */
     public static function configKey(): string
     {
-        return 'repository-create';
+        return 'repository-upsert';
     }
 
     /**

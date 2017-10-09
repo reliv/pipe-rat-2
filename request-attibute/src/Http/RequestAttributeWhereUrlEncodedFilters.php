@@ -15,8 +15,6 @@ class RequestAttributeWhereUrlEncodedFilters
     extends RequestAttributeAbstractUrlEncodedFilters
     implements RequestAttributeWhere
 {
-    const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
-
     /**
      * Is used by parent getValue() function
      */

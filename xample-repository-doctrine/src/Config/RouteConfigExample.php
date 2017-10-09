@@ -3,14 +3,14 @@
 namespace Reliv\PipeRat2\XampleRepositoryDoctrine\Config;
 
 use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
-use Reliv\PipeRat2\Acl\Http\AclMiddleware;
+use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Api\OptionsService;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\Validate;
-use Reliv\PipeRat2\DataValidate\Http\ValidateMiddleware;
+use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
@@ -56,14 +56,14 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 RequestFormatJson::configKey()
                 => RequestFormatJson::class,
 
-                AclMiddleware::configKey()
-                => AclMiddleware::class,
+                RequestAclMiddleware::configKey()
+                => RequestAclMiddleware::class,
 
                 RequestAttributeWhereUrlEncodedFilters::configKey()
                 => RequestAttributeWhereUrlEncodedFilters::class,
 
-                ValidateMiddleware::configKey()
-                => ValidateMiddleware::class,
+                RequestValidateMiddleware::configKey()
+                => RequestValidateMiddleware::class,
 
                 RepositoryFindById::configKey()
                 => RepositoryFindById::class,
@@ -92,7 +92,7 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                     RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
 
-                AclMiddleware::configKey() => [
+                RequestAclMiddleware::configKey() => [
                     OptionsService::SERVICE_NAME
                     => IsAllowedRcmUser::class,
 
@@ -100,22 +100,22 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                         IsAllowedRcmUser::OPTION_RESOURCE_ID => 'admin',
                         IsAllowedRcmUser::OPTION_PRIVILEGE => null,
                     ],
-                    AclMiddleware::OPTION_NOT_ALLOWED_STATUS_CODE => 401,
-                    AclMiddleware::OPTION_NOT_ALLOWED_STATUS_MESSAGE => 'No way man!',
+                    RequestAclMiddleware::OPTION_NOT_ALLOWED_STATUS_CODE => 401,
+                    RequestAclMiddleware::OPTION_NOT_ALLOWED_STATUS_MESSAGE => 'No way man!',
                 ],
 
                 RequestAttributeWhereUrlEncodedFilters::configKey() => [
                     RequestAttributeWhere::OPTION_ALLOW_DEEP_WHERES => false,
                 ],
 
-                ValidateMiddleware::configKey() => [
+                RequestValidateMiddleware::configKey() => [
                     OptionsService::SERVICE_NAME
                     => Validate::class,
 
                     OptionsService::SERVICE_OPTIONS => [
                         Validate::OPTION_PRIMARY_MESSAGE => 'Well, that is not good!'
                     ],
-                    ValidateMiddleware::OPTION_FAIL_STATUS_CODE => 400,
+                    RequestValidateMiddleware::OPTION_FAIL_STATUS_CODE => 400,
                 ],
 
                 RepositoryFindById::configKey() => [
@@ -137,14 +137,14 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            'response-header-mutator' => 100,
-            'response-format-mutator' => 200,
-            'data-extractor-mutator' => 300,
-            'data-body-parser' => 400,
-            'acl' => 500,
-            'request-attribute-where' => 600,
-            'data-validate' => 700,
-            'controller' => 800,
+            'response-header-mutator' => 800,
+            'response-format-mutator' => 700,
+            'data-extractor-mutator' => 600,
+            'data-body-parser' => 500,
+            'acl' => 400,
+            'request-attribute-where' => 300,
+            'data-validate' => 200,
+            'controller' => 100,
         ];
     }
 }

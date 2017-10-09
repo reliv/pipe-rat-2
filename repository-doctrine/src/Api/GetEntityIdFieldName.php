@@ -41,8 +41,8 @@ class GetEntityIdFieldName implements \Reliv\PipeRat2\Repository\Api\GetEntityId
     public function __invoke(
         array $options
     ):string {
-        if (array_key_exists(RepositoryOptions::ENTITY_ID_FIELD_NAME, $options)) {
-            return $options[RepositoryOptions::ENTITY_ID_FIELD_NAME];
+        if (array_key_exists(GetEntityIdFieldName::OPTION_ENTITY_ID_FIELD_NAME, $options)) {
+            return $options[GetEntityIdFieldName::OPTION_ENTITY_ID_FIELD_NAME];
         }
 
         $entityClass = $this->getEntityClass->__invoke($options);

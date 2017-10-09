@@ -9,7 +9,7 @@ use Reliv\PipeRat2\Options\Options;
  */
 class FindById implements \Reliv\PipeRat2\Repository\Api\FindById
 {
-    const OPTION_ENTITY_CLASS = 'entity-class';
+    const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
 
     /**
      * @var GetEntityRepository
@@ -35,17 +35,7 @@ class FindById implements \Reliv\PipeRat2\Repository\Api\FindById
         $id,
         array $options = []
     ) {
-        $entityClass = Options::get(
-            $options,
-            self::OPTION_ENTITY_CLASS
-        );
-
-        if(empty($entityClass)) {
-            // @todo MAYBE??????
-        }
-
         $repository = $this->getEntityRepository->__invoke($options);
-
 
         return $repository->find($id);
     }

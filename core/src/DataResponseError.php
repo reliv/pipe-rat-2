@@ -27,7 +27,7 @@ class DataResponseError extends Response implements DataResponse
         array $headers = []
     ) {
         $this->dataBody = [
-            'primaryMessage' => $primaryMessage
+            'error' => $primaryMessage
         ];
 
         if (!empty($fieldMessages)) {

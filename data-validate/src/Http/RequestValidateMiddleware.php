@@ -15,7 +15,7 @@ use Reliv\PipeRat2\Options\Options;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ValidateMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
+class RequestValidateMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_FAIL_STATUS_CODE = 'fail-status-code';
     /**
@@ -23,7 +23,7 @@ class ValidateMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstrac
      */
     public static function configKey(): string
     {
-        return 'data-validate';
+        return 'request-data-validate';
     }
 
     /**

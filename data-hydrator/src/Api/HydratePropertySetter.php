@@ -17,7 +17,7 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
      * @param object|array $dataModel
      * @param array        $options
      *
-     * @return mixed
+     * @return object|array
      */
     public function __invoke(array $data, $dataModel, array $options)
     {
@@ -29,6 +29,8 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
         }
 
         $this->setProperties($data, $dataModel, $properties);
+
+        return $dataModel;
     }
 
     /**

@@ -28,7 +28,7 @@
   ],
   "require": {
     "php": ">=7",
-    "zendframework/zend-stratigility": "2.*",
+    "zendframework/zend-expressive": "^2.0",
     "reliv/zf-config-factories": "3.* || 4.*",
     "reliv/zf-input-filter-service": "0.*"
   },

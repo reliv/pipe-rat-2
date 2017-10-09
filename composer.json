@@ -40,6 +40,7 @@
   },
   "autoload": {
     "psr-4": {
+      "Reliv\\PipeRat2\\": "/",
       "Reliv\\PipeRat2\\Acl\\": "acl/src/",
       "Reliv\\PipeRat2\\Core\\": "core/src/",
       "Reliv\\PipeRat2\\DataExtractor\\": "data-extractor/src/",

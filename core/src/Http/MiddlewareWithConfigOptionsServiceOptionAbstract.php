@@ -5,12 +5,16 @@ namespace Reliv\PipeRat2\Core\Http;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\OptionsService;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
 abstract class MiddlewareWithConfigOptionsServiceOptionAbstract implements MiddlewareWithConfigKey
 {
+    const OPTION_SERVICE_NAME = OptionsService::SERVICE_NAME;
+    const OPTION_SERVICE_OPTIONS = OptionsService::SERVICE_OPTIONS;
+
     /**
      * @var GetOptions
      */

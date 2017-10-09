@@ -4,7 +4,6 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
 use Doctrine\ORM\EntityManager;
 use Reliv\PipeRat2\Repository\Api\GetEntityClass;
-use Reliv\PipeRat2\Repository\Api\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -42,8 +41,8 @@ class GetEntityIdFieldName implements \Reliv\PipeRat2\Repository\Api\GetEntityId
     public function __invoke(
         array $options
     ):string {
-        if (array_key_exists(Options::ENTITY_ID_FIELD_NAME, $options)) {
-            return $options[Options::ENTITY_ID_FIELD_NAME];
+        if (array_key_exists(RepositoryOptions::ENTITY_ID_FIELD_NAME, $options)) {
+            return $options[RepositoryOptions::ENTITY_ID_FIELD_NAME];
         }
 
         $entityClass = $this->getEntityClass->__invoke($options);

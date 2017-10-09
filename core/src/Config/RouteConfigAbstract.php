@@ -21,14 +21,16 @@ abstract class RouteConfigAbstract
     public static function get(
         string $resourceName,
         array $params,
-        array $configOverride,
-        array $prioritiesOverride
+        array $configOverride = [],
+        array $prioritiesOverride = []
     ): array
     {
         $params = self::prepareParams(
             $resourceName,
             $params
         );
+
+        self::assertHasRequiredParams($params);
 
         $defaultConfig = self::defaultConfig();
 
@@ -112,6 +114,16 @@ abstract class RouteConfigAbstract
     /**
      * @return array
      */
+    protected static function requiredParams(): array
+    {
+        return [
+            'resource-name',
+        ];
+    }
+
+    /**
+     * @return array
+     */
     protected static function defaultParams(): array
     {
         return [
@@ -139,6 +151,18 @@ abstract class RouteConfigAbstract
     protected static function defaultPriorities(): array
     {
         return [];
+    }
+
+    protected static function assertHasRequiredParams($params)
+    {
+        foreach (self::requiredParams() as $requiredParam) {
+            if (!array_key_exists($requiredParam, $params)) {
+                throw new \Exception(
+                    'Required param is missing: ' . $requiredParam
+                    . '  in: ' . var_export($params, true)
+                );
+            }
+        }
     }
 
     /**

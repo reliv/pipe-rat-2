@@ -18,7 +18,7 @@ interface RouteConfig
     public static function get(
         string $resourceName,
         array $params,
-        array $configOverride,
-        array $prioritiesOverride
+        array $configOverride = [],
+        array $prioritiesOverride = []
     ): array;
 }

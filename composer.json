@@ -40,7 +40,19 @@
   },
   "autoload": {
     "psr-4": {
-      "Reliv\\PipeRat\\": "src/"
+      "Reliv\\PipeRat2\\Acl\\": "acl/src/",
+      "Reliv\\PipeRat2\\Core\\": "core/src/",
+      "Reliv\\PipeRat2\\DataExtractor\\": "data-extractor/src/",
+      "Reliv\\PipeRat2\\DataHydrator\\": "data-hydrator/src/",
+      "Reliv\\PipeRat2\\DataValidate\\": "data-validate/src/",
+      "Reliv\\PipeRat2\\Options\\": "options/src/",
+      "Reliv\\PipeRat2\\Repository\\": "repository/src/",
+      "Reliv\\PipeRat2\\RepositoryDoctrine\\": "repository-doctrine/src/",
+      "Reliv\\PipeRat2\\RequestAttribute\\": "request-attribute/src/",
+      "Reliv\\PipeRat2\\RequestFormat\\": "request-format/src/",
+      "Reliv\\PipeRat2\\ResponseFormat\\": "response-format/src/",
+      "Reliv\\PipeRat2\\ResponseHeaders\\": "response-headers/src/",
+      "Reliv\\PipeRat2\\XampleRepositoryDoctrine\\": "xample-repository-doctrine/src/"
     }
   }
 }

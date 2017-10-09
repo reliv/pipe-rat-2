@@ -2,8 +2,6 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
-use Doctrine\ORM\EntityManager;
-
 /**
  * @author James Jervis - https://github.com/jerv13
  */
@@ -32,7 +30,8 @@ class Count implements \Reliv\PipeRat2\Repository\Api\Count
     public function __invoke(
         array $criteria = [],
         array $options = []
-    ):int {
+    ):int
+    {
         $repository = $this->getEntityRepository->__invoke($options);
         $results = $repository->findBy($criteria);
 

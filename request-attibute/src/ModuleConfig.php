@@ -3,11 +3,11 @@
 namespace Reliv\PipeRat2\RequestAttribute;
 
 use Reliv\PipeRat2\Core\Api\GetOptions;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFields;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimit;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeOrder;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeSkip;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFieldsUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimitUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeOrderUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeSkipUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -22,27 +22,32 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
-                    RequestAttributeFields::class => [
+                    RequestAttributeFieldsUrlEncodedFilters::class => [
+                        'class' => RequestAttributeFieldsUrlEncodedFilters::class,
                         'arguments' => [
                             GetOptions::class,
                         ],
                     ],
-                    RequestAttributeLimit::class => [
+                    RequestAttributeLimitUrlEncodedFilters::class => [
+                        'class' => RequestAttributeLimitUrlEncodedFilters::class,
                         'arguments' => [
                             GetOptions::class,
                         ],
                     ],
-                    RequestAttributeOrder::class => [
+                    RequestAttributeOrderUrlEncodedFilters::class => [
+                        'class' => RequestAttributeOrderUrlEncodedFilters::class,
                         'arguments' => [
                             GetOptions::class,
                         ],
                     ],
-                    RequestAttributeSkip::class => [
+                    RequestAttributeSkipUrlEncodedFilters::class => [
+                        'class' => RequestAttributeSkipUrlEncodedFilters::class,
                         'arguments' => [
                             GetOptions::class,
                         ],
                     ],
-                    RequestAttributeWhere::class => [
+                    RequestAttributeWhereUrlEncodedFilters::class => [
+                        'class' => RequestAttributeWhereUrlEncodedFilters::class,
                         'arguments' => [
                             GetOptions::class,
                         ],

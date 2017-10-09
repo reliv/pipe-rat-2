@@ -16,11 +16,11 @@ class GetEntityClassBasic implements GetEntityClass
     public function __invoke(
         array $options
     ):string {
-        if (!array_key_exists(Options::ENTITY_CLASS_NAME, $options)) {
+        if (!array_key_exists(RepositoryOptions::ENTITY_CLASS_NAME, $options)) {
             throw new \Exception("Entity class not found in options: " . json_encode($options, 0, 5));
         }
 
-        $entityClass = $options[Options::ENTITY_CLASS_NAME];
+        $entityClass = $options[RepositoryOptions::ENTITY_CLASS_NAME];
 
         if (!class_exists($entityClass)) {
             throw new \Exception("Entity class does not exist: " . $entityClass);

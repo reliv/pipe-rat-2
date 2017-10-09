@@ -2,11 +2,15 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
+use Reliv\PipeRat2\Options\Options;
+
 /**
  * @author James Jervis - https://github.com/jerv13
  */
 class FindById implements \Reliv\PipeRat2\Repository\Api\FindById
 {
+    const OPTION_ENTITY_CLASS = 'entity-class';
+
     /**
      * @var GetEntityRepository
      */
@@ -31,7 +35,18 @@ class FindById implements \Reliv\PipeRat2\Repository\Api\FindById
         $id,
         array $options = []
     ) {
+        $entityClass = Options::get(
+            $options,
+            self::OPTION_ENTITY_CLASS
+        );
+
+        if(empty($entityClass)) {
+            // @todo MAYBE??????
+        }
+
         $repository = $this->getEntityRepository->__invoke($options);
+
+
         return $repository->find($id);
     }
 }

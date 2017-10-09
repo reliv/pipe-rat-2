@@ -19,7 +19,7 @@ class RouteRoot
      * @return void
      * @throws \Exception
      */
-    public static function set(string $rootPath = self::DEFAULT_ROOT_PATH)
+    public static function bootstrap(string $rootPath = self::DEFAULT_ROOT_PATH)
     {
         if (self::$isSet) {
             throw new \Exception('Root path can only be set once on bootstrap');
@@ -36,7 +36,7 @@ class RouteRoot
     public static function get()
     {
         if (!self::$isSet) {
-            throw new \Exception('Root was not set on bootstrap');
+            self::bootstrap(self::DEFAULT_ROOT_PATH);
         }
 
         return self::$rootPath;

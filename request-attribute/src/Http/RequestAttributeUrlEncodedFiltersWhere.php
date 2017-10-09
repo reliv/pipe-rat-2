@@ -11,8 +11,8 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RequestAttributeWhereUrlEncodedFilters
-    extends RequestAttributeAbstractUrlEncodedFilters
+class RequestAttributeUrlEncodedFiltersWhere
+    extends RequestAttributeUrlEncodedFiltersAbstract
     implements RequestAttributeWhere
 {
     /**

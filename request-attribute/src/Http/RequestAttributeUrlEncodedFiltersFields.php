@@ -10,21 +10,21 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RequestAttributeLimitUrlEncodedFilters
-    extends RequestAttributeAbstractUrlEncodedFilters
-    implements RequestAttributeLimit
+class RequestAttributeUrlEncodedFiltersFields
+    extends RequestAttributeUrlEncodedFiltersAbstract
+    implements RequestAttributeFields
 {
     /**
      * Is used by parent getValue() function
      */
-    const URL_KEY = 'limit';
+    const URL_KEY = 'fields';
 
     /**
      * @return string
      */
     public static function configKey(): string
     {
-        return 'request-attribute-limit';
+        return 'request-attribute-fields-url-encoded-filters';
     }
 
     /**
@@ -50,13 +50,22 @@ class RequestAttributeLimitUrlEncodedFilters
         ResponseInterface $response,
         callable $next = null
     ) {
-        $value = $this->getValue($request);
+        $fields = $this->getValue($request);
 
-        if ($value !== null && $value != (int)$value) {
-            //Should this be 400'ing instead of throwing?
-            throw new InvalidRequestAttribute();
+        if ($fields === null) {
+            return $next(
+                $request,
+                $response
+            );
         }
 
-        return $next($request->withAttribute(self::ATTRIBUTE, $value), $response);
+        foreach ($fields as $key => $value) {
+            $fields[$key] = ($value == 'true' || $value == '1' ? true : false);
+        }
+
+        return $next(
+            $request->withAttribute(self::ATTRIBUTE, $fields),
+            $response
+        );
     }
 }

@@ -10,8 +10,8 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RequestAttributeOrderUrlEncodedFilters
-    extends RequestAttributeAbstractUrlEncodedFilters
+class RequestAttributeUrlEncodedFiltersOrder
+    extends RequestAttributeUrlEncodedFiltersAbstract
     implements RequestAttributeOrder
 {
     /**

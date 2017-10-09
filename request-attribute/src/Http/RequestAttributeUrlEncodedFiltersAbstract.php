@@ -5,7 +5,7 @@ namespace Reliv\PipeRat2\RequestAttribute\Http;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 
-abstract class RequestAttributeAbstractUrlEncodedFilters extends MiddlewareWithConfigOptionsAbstract
+abstract class RequestAttributeUrlEncodedFiltersAbstract extends MiddlewareWithConfigOptionsAbstract
 {
     /**
      * Over-ride me

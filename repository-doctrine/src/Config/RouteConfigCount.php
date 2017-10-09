@@ -9,7 +9,7 @@ use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryCount;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -45,8 +45,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
 
-                RequestAttributeWhereUrlEncodedFilters::configKey()
-                => RequestAttributeWhereUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersWhere::configKey()
+                => RequestAttributeUrlEncodedFiltersWhere::class,
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
@@ -81,8 +81,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeWhereUrlEncodedFilters::configKey() => [
-                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES
+                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
+                    RequestAttributeUrlEncodedFiltersWhere::OPTION_ALLOW_DEEP_WHERES
                     => false,
                 ],
 
@@ -130,7 +130,7 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormatJson::configKey() => 700,
             RequestAclMiddleware::configKey() => 600,
-            RequestAttributeWhereUrlEncodedFilters::configKey() => 500,
+            RequestAttributeUrlEncodedFiltersWhere::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,

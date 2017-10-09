@@ -13,7 +13,7 @@ use Reliv\PipeRat2\DataValidate\Api\Validate;
 use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -59,8 +59,8 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
 
-                RequestAttributeWhereUrlEncodedFilters::configKey()
-                => RequestAttributeWhereUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersWhere::configKey()
+                => RequestAttributeUrlEncodedFiltersWhere::class,
 
                 RequestValidateMiddleware::configKey()
                 => RequestValidateMiddleware::class,
@@ -104,7 +104,7 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                     RequestAclMiddleware::OPTION_NOT_ALLOWED_STATUS_MESSAGE => 'No way man!',
                 ],
 
-                RequestAttributeWhereUrlEncodedFilters::configKey() => [
+                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
                     RequestAttributeWhere::OPTION_ALLOW_DEEP_WHERES => false,
                 ],
 

@@ -8,6 +8,7 @@ use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigDeleteById;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigExists;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFind;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFindById;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFindOne;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigUpsert;
 use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
 
@@ -95,6 +96,15 @@ class ModuleConfig
 
                 'pipe-rat-2.xample.findById'
                 => RouteConfigFindById::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
+                'pipe-rat-2.xample.findOne'
+                => RouteConfigFindOne::get(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class

@@ -9,11 +9,11 @@ use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryFind;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFieldsUrlEncodedFilters;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimitUrlEncodedFilters;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeOrderUrlEncodedFilters;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeSkipUrlEncodedFilters;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersLimit;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersOrder;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersSkip;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -49,20 +49,20 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
 
-                RequestAttributeWhereUrlEncodedFilters::configKey()
-                => RequestAttributeWhereUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersWhere::configKey()
+                => RequestAttributeUrlEncodedFiltersWhere::class,
 
-                RequestAttributeFieldsUrlEncodedFilters::configKey()
-                => RequestAttributeFieldsUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersFields::configKey()
+                => RequestAttributeUrlEncodedFiltersFields::class,
 
-                RequestAttributeOrderUrlEncodedFilters::configKey()
-                => RequestAttributeOrderUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersOrder::configKey()
+                => RequestAttributeUrlEncodedFiltersOrder::class,
 
-                RequestAttributeSkipUrlEncodedFilters::configKey()
-                => RequestAttributeSkipUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersSkip::configKey()
+                => RequestAttributeUrlEncodedFiltersSkip::class,
 
-                RequestAttributeLimitUrlEncodedFilters::configKey()
-                => RequestAttributeLimitUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersLimit::configKey()
+                => RequestAttributeUrlEncodedFiltersLimit::class,
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
@@ -96,17 +96,17 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeWhereUrlEncodedFilters::configKey() => [
-                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES => false,
+                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
+                    RequestAttributeUrlEncodedFiltersWhere::OPTION_ALLOW_DEEP_WHERES => false,
                 ],
 
-                RequestAttributeFieldsUrlEncodedFilters::configKey() => [],
+                RequestAttributeUrlEncodedFiltersFields::configKey() => [],
 
-                RequestAttributeOrderUrlEncodedFilters::configKey() => [],
+                RequestAttributeUrlEncodedFiltersOrder::configKey() => [],
 
-                RequestAttributeSkipUrlEncodedFilters::configKey() => [],
+                RequestAttributeUrlEncodedFiltersSkip::configKey() => [],
 
-                RequestAttributeLimitUrlEncodedFilters::configKey() => [],
+                RequestAttributeUrlEncodedFiltersLimit::configKey() => [],
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
@@ -148,11 +148,11 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormatJson::configKey() => 1100,
             RequestAclMiddleware::configKey() => 1000,
-            RequestAttributeWhereUrlEncodedFilters::configKey() => 900,
-            RequestAttributeFieldsUrlEncodedFilters::configKey() => 800,
-            RequestAttributeOrderUrlEncodedFilters::configKey() => 700,
-            RequestAttributeSkipUrlEncodedFilters::configKey() => 600,
-            RequestAttributeLimitUrlEncodedFilters::configKey() => 500,
+            RequestAttributeUrlEncodedFiltersWhere::configKey() => 900,
+            RequestAttributeUrlEncodedFiltersFields::configKey() => 800,
+            RequestAttributeUrlEncodedFiltersOrder::configKey() => 700,
+            RequestAttributeUrlEncodedFiltersSkip::configKey() => 600,
+            RequestAttributeUrlEncodedFiltersLimit::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,

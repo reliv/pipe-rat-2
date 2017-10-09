@@ -9,7 +9,8 @@ use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindOne;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -34,7 +35,7 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
             'name' => '[--{root-path}--].[--{resource-name}--].findOne',
 
             /* Use standard route paths for client simplicity */
-            'path' => '[--{root-path}--]/[--{resource-name}--]',
+            'path' => '[--{root-path}--]/[--{resource-name}--]/findOne',
 
             /* Wire each API independently */
             'middleware' => [
@@ -45,8 +46,11 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
 
-                RequestAttributeWhereUrlEncodedFilters::configKey()
-                => RequestAttributeWhereUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersWhere::configKey()
+                => RequestAttributeUrlEncodedFiltersWhere::class,
+
+                RequestAttributeUrlEncodedFiltersFields::configKey()
+                => RequestAttributeUrlEncodedFiltersFields::class,
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
@@ -80,9 +84,11 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeWhereUrlEncodedFilters::configKey() => [
-                    RequestAttributeWhereUrlEncodedFilters::OPTION_ALLOW_DEEP_WHERES => false,
+                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
+                    RequestAttributeUrlEncodedFiltersWhere::OPTION_ALLOW_DEEP_WHERES => false,
                 ],
+
+                RequestAttributeUrlEncodedFiltersFields::configKey() => [],
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
@@ -122,9 +128,10 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormatJson::configKey() => 700,
-            RequestAclMiddleware::configKey() => 600,
-            RequestAttributeWhereUrlEncodedFilters::configKey() => 500,
+            RequestFormatJson::configKey() => 800,
+            RequestAclMiddleware::configKey() => 700,
+            RequestAttributeUrlEncodedFiltersWhere::configKey() => 600,
+            RequestAttributeUrlEncodedFiltersFields::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,

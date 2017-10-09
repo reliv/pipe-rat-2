@@ -12,8 +12,8 @@ use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryCount;
 use Reliv\PipeRat2\Repository\Http\RepositoryCreate;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFieldsUrlEncodedFilters;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhereUrlEncodedFilters;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -49,8 +49,8 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                 RequestAclMiddleware::configKey()
                 => RequestAclMiddleware::class,
 
-                RequestAttributeFieldsUrlEncodedFilters::configKey()
-                => RequestAttributeFieldsUrlEncodedFilters::class,
+                RequestAttributeUrlEncodedFiltersFields::configKey()
+                => RequestAttributeUrlEncodedFiltersFields::class,
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
@@ -84,7 +84,7 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeFieldsUrlEncodedFilters::configKey() => [],
+                RequestAttributeUrlEncodedFiltersFields::configKey() => [],
 
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
@@ -127,7 +127,7 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormatJson::configKey() => 700,
             RequestAclMiddleware::configKey() => 600,
-            RequestAttributeFieldsUrlEncodedFilters::configKey() => 500,
+            RequestAttributeUrlEncodedFiltersFields::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,

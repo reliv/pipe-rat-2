@@ -7,6 +7,7 @@ use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindOne;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
@@ -101,10 +102,10 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractCollectionPropertyGetter::class,
+                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
                     ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_LIST => null,
-                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
+                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => null,
+                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
                     ],
                 ],
                 /** </response-mutators> */

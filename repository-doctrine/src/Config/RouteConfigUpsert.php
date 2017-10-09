@@ -2,18 +2,16 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Config;
 
-use Reliv\PipeRat2\Acl\Api\IsAllowedAny;
-use Reliv\PipeRat2\Acl\Api\IsAllowedNone;
 use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
 use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
-use Reliv\PipeRat2\Repository\Http\RepositoryCount;
+use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
+use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
 use Reliv\PipeRat2\Repository\Http\RepositoryUpsert;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -52,6 +50,9 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
                 RequestAttributeUrlEncodedFiltersFields::configKey()
                 => RequestAttributeUrlEncodedFiltersFields::class,
 
+                RequestValidateMiddleware::configKey()
+                => RequestValidateMiddleware::class,
+
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey()
                 => ResponseHeadersAdd::class,
@@ -86,6 +87,15 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributeUrlEncodedFiltersFields::configKey() => [],
 
+                RequestValidateMiddleware::configKey() => [
+                    RequestValidateMiddleware::OPTION_SERVICE_NAME
+                    => ValidateNotConfigured::class,
+
+                    RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [
+                        ValidateNotConfigured::OPTION_MESSAGE => null
+                    ],
+                ],
+
                 /** <response-mutators> */
                 ResponseHeadersAdd::configKey() => [
                     ResponseHeadersAdd::OPTION_HEADERS
@@ -106,7 +116,6 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
                 ],
                 /** </response-mutators> */
 
-
                 RepositoryUpsert::configKey() => [
                     RepositoryUpsert::OPTION_SERVICE_NAME
                     => \Reliv\PipeRat2\RepositoryDoctrine\Api\Upsert::class,
@@ -126,9 +135,10 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormatJson::configKey() => 700,
-            RequestAclMiddleware::configKey() => 600,
-            RequestAttributeUrlEncodedFiltersFields::configKey() => 500,
+            RequestFormatJson::configKey() => 800,
+            RequestAclMiddleware::configKey() => 700,
+            RequestAttributeUrlEncodedFiltersFields::configKey() => 600,
+            RequestValidateMiddleware::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeadersAdd::configKey() => 400,

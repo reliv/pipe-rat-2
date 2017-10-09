@@ -9,6 +9,7 @@ use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigExists;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFind;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFindById;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigFindOne;
+use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigUpdateProperties;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigUpsert;
 use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
 
@@ -85,6 +86,16 @@ class ModuleConfig
                     []
                 ),
 
+                // NOTE: 'findeOne' MUST be defined before the 'find' route or it will conflict
+                'pipe-rat-2.xample.findOne'
+                => RouteConfigFindOne::get(
+                    'xample',
+                    [
+                        'entity-class' => XampleEntity::class
+                    ],
+                    []
+                ),
+
                 'pipe-rat-2.xample.find'
                 => RouteConfigFind::get(
                     'xample',
@@ -103,9 +114,9 @@ class ModuleConfig
                     []
                 ),
 
-                'pipe-rat-2.xample.findOne'
-                => RouteConfigFindOne::get(
-                    'xample',
+                'pipe-rat-2.xample.update-properties'
+                => RouteConfigUpdateProperties::get(
+                    'xample/t',
                     [
                         'entity-class' => XampleEntity::class
                     ],

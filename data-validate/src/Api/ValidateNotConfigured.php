@@ -1,41 +1,39 @@
 <?php
 
-namespace Reliv\PipeRat2\Acl\Api;
+namespace Reliv\PipeRat2\DataValidate\Api;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\DataValidate\ValidateResult\ValidateResult;
 use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class IsAllowedNotConfigured implements IsAllowed
+class ValidateNotConfigured implements Validate
 {
     const OPTION_MESSAGE = 'message';
 
     protected $defaultMessage;
 
-    /**
-     * @param string|null $defaultMessage
-     */
     public function __construct(
         string $defaultMessage = null
     ) {
         if ($defaultMessage === null) {
-            $this->defaultMessage = 'Acl has not be configured: ' . get_class($this);
+            $this->defaultMessage = 'Validation is not configured: ' . get_class($this);
         }
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param array                  $options
+     * @param       $data
+     * @param array $options
      *
-     * @return bool
+     * @return ValidateResult
      * @throws \Exception
      */
     public function __invoke(
-        ServerRequestInterface $request,
+        $data,
         array $options = []
-    ): bool {
+    ): ValidateResult
+    {
         $message = Options::get(
             $options,
             self::OPTION_MESSAGE,

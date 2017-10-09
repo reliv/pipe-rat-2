@@ -28,7 +28,7 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
             $properties = $this->getPropertyListByMethods($dataModel);
         }
 
-        $this->setProperties($data, $dataModel, $properties);
+        $dataModel = $this->setProperties($data, $dataModel, $properties);
 
         return $dataModel;
     }
@@ -40,7 +40,7 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
      * @param       $dataModel
      * @param array $properties
      *
-     * @return void
+     * @return object|array
      */
     protected function setProperties(
         array $data,
@@ -54,39 +54,42 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
             }
 
             if (is_object($dataModel) && array_key_exists($property, $data)) {
-                $this->setDataToObject($property, $data[$property], $dataModel);
+                $dataModel = $this->setDataToObject($property, $data[$property], $dataModel);
             }
 
             if (is_array($dataModel)) {
-                $this->setDataToArray($property, $data[$property], $dataModel);
+                $dataModel = $this->setDataToArray($property, $data[$property], $dataModel);
             }
         }
+
+        return $dataModel;
     }
 
     /**
      * setDataToArray
      *
      * @param string $property
-     * @param mixed $value
-     * @param array $dataModel
+     * @param mixed  $value
+     * @param array  $dataModel
      *
-     * @return void
+     * @return array
      */
     protected function setDataToArray($property, $value, array $dataModel)
     {
         if (array_key_exists($property, $dataModel)) {
             $dataModel[$property] = $value;
         }
+
+        return $dataModel;
     }
 
     /**
-     * setDataToObject
-     *
      * @param $property
      * @param $value
      * @param $dataModel
      *
-     * @return void
+     * @return mixed
+     * @throws \Exception
      */
     protected function setDataToObject($property, $value, $dataModel)
     {
@@ -94,7 +97,11 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
 
         if (method_exists($dataModel, $method)) {
             $dataModel->$method($value);
+        } else {
+            throw new \Exception('Can not hydrate, method does not exist: ' . $method);
         }
+
+        return $dataModel;
     }
 
     /**

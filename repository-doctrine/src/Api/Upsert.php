@@ -107,6 +107,7 @@ class Upsert implements \Reliv\PipeRat2\Repository\Api\Upsert
         if (!is_array($data)) {
             throw new \Exception('Can only handle data as array, got: ' . var_export($data, true));
         }
+
         $repository = $this->getEntityRepository->__invoke(
             $options
         );

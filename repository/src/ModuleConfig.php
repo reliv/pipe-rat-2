@@ -108,7 +108,14 @@ class ModuleConfig
                     ],
                     RepositoryUpdateProperties::class => [
                         'arguments' => [
-                            // @todo
+                            GetOptions::class,
+                            GetServiceFromConfigOptions::class,
+                            GetServiceOptionsFromConfigOptions::class,
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_ID_PARAM],
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_BAD_REQUEST_STATUS_CODE],
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_BAD_REQUEST_MESSAGE],
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_NOT_FOUND_STATUS_CODE],
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_NOT_FOUND_MESSAGE],
                         ],
                     ],
                     RepositoryUpsert::class => [

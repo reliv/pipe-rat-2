@@ -6,6 +6,8 @@ use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\DataValidate\Api\Validate;
+use Reliv\PipeRat2\DataValidate\Api\ValidateNoop;
+use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Api\ValidateZfInputFilter;
 use Reliv\PipeRat2\DataValidate\Api\ValidateZfInputFilterFactory;
 use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
@@ -26,6 +28,12 @@ class ModuleConfig
                     Validate::class => [
                         'class' => ValidateZfInputFilter::class,
                         'factory' => ValidateZfInputFilterFactory::class,
+                    ],
+                    ValidateNoop::class => [
+                        ['literal' => null]
+                    ],
+                    ValidateNotConfigured::class => [
+                        ['literal' => null]
                     ],
                     ValidateZfInputFilter::class => [
                         'factory' => ValidateZfInputFilterFactory::class,

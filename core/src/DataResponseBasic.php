@@ -15,16 +15,22 @@ class DataResponseBasic extends Response implements DataResponse
     protected $dataBody = null;
 
     /**
-     * @param mixed $dataBody
-     * @param int   $status
-     * @param array $headers
+     * @param mixed       $dataBody
+     * @param int         $status
+     * @param array       $headers
+     * @param string|null $reasonPhrase
      */
     public function __construct(
         $dataBody,
         int $status = 200,
-        array $headers = []
+        array $headers = [],
+        string $reasonPhrase = null
     ) {
         $this->dataBody = $dataBody;
+
+        if (!empty($reasonPhrase) && !array_key_exists('reason-phrase', $headers)) {
+            $headers['reason-phrase'] = $reasonPhrase;
+        }
 
         parent::__construct('php://memory', $status, $headers);
     }

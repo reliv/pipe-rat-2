@@ -9,7 +9,6 @@ use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
-use Reliv\PipeRat2\Core\TextResponse;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\Repository\Api\Find;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimit;
@@ -160,9 +159,11 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultNotFoundMessage
             );
 
-            return new TextResponse(
-                $failMessage,
-                $failStatusCode
+            return new DataResponseBasic(
+                null,
+                $failStatusCode,
+                [],
+                $failMessage
             );
         }
 

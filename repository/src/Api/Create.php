@@ -11,7 +11,7 @@ interface Create
      * @param object|array $data
      * @param array        $options
      *
-     * @return mixed $data
+     * @return object|null $data
      */
     public function __invoke(
         $data,

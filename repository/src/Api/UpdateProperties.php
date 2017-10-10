@@ -12,7 +12,7 @@ interface UpdateProperties
      * @param array      $properties
      * @param array      $options
      *
-     * @return mixed $data
+     * @return object|null $data
      */
     public function __invoke(
         $id,

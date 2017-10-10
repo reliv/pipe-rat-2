@@ -11,7 +11,7 @@ interface FindById
      * @param int|string $id
      * @param array      $options
      *
-     * @return mixed $data
+     * @return object|null $data
      */
     public function __invoke(
         $id,

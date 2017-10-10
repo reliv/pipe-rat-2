@@ -5,10 +5,19 @@ namespace Reliv\PipeRat2\Repository;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Repository\Api\CountNotConfigured;
+use Reliv\PipeRat2\Repository\Api\CreateNotConfigured;
+use Reliv\PipeRat2\Repository\Api\DeleteByIdNotConfigured;
+use Reliv\PipeRat2\Repository\Api\ExistsNotConfigured;
+use Reliv\PipeRat2\Repository\Api\FindByIdNotConfigured;
+use Reliv\PipeRat2\Repository\Api\FindNotConfigured;
+use Reliv\PipeRat2\Repository\Api\FindOneNotConfigured;
 use Reliv\PipeRat2\Repository\Api\GetEntityClass;
 use Reliv\PipeRat2\Repository\Api\GetEntityClassBasic;
 use Reliv\PipeRat2\Repository\Api\GetEntityIdFieldName;
 use Reliv\PipeRat2\Repository\Api\GetEntityIdFieldNameBasic;
+use Reliv\PipeRat2\Repository\Api\UpdatePropertiesNotConfigured;
+use Reliv\PipeRat2\Repository\Api\UpsertNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryCount;
 use Reliv\PipeRat2\Repository\Http\RepositoryCreate;
 use Reliv\PipeRat2\Repository\Http\RepositoryDeleteById;
@@ -32,6 +41,48 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    CountNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => CountNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => CountNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    CreateNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => CreateNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => CreateNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    DeleteByIdNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => DeleteByIdNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => DeleteByIdNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    ExistsNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => ExistsNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => ExistsNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    FindByIdNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => FindByIdNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => FindByIdNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    FindNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => FindNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => FindNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    FindOneNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => FindOneNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => FindOneNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
                     GetEntityClass::class => [
                         'class' => GetEntityClassBasic::class,
                     ],
@@ -41,7 +92,18 @@ class ModuleConfig
                             '0-' => GetEntityClass::class,
                         ],
                     ],
-
+                    UpdatePropertiesNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => UpdatePropertiesNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => UpdatePropertiesNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
+                    UpsertNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => UpsertNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => UpsertNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
                     RepositoryCount::class => [
                         'arguments' => [
                             GetOptions::class,

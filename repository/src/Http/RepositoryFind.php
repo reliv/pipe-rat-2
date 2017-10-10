@@ -138,7 +138,7 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
             $filterSkip
         );
 
-        $result = $findApi->__invoke(
+        $results = $findApi->__invoke(
             $criteria,
             $orderBy,
             $limit,
@@ -146,7 +146,7 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
             $findOptions
         );
 
-        if (empty($result)) {
+        if (empty($results)) {
             $failStatusCode = Options::get(
                 $options,
                 self::OPTION_NOT_FOUND_STATUS_CODE,
@@ -160,7 +160,7 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
             );
 
             return new DataResponseBasic(
-                null,
+                [],
                 $failStatusCode,
                 [],
                 $failMessage
@@ -168,7 +168,7 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
         }
 
         return new DataResponseBasic(
-            $result
+            $results
         );
     }
 }

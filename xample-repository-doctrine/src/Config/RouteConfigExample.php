@@ -44,15 +44,6 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
             /* Wire each API independently */
             'middleware' => [
                 /*'{config-key}' => '{service-name}',*/
-                ResponseHeadersAdd::configKey()
-                => ResponseHeadersAdd::class,
-
-                ResponseFormatJson::configKey()
-                => ResponseFormatJson::class,
-
-                ResponseDataExtractor::configKey()
-                => ResponseDataExtractor::class,
-
                 RequestFormatJson::configKey()
                 => RequestFormatJson::class,
 
@@ -65,6 +56,17 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 RequestValidateMiddleware::configKey()
                 => RequestValidateMiddleware::class,
 
+                /** <response-mutators> */
+                ResponseHeadersAdd::configKey()
+                => ResponseHeadersAdd::class,
+
+                ResponseFormatJson::configKey()
+                => ResponseFormatJson::class,
+
+                ResponseDataExtractor::configKey()
+                => ResponseDataExtractor::class,
+                /** </response-mutators> */
+
                 RepositoryFindById::configKey()
                 => RepositoryFindById::class,
             ],
@@ -72,22 +74,6 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
             /* Use route to find options at runtime */
             'options' => [
                 /*'{config-key}' => ['{optionKey}'=>'{optionValue}'],*/
-                ResponseHeadersAdd::configKey() => [
-                    ResponseHeadersAdd::OPTION_HEADERS => ['header-name' => 'header-value'],
-                ],
-
-                ResponseFormatJson::configKey() => [
-                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
-                ],
-
-                ResponseDataExtractor::configKey() => [
-                    OptionsService::SERVICE_NAME => ExtractPropertyGetter::class,
-                    OptionsService::SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => [],
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
-                    ],
-                ],
-
                 RequestFormatJson::configKey() => [
                     RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
@@ -118,12 +104,30 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                     RequestValidateMiddleware::OPTION_FAIL_STATUS_CODE => 400,
                 ],
 
+                /** <response-mutators> */
+                ResponseHeadersAdd::configKey() => [
+                    ResponseHeadersAdd::OPTION_HEADERS => ['header-name' => 'header-value'],
+                ],
+
+                ResponseFormatJson::configKey() => [
+                    ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
+                ],
+
+                ResponseDataExtractor::configKey() => [
+                    OptionsService::SERVICE_NAME => ExtractPropertyGetter::class,
+                    OptionsService::SERVICE_OPTIONS => [
+                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => [],
+                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
+                    ],
+                ],
+                /** </response-mutators> */
+
                 RepositoryFindById::configKey() => [
                     OptionsService::SERVICE_NAME
                     => \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::class,
 
                     OptionsService::SERVICE_OPTIONS => [
-                        \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::OPTION_ENTITY_CLASS
+                        \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::OPTION_ENTITY_CLASS_NAME
                         => '[--{entity-class}--]',
                     ],
                 ],
@@ -137,14 +141,16 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            'response-header-mutator' => 800,
-            'response-format-mutator' => 700,
-            'data-extractor-mutator' => 600,
-            'data-body-parser' => 500,
-            'acl' => 400,
-            'request-attribute-where' => 300,
-            'data-validate' => 200,
-            'controller' => 100,
+            RequestFormatJson::configKey() => 800,
+            RequestAclMiddleware::configKey() => 700,
+            RequestAttributeUrlEncodedFiltersWhere::configKey() => 600,
+            RequestValidateMiddleware::configKey() => 500,
+            /** <response-mutators> */
+            ResponseHeadersAdd::configKey() => 400,
+            ResponseFormatJson::configKey() => 300,
+            ResponseDataExtractor::configKey() => 200,
+            /** </response-mutators> */
+            RepositoryFindById::configKey() => 100,
         ];
     }
 }

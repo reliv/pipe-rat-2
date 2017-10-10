@@ -11,18 +11,22 @@ use Reliv\PipeRat2\Options\Options;
 class IsAllowedNotConfigured implements IsAllowed
 {
     const OPTION_MESSAGE = 'message';
+    const DEFAULT_MESSAGE = 'Acl has not be configured';
+    const DEFAULT_ERROR_TYPE = E_USER_WARNING;
 
     protected $defaultMessage;
+    protected $errorType;
 
     /**
      * @param string|null $defaultMessage
+     * @param int         $errorType
      */
     public function __construct(
-        string $defaultMessage = null
+        string $defaultMessage = self::DEFAULT_MESSAGE,
+        int $errorType = self::DEFAULT_ERROR_TYPE
     ) {
-        if ($defaultMessage === null) {
-            $this->defaultMessage = 'Acl has not be configured: ' . get_class($this);
-        }
+        $this->defaultMessage = $defaultMessage;
+        $this->errorType = $errorType;
     }
 
     /**
@@ -35,13 +39,21 @@ class IsAllowedNotConfigured implements IsAllowed
     public function __invoke(
         ServerRequestInterface $request,
         array $options = []
-    ): bool {
+    ): bool
+    {
         $message = Options::get(
             $options,
             self::OPTION_MESSAGE,
             $this->defaultMessage
         );
 
-        throw new \Exception($message);
+        if ($this->errorType > 0) {
+            trigger_error(
+                $message,
+                $this->errorType
+            );
+        }
+
+        return true;
     }
 }

@@ -33,7 +33,10 @@ class ModuleConfig
                         ['literal' => null]
                     ],
                     ValidateNotConfigured::class => [
-                        ['literal' => null]
+                        'arguments' => [
+                            ['literal' => ValidateNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => ValidateNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
                     ],
                     ValidateZfInputFilter::class => [
                         'factory' => ValidateZfInputFilterFactory::class,

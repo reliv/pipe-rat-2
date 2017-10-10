@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\DataValidate\Api;
 
 use Reliv\PipeRat2\DataValidate\ValidateResult\ValidateResult;
+use Reliv\PipeRat2\DataValidate\ValidateResult\ValidateResultBasic;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -11,15 +12,22 @@ use Reliv\PipeRat2\Options\Options;
 class ValidateNotConfigured implements Validate
 {
     const OPTION_MESSAGE = 'message';
+    const DEFAULT_MESSAGE = 'Validation has not been configured';
+    const DEFAULT_ERROR_TYPE = E_USER_WARNING;
 
     protected $defaultMessage;
+    protected $errorType;
 
+    /**
+     * @param string|null $defaultMessage
+     * @param int         $errorType
+     */
     public function __construct(
-        string $defaultMessage = null
+        string $defaultMessage = self::DEFAULT_MESSAGE,
+        int $errorType = self::DEFAULT_ERROR_TYPE
     ) {
-        if ($defaultMessage === null) {
-            $this->defaultMessage = 'Validation is not configured: ' . get_class($this);
-        }
+        $this->defaultMessage = $defaultMessage;
+        $this->errorType = $errorType;
     }
 
     /**
@@ -40,6 +48,16 @@ class ValidateNotConfigured implements Validate
             $this->defaultMessage
         );
 
-        throw new \Exception($message);
+        if ($this->errorType > 0) {
+            trigger_error(
+                $message,
+                $this->errorType
+            );
+        }
+
+        return new ValidateResultBasic(
+            true,
+            $message
+        );
     }
 }

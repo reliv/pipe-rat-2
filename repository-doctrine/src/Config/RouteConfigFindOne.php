@@ -2,11 +2,10 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Config;
 
-use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
+use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindOne;
@@ -32,15 +31,11 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            /* Use standard route names for client simplicity */
             'name' => '[--{root-path}--].[--{resource-name}--].findOne',
 
-            /* Use standard route paths for client simplicity */
             'path' => '[--{root-path}--]/[--{resource-name}--]/findOne',
 
-            /* Wire each API independently */
             'middleware' => [
-                /*'{config-key}' => '{service-name}',*/
                 RequestFormatJson::configKey()
                 => RequestFormatJson::class,
 
@@ -68,20 +63,20 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                 => RepositoryFindOne::class,
             ],
 
-            /* Use route to findOne options at runtime */
             'options' => [
-                /*'{config-key}' => ['{optionKey}'=>'{optionValue}'],*/
                 RequestFormatJson::configKey() => [
                     RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
 
                 RequestAclMiddleware::configKey() => [
                     RequestAclMiddleware::OPTION_SERVICE_NAME
-                    => IsAllowedRcmUser::class,
+                    => IsAllowedNotConfigured::class,
 
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
-                        IsAllowedRcmUser::OPTION_RESOURCE_ID => 'sites',
-                        IsAllowedRcmUser::OPTION_PRIVILEGE => 'admin',
+                        IsAllowedNotConfigured::OPTION_MESSAGE
+                        => IsAllowedNotConfigured::DEFAULT_MESSAGE
+                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
+                            . ' in file: "[--{source-config-file}--]"',
                     ],
                 ],
 
@@ -121,7 +116,6 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                 ],
             ],
 
-            /* Use expressive to define allowed methods */
             'allowed_methods' => ['GET'],
         ];
     }

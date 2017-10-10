@@ -30,7 +30,12 @@ class ModuleConfig
                     ],
                     IsAllowedAny::class => [],
                     IsAllowedNone::class => [],
-                    IsAllowedNotConfigured::class => [],
+                    IsAllowedNotConfigured::class => [
+                        'arguments' => [
+                            ['literal' => IsAllowedNotConfigured::DEFAULT_MESSAGE],
+                            ['literal' => IsAllowedNotConfigured::DEFAULT_ERROR_TYPE],
+                        ],
+                    ],
                     IsAllowedRcmUser::class => [
                         'arguments' => [
                             \RcmUser\Api\Acl\IsAllowed::class

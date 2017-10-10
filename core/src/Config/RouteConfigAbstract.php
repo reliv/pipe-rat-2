@@ -2,9 +2,6 @@
 
 namespace Reliv\PipeRat2\Core\Config;
 
-use Zend\ConfigAggregator\ArrayProvider;
-use Zend\ConfigAggregator\ConfigAggregator;
-
 /**
  * @author James Jervis - https://github.com/jerv13
  */
@@ -23,8 +20,7 @@ abstract class RouteConfigAbstract
         array $params,
         array $configOverride = [],
         array $prioritiesOverride = []
-    ): array
-    {
+    ): array {
         $params = static::prepareParams(
             $resourceName,
             $params
@@ -72,21 +68,12 @@ abstract class RouteConfigAbstract
             'allowed_methods' => $allowedMethods,
         ];
 
-        $optionsProvider = new ArrayProvider($options);
-        $optionsProviderDefault = new ArrayProvider($defaultConfig['options']);
-        $aggregator = new ConfigAggregator([$optionsProvider, $optionsProviderDefault]);
-        $config['options'] = $aggregator->getMergedConfig();
+        $config['options'] = self::merge($defaultConfig['options'], $options);
 
-        $middlewareProvider = new ArrayProvider($middlewareServices);
-        $middlewareProviderDefault = new ArrayProvider($defaultConfig['middleware']);
-        $aggregator = new ConfigAggregator([$middlewareProvider, $middlewareProviderDefault]);
-        $middlewareServices = $aggregator->getMergedConfig();
+        $middlewareServices = self::merge($defaultConfig['middleware'], $middlewareServices);
 
         $defaultPriorities = static::defaultPriorities();
-        $priorityProvider = new ArrayProvider($prioritiesOverride);
-        $priorityProviderDefault = new ArrayProvider($defaultPriorities);
-        $aggregator = new ConfigAggregator([$priorityProvider, $priorityProviderDefault]);
-        $priorities = $aggregator->getMergedConfig();
+        $priorities = self::merge($defaultPriorities, $prioritiesOverride);
 
         $queue = new \SplPriorityQueue();
 
@@ -112,6 +99,35 @@ abstract class RouteConfigAbstract
     }
 
     /**
+     * @param array $defaults
+     * @param array $overrides
+     *
+     * @return array
+     */
+    protected static function merge(array $defaults, array $overrides)
+    {
+        /* NOTE: This style of merging leaves orphan values from defaults *
+        $providerDefault = new \Zend\ConfigAggregator\ArrayProvider($defaults);
+        $provider = new \Zend\ConfigAggregator\ArrayProvider($overrides);
+        $aggregator = new \Zend\ConfigAggregator\ConfigAggregator([$providerDefault, $provider]);
+        return $aggregator->getMergedConfig();
+        /* */
+
+        /**
+         * NOTE: This means overriding the config, completely removes the default values
+         * @var string $name
+         * @var array  $serviceConfig
+         */
+        foreach ($defaults as $name => $serviceConfig) {
+            if (!array_key_exists($name, $overrides)) {
+                $overrides[$name] = $serviceConfig;
+            }
+        }
+
+        return $overrides;
+    }
+
+    /**
      * @return array
      */
     protected static function requiredParams(): array
@@ -128,6 +144,7 @@ abstract class RouteConfigAbstract
     {
         return [
             'root-path' => RouteRoot::get(),
+            'source-config-file' => 'source-config-file not set in: ' . static::class,
         ];
     }
 
@@ -153,6 +170,12 @@ abstract class RouteConfigAbstract
         return [];
     }
 
+    /**
+     * @param $params
+     *
+     * @return void
+     * @throws \Exception
+     */
     protected static function assertHasRequiredParams($params)
     {
         foreach (static::requiredParams() as $requiredParam) {
@@ -242,8 +265,7 @@ abstract class RouteConfigAbstract
     protected static function parseValue(
         string $value,
         array $params
-    ):string
-    {
+    ):string {
         foreach ($params as $key => $param) {
             $value = str_replace('[--{' . $key . '}--]', $param, $value);
         }

@@ -2,8 +2,7 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Config;
 
-use Reliv\PipeRat2\Acl\Api\IsAllowedAny;
-use Reliv\PipeRat2\Acl\Api\IsAllowedNone;
+use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
 use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
@@ -12,10 +11,8 @@ use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
-use Reliv\PipeRat2\Repository\Http\RepositoryCount;
 use Reliv\PipeRat2\Repository\Http\RepositoryCreate;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
@@ -36,15 +33,11 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            /* Use standard route names for client simplicity */
             'name' => '[--{root-path}--].[--{resource-name}--].create',
 
-            /* Use standard route paths for client simplicity */
             'path' => '[--{root-path}--]/[--{resource-name}--]',
 
-            /* Wire each API independently */
             'middleware' => [
-                /*'{config-key}' => '{service-name}',*/
                 RequestFormatJson::configKey()
                 => RequestFormatJson::class,
 
@@ -71,21 +64,20 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                 RepositoryCreate::configKey()
                 => RepositoryCreate::class,
             ],
-
-            /* Use route to find options at runtime */
             'options' => [
-                /*'{config-key}' => ['{optionKey}'=>'{optionValue}'],*/
                 RequestFormatJson::configKey() => [
                     RequestFormatJson::OPTION_VALID_CONTENT_TYPES => ['application/json'],
                 ],
 
                 RequestAclMiddleware::configKey() => [
                     RequestAclMiddleware::OPTION_SERVICE_NAME
-                    => IsAllowedRcmUser::class,
+                    => IsAllowedNotConfigured::class,
 
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
-                        IsAllowedRcmUser::OPTION_RESOURCE_ID => 'sites',
-                        IsAllowedRcmUser::OPTION_PRIVILEGE => 'admin',
+                        IsAllowedNotConfigured::OPTION_MESSAGE
+                        => IsAllowedNotConfigured::DEFAULT_MESSAGE
+                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
+                            . ' in file: "[--{source-config-file}--]"',
                     ],
                 ],
 
@@ -96,7 +88,10 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     => ValidateNotConfigured::class,
 
                     RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [
-                        ValidateNotConfigured::OPTION_MESSAGE => null
+                        ValidateNotConfigured::OPTION_MESSAGE
+                        => ValidateNotConfigured::DEFAULT_MESSAGE
+                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
+                            . ' in file: "[--{source-config-file}--]"',
                     ],
                 ],
 
@@ -119,7 +114,6 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                 ],
                 /** </response-mutators> */
 
-
                 RepositoryCreate::configKey() => [
                     RepositoryCreate::OPTION_SERVICE_NAME
                     => \Reliv\PipeRat2\RepositoryDoctrine\Api\Create::class,
@@ -131,7 +125,6 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                 ],
             ],
 
-            /* Use expressive to define allowed methods */
             'allowed_methods' => ['POST'],
         ];
     }

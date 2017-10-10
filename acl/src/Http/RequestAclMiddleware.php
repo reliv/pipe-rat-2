@@ -10,6 +10,7 @@ use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\DataResponseError;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\Core\Response;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -111,7 +112,7 @@ class RequestAclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstr
                 $this->defaultFailStatusMessage
             );
 
-            return new DataResponseError(
+            return new Response(
                 $failMessage,
                 $failStatusCode
             );

@@ -8,15 +8,15 @@ use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\DataResponseBasic;
-use Reliv\PipeRat2\Core\DataResponseError;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\Core\TextResponse;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\Repository\Api\FindById;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RepositoryFindById extends MiddlewareWithConfigOptionsServiceOptionAbstract 
+class RepositoryFindById extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_ID_PARAM = 'id-param-name';
     const OPTION_BAD_REQUEST_STATUS_CODE = 'bad-request-status-code';
@@ -126,7 +126,7 @@ class RepositoryFindById extends MiddlewareWithConfigOptionsServiceOptionAbstrac
                 $this->defaultBadRequestMessage
             );
 
-            return new DataResponseError(
+            return new TextResponse(
                 $failMessage,
                 $failStatusCode
             );
@@ -150,7 +150,7 @@ class RepositoryFindById extends MiddlewareWithConfigOptionsServiceOptionAbstrac
                 $this->defaultNotFoundMessage
             );
 
-            return new DataResponseError(
+            return new TextResponse(
                 $failMessage,
                 $failStatusCode
             );

@@ -64,7 +64,7 @@ class ModuleConfig
                  * VERB: 'GET'
                  */
                 'pipe-rat-2.xample.count'
-                => RouteConfigCount::get(
+                => RouteConfigCount::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -88,7 +88,7 @@ class ModuleConfig
                  * VERB: 'GET'
                  *  */
                 'pipe-rat-2.xample.find-one'
-                => RouteConfigFindOne::get(
+                => RouteConfigFindOne::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -112,7 +112,7 @@ class ModuleConfig
                  * VERB: 'GET'
                  */
                 'pipe-rat-2.xample.find-by-id'
-                => RouteConfigFindById::get(
+                => RouteConfigFindById::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -136,7 +136,7 @@ class ModuleConfig
                  * VERB: 'PUT'
                  */
                 'pipe-rat-2.xample.update-properties'
-                => RouteConfigUpdateProperties::get(
+                => RouteConfigUpdateProperties::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -166,7 +166,7 @@ class ModuleConfig
                  * VERB: 'DELETE'
                  */
                 'pipe-rat-2.xample.delete-by-id'
-                => RouteConfigDeleteById::get(
+                => RouteConfigDeleteById::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -190,7 +190,7 @@ class ModuleConfig
                  * VERB: 'GET'
                  */
                 'pipe-rat-2.xample.exists'
-                => RouteConfigExists::get(
+                => RouteConfigExists::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -214,7 +214,7 @@ class ModuleConfig
                  * VERB: 'GET'
                  */
                 'pipe-rat-2.xample.find'
-                => RouteConfigFind::get(
+                => RouteConfigFind::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -238,7 +238,7 @@ class ModuleConfig
                  * VERB: 'POST'
                  */
                 'pipe-rat-2.xample.create'
-                => RouteConfigCreate::get(
+                => RouteConfigCreate::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,
@@ -268,7 +268,7 @@ class ModuleConfig
                  * VERB: 'PUT'
                  */
                 'pipe-rat-2.xample.upsert'
-                => RouteConfigUpsert::get(
+                => RouteConfigUpsert::build(
                     'xample',
                     [
                         'entity-class' => XampleEntity::class,

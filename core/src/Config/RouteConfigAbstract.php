@@ -15,7 +15,7 @@ abstract class RouteConfigAbstract
      *
      * @return array
      */
-    public static function get(
+    public static function build(
         string $resourceName,
         array $params,
         array $configOverride = [],

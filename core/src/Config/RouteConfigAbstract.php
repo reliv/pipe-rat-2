@@ -88,12 +88,12 @@ abstract class RouteConfigAbstract
             $config['middleware'][$key] = $middlewareServices[$key];
         }
 
-        $config = static::parseArrayParams(
+        $config = ConfigParams::parse(
             $config,
             $params
         );
 
-        $config['name'] = static::prepareName($config['name']);
+        $config['name'] = ConfigName::parse($config['name']);
 
         return $config;
     }
@@ -142,10 +142,7 @@ abstract class RouteConfigAbstract
      */
     protected static function defaultParams(): array
     {
-        return [
-            'root-path' => RouteRoot::get(),
-            'source-config-file' => 'source-config-file not set in: ' . static::class,
-        ];
+        return ConfigParams::defaultParams();
     }
 
     /**
@@ -203,74 +200,6 @@ abstract class RouteConfigAbstract
         $params = array_merge(static::defaultParams(), $params);
 
         return $params;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return mixed|string
-     */
-    protected static function prepareName(
-        string $name
-    ) {
-        // CamelCase to dash-separated
-        $name = strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $name));
-        $name = str_replace('/', '.', $name);
-        $name = ltrim($name, '.');
-
-        return $name;
-    }
-
-    /**
-     * @param array $config
-     * @param array $params
-     *
-     * @return array
-     */
-    protected static function parseArrayParams(
-        array $config,
-        array $params
-    ) {
-        if (!is_array($config)) {
-            return $config;
-        }
-
-        foreach ($config as $key => $value) {
-            if (is_array($value)) {
-                $config[$key] = static::parseArrayParams(
-                    $value,
-                    $params
-                );
-
-                continue;
-            }
-
-            if (is_string($value)) {
-                $config[$key] = static::parseValue(
-                    $value,
-                    $params
-                );
-            }
-        }
-
-        return $config;
-    }
-
-    /**
-     * @param string $value
-     * @param array  $params
-     *
-     * @return string
-     */
-    protected static function parseValue(
-        string $value,
-        array $params
-    ):string {
-        foreach ($params as $key => $param) {
-            $value = str_replace('{pipe-rat-2-config.' . $key . '}', $param, $value);
-        }
-
-        return $value;
     }
 
     /**

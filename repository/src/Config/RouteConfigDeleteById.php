@@ -22,9 +22,9 @@ class RouteConfigDeleteById extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--].{id}',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.{id}',
 
-            'path' => '[--{root-path}--]/[--{resource-name}--]/{id}',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}/{id}',
 
             'middleware' => [
                 RequestFormatJson::configKey()
@@ -60,8 +60,8 @@ class RouteConfigDeleteById extends RouteConfigAbstract implements RouteConfig
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
                         IsAllowedNotConfigured::OPTION_MESSAGE
                         => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -91,8 +91,8 @@ class RouteConfigDeleteById extends RouteConfigAbstract implements RouteConfig
                     RepositoryDeleteById::OPTION_SERVICE_OPTIONS => [
                         DeleteByIdNotConfigured::OPTION_MESSAGE
                         => DeleteByIdNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
             ],

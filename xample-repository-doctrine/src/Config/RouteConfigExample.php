@@ -36,10 +36,10 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
     {
         return [
             /* Use standard route names for client simplicity */
-            'name' => '[--{root-path}--].[--{resource-name}--].example',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.example',
 
             /* Use standard route paths for client simplicity */
-            'path' => '[--{root-path}--]/[--{resource-name}--]/example',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}/example',
 
             /* Wire each API independently */
             'middleware' => [
@@ -128,7 +128,7 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 
                     OptionsService::SERVICE_OPTIONS => [
                         \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::OPTION_ENTITY_CLASS_NAME
-                        => '[--{entity-class}--]',
+                        => '{pipe-rat-2-config.entity-class}',
                     ],
                 ],
             ],

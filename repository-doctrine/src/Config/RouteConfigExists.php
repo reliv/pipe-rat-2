@@ -29,9 +29,9 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--].{id}.exists',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.{id}.exists',
 
-            'path' => '[--{root-path}--]/[--{resource-name}--]/{id}/exists',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}/{id}/exists',
 
             'middleware' => [
                 RequestFormatJson::configKey()
@@ -67,8 +67,8 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
                         IsAllowedNotConfigured::OPTION_MESSAGE
                         => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -97,7 +97,7 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
 
                     RepositoryExists::OPTION_SERVICE_OPTIONS => [
                         \Reliv\PipeRat2\RepositoryDoctrine\Api\Exists::OPTION_ENTITY_CLASS_NAME
-                        => '[--{entity-class}--]',
+                        => '{pipe-rat-2-config.entity-class}',
                     ],
                 ],
             ],

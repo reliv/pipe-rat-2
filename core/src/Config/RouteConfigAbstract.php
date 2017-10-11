@@ -154,8 +154,8 @@ abstract class RouteConfigAbstract
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--]',
-            'path' => '[--{root-path}--]/[--{resource-name}--]',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}',
             'middleware' => [],
             'options' => [],
             'allowed_methods' => ['GET'],
@@ -267,7 +267,7 @@ abstract class RouteConfigAbstract
         array $params
     ):string {
         foreach ($params as $key => $param) {
-            $value = str_replace('[--{' . $key . '}--]', $param, $value);
+            $value = str_replace('{pipe-rat-2-config.' . $key . '}', $param, $value);
         }
 
         return $value;

@@ -26,9 +26,9 @@ class RouteConfigUpdateProperties extends RouteConfigAbstract implements RouteCo
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--].update-properties',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.update-properties',
 
-            'path' => '[--{root-path}--]/[--{resource-name}--]/{id}',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}/{id}',
 
             'middleware' => [
                 RequestFormatJson::configKey()
@@ -70,8 +70,8 @@ class RouteConfigUpdateProperties extends RouteConfigAbstract implements RouteCo
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
                         IsAllowedNotConfigured::OPTION_MESSAGE
                         => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -84,8 +84,8 @@ class RouteConfigUpdateProperties extends RouteConfigAbstract implements RouteCo
                     RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [
                         ValidateNotConfigured::OPTION_MESSAGE
                         => ValidateNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -116,8 +116,8 @@ class RouteConfigUpdateProperties extends RouteConfigAbstract implements RouteCo
                     RepositoryUpdateProperties::OPTION_SERVICE_OPTIONS => [
                         UpdatePropertiesNotConfigured::OPTION_MESSAGE
                         => UpdatePropertiesNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
             ],

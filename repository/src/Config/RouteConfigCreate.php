@@ -25,9 +25,9 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--].create',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.create',
 
-            'path' => '[--{root-path}--]/[--{resource-name}--]',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}',
 
             'middleware' => [
                 RequestFormatJson::configKey()
@@ -68,8 +68,8 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
                         IsAllowedNotConfigured::OPTION_MESSAGE
                         => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -82,8 +82,8 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [
                         ValidateNotConfigured::OPTION_MESSAGE
                         => ValidateNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -113,8 +113,8 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     RepositoryCreate::OPTION_SERVICE_OPTIONS => [
                         CreateNotConfigured::OPTION_MESSAGE
                         => CreateNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
             ],

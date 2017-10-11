@@ -23,9 +23,9 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
     protected static function defaultConfig(): array
     {
         return [
-            'name' => '[--{root-path}--].[--{resource-name}--].count',
+            'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.count',
 
-            'path' => '[--{root-path}--]/[--{resource-name}--]/count',
+            'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}/count',
 
             'middleware' => [
                 RequestFormatJson::configKey()
@@ -65,8 +65,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                     RequestAclMiddleware::OPTION_SERVICE_OPTIONS => [
                         IsAllowedNotConfigured::OPTION_MESSAGE
                         => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
 
@@ -105,8 +105,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                     RepositoryCount::OPTION_SERVICE_OPTIONS => [
                         CountNotConfigured::OPTION_MESSAGE
                         => CountNotConfigured::DEFAULT_MESSAGE
-                            . ' for pipe-rat-2 resource: "[--{resource-name}--]"'
-                            . ' in file: "[--{source-config-file}--]"',
+                            . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                            . ' in file: "{pipe-rat-2-config.source-config-file}"',
                     ],
                 ],
             ],

@@ -19,7 +19,7 @@ class Options
         string $key,
         $default = null
     ) {
-        if (self::has($options, $key)) {
+        if (array_key_exists($key, $options)) {
             return $options[$key];
         }
 

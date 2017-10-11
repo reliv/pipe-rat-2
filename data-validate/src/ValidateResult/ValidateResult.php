@@ -21,4 +21,11 @@ interface ValidateResult extends \JsonSerializable
      * @return array ['{field-name}' => '{message}'] | ['{field-name}' => ['{message}']]
      */
     public function getFieldMessages():array;
+
+    /**
+     * Validated/Filtered data
+     *
+     * @return array|object
+     */
+    public function getValidData();
 }

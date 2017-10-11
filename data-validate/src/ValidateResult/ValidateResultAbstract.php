@@ -13,19 +13,23 @@ abstract class ValidateResultAbstract
      * @var array ['{field-name}' => '{message}']
      */
     protected $fieldMessages = [];
+    protected $validData = null;
 
     /**
      * @param bool   $valid
      * @param string $primaryMessage
+     * @param null   $validData
      * @param array  $fieldMessages
      */
     public function __construct(
         bool $valid = true,
         string $primaryMessage = '',
+        $validData = null,
         array $fieldMessages = []
     ) {
         $this->valid = $valid;
         $this->primaryMessage = $primaryMessage;
+        $this->validData = $validData;
         $this->fieldMessages = $fieldMessages;
     }
 
@@ -51,6 +55,16 @@ abstract class ValidateResultAbstract
     public function getFieldMessages():array
     {
         return $this->fieldMessages;
+    }
+
+    /**
+     * Validated/Filtered data
+     *
+     * @return mixed
+     */
+    public function getValidData()
+    {
+        return $this->validData;
     }
 
     /**

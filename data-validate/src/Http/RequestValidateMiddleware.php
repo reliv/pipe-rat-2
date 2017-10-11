@@ -18,6 +18,7 @@ use Reliv\PipeRat2\Options\Options;
 class RequestValidateMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_FAIL_STATUS_CODE = 'fail-status-code';
+
     /**
      * @return string
      */
@@ -98,6 +99,9 @@ class RequestValidateMiddleware extends MiddlewareWithConfigOptionsServiceOption
             );
         }
 
-        return $next($request, $response);
+        return $next(
+            $request->withParsedBody($validateResult->getValidData()),
+            $response
+        );
     }
 }

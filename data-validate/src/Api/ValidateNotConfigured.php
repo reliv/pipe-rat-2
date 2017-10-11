@@ -57,7 +57,8 @@ class ValidateNotConfigured implements Validate
 
         return new ValidateResultBasic(
             true,
-            $message
+            $message,
+            $data
         );
     }
 }

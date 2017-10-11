@@ -39,7 +39,7 @@ class ValidateZfInputFilter implements Validate
     }
 
     /**
-     * @param $data
+     * @param       $data
      * @param array $options
      *
      * @return ValidateResult
@@ -87,7 +87,8 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage
+                $primaryMessage,
+                $inputFilter->getValues()
             );
         }
 
@@ -113,7 +114,8 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage
+                $primaryMessage,
+                $inputFilter->getValues()
             );
         }
 
@@ -136,7 +138,8 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage
+                $primaryMessage,
+                $inputFilter->getValues()
             );
         }
 

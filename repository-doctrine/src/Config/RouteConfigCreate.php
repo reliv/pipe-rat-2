@@ -3,12 +3,11 @@
 namespace Reliv\PipeRat2\RepositoryDoctrine\Config;
 
 use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
-use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
 use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
-use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
+use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
 use Reliv\PipeRat2\Repository\Http\RepositoryCreate;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat2\DataExtractor\Api;
+namespace Reliv\PipeRat2\DataExtractor\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,6 +10,7 @@ use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFields;
 

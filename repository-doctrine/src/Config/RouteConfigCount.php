@@ -7,7 +7,7 @@ use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
-use Reliv\PipeRat2\DataExtractor\Api\ResponseDataExtractor;
+use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryCount;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;

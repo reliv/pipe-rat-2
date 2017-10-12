@@ -1,55 +1,60 @@
 <?php
 
-namespace Reliv\PipeRat2\ResponseHeaders\Http;
+namespace Reliv\PipeRat2\ResponseHeaders\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 use Reliv\PipeRat2\Options\Options;
 
 /**
- * Middleware to send Expires header.
- *
  * @author James Jervis - https://github.com/jerv13
  */
-class ResponseHeadersCacheMaxAge extends MiddlewareWithConfigOptionsAbstract
+class WithResponseHeadersCacheMaxAge implements WithResponseHeaders
 {
     const OPTION_HTTP_METHODS = 'httpMethods';
     const OPTION_PRAGMA = 'pragma';
     const OPTION_MAX_AGE = 'max-age';
 
+    const DEFAULT_HTTP_METHODS = ['GET', 'OPTIONS', 'HEAD'];
+    const DEFAULT_PRAGMA = 'cache';
+    const DEFAULT_MAX_AGE = '3600';
+
+    protected $defaultHttpMethods;
+    protected $defaultPragma;
+    protected $defaultMaxAge;
+
     /**
-     * @return string
+     * @param array  $defaultHttpMethods
+     * @param string $defaultPragma
+     * @param string $defaultMaxAge
      */
-    public static function configKey(): string
-    {
-        return 'response-headers-cache-max-age';
+    public function __construct(
+        array $defaultHttpMethods = self::DEFAULT_HTTP_METHODS,
+        string $defaultPragma = self::DEFAULT_PRAGMA,
+        $defaultMaxAge = self::DEFAULT_MAX_AGE
+    ) {
+        $this->defaultHttpMethods = $defaultHttpMethods;
+        $this->defaultPragma = $defaultPragma;
+        $this->defaultMaxAge = $defaultMaxAge;
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
-     * @param callable               $next
+     * @param array                  $options
      *
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        callable $next
-    ) {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
-
-        $options = $this->getOptions->__invoke(
-            $request,
-            self::configKey()
-        );
-
+        array $options = []
+    ):ResponseInterface {
         $httpMethods = Options::get(
             $options,
             self::OPTION_HTTP_METHODS,
-            ['GET', 'OPTIONS', 'HEAD']
+            $this->defaultHttpMethods
         );
 
         if (!in_array($request->getMethod(), $httpMethods)) {
@@ -59,12 +64,13 @@ class ResponseHeadersCacheMaxAge extends MiddlewareWithConfigOptionsAbstract
         $pragma = Options::get(
             $options,
             self::OPTION_PRAGMA,
-            'cache'
+            $this->defaultPragma
         );
+
         $maxAge = Options::get(
             $options,
-            'max-age',
-            '3600'
+            self::OPTION_MAX_AGE,
+            $this->defaultMaxAge
         );
 
         // $lastModifiedDefault = new \DateTime('@0');

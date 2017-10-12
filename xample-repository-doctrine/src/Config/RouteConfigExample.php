@@ -12,13 +12,15 @@ use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\Validate;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
+use Reliv\PipeRat2\RepositoryDoctrine\Api\FindById;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormat;
-use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
+use Reliv\PipeRat2\ResponseHeaders\Api\WithResponseHeadersAdded;
+use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeaders;
 use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
 
 /**
@@ -59,8 +61,8 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 => RequestDataValidate::class,
 
                 /** <response-mutators> */
-                ResponseHeadersAdd::configKey()
-                => ResponseHeadersAdd::class,
+                ResponseHeaders::configKey()
+                => ResponseHeaders::class,
 
                 ResponseFormat::configKey()
                 => ResponseFormat::class,
@@ -115,8 +117,13 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 /** <response-mutators> */
-                ResponseHeadersAdd::configKey() => [
-                    ResponseHeadersAdd::OPTION_HEADERS => ['header-name' => 'header-value'],
+                ResponseHeaders::configKey() => [
+                    ResponseHeaders::OPTION_SERVICE_NAME
+                    => WithResponseHeadersAdded::class,
+
+                    ResponseHeaders::OPTION_SERVICE_OPTIONS => [
+                        WithResponseHeadersAdded::OPTION_HEADERS => []
+                    ],
                 ],
 
                 ResponseFormat::configKey() => [
@@ -139,10 +146,10 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 
                 RepositoryFindById::configKey() => [
                     RepositoryFindById::OPTION_SERVICE_NAME
-                    => \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::class,
+                    => FindById::class,
 
                     RepositoryFindById::OPTION_SERVICE_OPTIONS => [
-                        \Reliv\PipeRat2\RepositoryDoctrine\Api\FindById::OPTION_ENTITY_CLASS_NAME
+                        FindById::OPTION_ENTITY_CLASS_NAME
                         => '{pipe-rat-2-config.entity-class}',
                     ],
                 ],
@@ -161,7 +168,7 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
             RequestAttributeUrlEncodedFiltersWhere::configKey() => 600,
             RequestDataValidate::configKey() => 500,
             /** <response-mutators> */
-            ResponseHeadersAdd::configKey() => 400,
+            ResponseHeaders::configKey() => 400,
             ResponseFormat::configKey() => 300,
             ResponseDataExtractor::configKey() => 200,
             /** </response-mutators> */

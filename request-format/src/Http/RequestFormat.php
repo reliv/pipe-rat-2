@@ -25,9 +25,9 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
     const OPTION_NOT_ACCEPTABLE_STATUS_CODE = 'not-acceptable-status-code';
     const OPTION_NOT_ACCEPTABLE_STATUS_MESSAGE = 'not-acceptable-status-message';
 
-    const DEFAULT_VALID_CONTENT_TYPES = IsValidContentType::ALL_TYPES;
+    const DEFAULT_VALID_CONTENT_TYPES = [IsValidContentType::ALL_TYPES];
     const DEFAULT_NOT_ALLOWED_STATUS_CODE = 406;
-    const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Acceptable';
+    const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Acceptable: Request Format';
 
     /**
      * Provide a unique config key
@@ -99,7 +99,7 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
             return $next($request, $response);
         }
 
-        if ($this->isValidContentType->__invoke($request, $options)) {
+        if (!$this->isValidContentType->__invoke($request, $options)) {
             $failStatusCode = Options::get(
                 $options,
                 self::OPTION_NOT_ACCEPTABLE_STATUS_CODE,

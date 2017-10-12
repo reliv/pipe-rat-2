@@ -8,3 +8,19 @@ ToDo
     - RequestAttribute
     - ResponseHeaders
 - Build standard return formats
+
+```
+ResponseHeaders::configKey()
+=> ResponseHeaders::class,
+
+ResponseHeaders::configKey() => [
+    ResponseHeaders::OPTION_SERVICE_NAME
+    => WithResponseHeadersAdded::class,
+
+    ResponseHeaders::OPTION_SERVICE_OPTIONS => [
+        WithResponseHeadersAdded::OPTION_HEADERS => []
+    ],
+],
+
+
+```

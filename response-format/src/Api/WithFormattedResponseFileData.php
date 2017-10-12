@@ -13,6 +13,7 @@ use Reliv\PipeRat2\Options\Options;
  */
 class WithFormattedResponseFileData implements WithFormattedResponse
 {
+    const OPTION_FORMATTABLE_RESPONSE_CLASSES = IsResponseFormattable::OPTION_FORMATTABLE_RESPONSE_CLASSES;
     const OPTION_CONTENT_TYPE = 'content-type';
     const OPTION_FILE_BASE_64_PROPERTY = 'file-base-64-property';
     const OPTION_FILE_CONTENT_TYPE_PROPERTY = 'file-content-type-property';
@@ -22,6 +23,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
     const OPTION_FORCE_DOWNLOAD_CONTENT_TYPE = 'force-download-content-type';
     const OPTION_FILE_NAME = 'file-name';
 
+    const DEFAULT_FORMATTABLE_RESPONSE_CLASSES = IsResponseFormattable::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
     const DEFAULT_CONTENT_TYPE = 'application/octet-stream';
     const DEFAULT_FILE_BASE_64_PROPERTY = 'file';
     const DEFAULT_FILE_CONTENT_TYPE_PROPERTY = null; // 'fileType'
@@ -32,6 +34,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
 
     const DOWNLOAD_HEADER = 'application/octet-stream';
 
+    protected $isResponseFormattable;
     protected $getDataModel;
     protected $extract;
     protected $defaultContentType = self::DEFAULT_CONTENT_TYPE;
@@ -41,9 +44,10 @@ class WithFormattedResponseFileData implements WithFormattedResponse
     protected $defaultFileNameProperty = self::DEFAULT_FILE_NAME_PROPERTY;
     protected $defaultDownloadQueryParam = self::DEFAULT_DOWNLOAD_QUERY_PARAM;
     protected $defaultForceDownload = self::DEFAULT_FORCE_DOWNLOAD;
-
+    protected $defaultFormattableResponseClasses = self::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
 
     /**
+     * @param IsResponseFormattable $isResponseFormattable
      * @param GetDataModel          $getDataModel
      * @param Extract               $extract
      * @param string                $defaultContentType
@@ -53,8 +57,10 @@ class WithFormattedResponseFileData implements WithFormattedResponse
      * @param string                $defaultFileNameProperty
      * @param string                $defaultDownloadQueryParam
      * @param string                $defaultForceDownload
+     * @param array                 $defaultFormattableResponseClasses
      */
     public function __construct(
+        IsResponseFormattable $isResponseFormattable,
         GetDataModel $getDataModel,
         Extract $extract,
         string $defaultContentType = self::DEFAULT_CONTENT_TYPE,
@@ -63,8 +69,10 @@ class WithFormattedResponseFileData implements WithFormattedResponse
         string $defaultFileContentTypeProperty = self::DEFAULT_FILE_CONTENT_TYPE_PROPERTY,
         string $defaultFileNameProperty = self::DEFAULT_FILE_NAME_PROPERTY,
         string $defaultDownloadQueryParam = self::DEFAULT_DOWNLOAD_QUERY_PARAM,
-        string $defaultForceDownload = self::DEFAULT_FORCE_DOWNLOAD
+        string $defaultForceDownload = self::DEFAULT_FORCE_DOWNLOAD,
+        array $defaultFormattableResponseClasses = self::DEFAULT_FORMATTABLE_RESPONSE_CLASSES
     ) {
+        $this->isResponseFormattable = $isResponseFormattable;
         $this->getDataModel = $getDataModel;
         $this->extract = $extract;
         $this->defaultContentType = $defaultContentType;
@@ -74,6 +82,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
         $this->defaultFileNameProperty = $defaultFileNameProperty;
         $this->defaultDownloadQueryParam = $defaultDownloadQueryParam;
         $this->defaultForceDownload = $defaultForceDownload;
+        $this->defaultFormattableResponseClasses = $defaultFormattableResponseClasses;
     }
 
     /**
@@ -88,8 +97,12 @@ class WithFormattedResponseFileData implements WithFormattedResponse
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
+        if (!$this->isResponseFormattable->__invoke($response, $options)) {
+            // @todo ERROR?
+            return $response;
+        }
+
         $properties = $this->getProperties(
             $response,
             $options

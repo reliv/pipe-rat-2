@@ -20,8 +20,8 @@ class WithFormattedResponseXml implements WithFormattedResponse
 
     protected $isResponseFormattable;
     protected $getDataModel;
-    protected $defaultContentType;
-    protected $defaultFormattableResponseClasses;
+    protected $defaultContentType = self::DEFAULT_CONTENT_TYPE;
+    protected $defaultFormattableResponseClasses = self::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
 
     /**
      * @param IsResponseFormattable $isResponseFormattable
@@ -55,7 +55,8 @@ class WithFormattedResponseXml implements WithFormattedResponse
         array $options = []
     ): ResponseInterface
     {
-        if (!$this->isResponseFormattable->__invoke($response)) {
+        if (!$this->isResponseFormattable->__invoke($response, $options)) {
+            // @todo ERROR?
             return $response;
         }
 

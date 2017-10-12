@@ -19,7 +19,8 @@ use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormat;
-use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
+use Reliv\PipeRat2\ResponseHeaders\Api\WithResponseHeadersAdded;
+use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeaders;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -64,8 +65,8 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                 => RequestAttributeUrlEncodedFiltersLimit::class,
 
                 /** <response-mutators> */
-                ResponseHeadersAdd::configKey()
-                => ResponseHeadersAdd::class,
+                ResponseHeaders::configKey()
+                => ResponseHeaders::class,
 
                 ResponseFormat::configKey()
                 => ResponseFormat::class,
@@ -111,9 +112,13 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                 RequestAttributeUrlEncodedFiltersLimit::configKey() => [],
 
                 /** <response-mutators> */
-                ResponseHeadersAdd::configKey() => [
-                    ResponseHeadersAdd::OPTION_HEADERS
-                    => [],
+                ResponseHeaders::configKey() => [
+                    ResponseHeaders::OPTION_SERVICE_NAME
+                    => WithResponseHeadersAdded::class,
+
+                    ResponseHeaders::OPTION_SERVICE_OPTIONS => [
+                        WithResponseHeadersAdded::OPTION_HEADERS => []
+                    ],
                 ],
 
                 ResponseFormat::configKey() => [
@@ -159,7 +164,7 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
             RequestAttributeUrlEncodedFiltersLimit::configKey() => 500,
 
             /** <response-mutators> */
-            ResponseHeadersAdd::configKey() => 400,
+            ResponseHeaders::configKey() => 400,
             ResponseFormat::configKey() => 300,
             ResponseDataExtractor::configKey() => 200,
             /** </response-mutators> */

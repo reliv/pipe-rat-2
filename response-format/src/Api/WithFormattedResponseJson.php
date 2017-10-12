@@ -22,9 +22,9 @@ class WithFormattedResponseJson implements WithFormattedResponse
 
     protected $isResponseFormattable;
     protected $getDataModel;
-    protected $defaultContentType;
-    protected $defaultJsonEncodingOptions;
-    protected $defaultFormattableResponseClasses;
+    protected $defaultContentType = self::DEFAULT_CONTENT_TYPE;
+    protected $defaultJsonEncodingOptions = self::DEFAULT_JSON_ENCODING_OPTIONS;
+    protected $defaultFormattableResponseClasses = self::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
 
     /**
      * @param IsResponseFormattable $isResponseFormattable
@@ -59,8 +59,10 @@ class WithFormattedResponseJson implements WithFormattedResponse
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
-    ): ResponseInterface {
-        if (!$this->isResponseFormattable->__invoke($response)) {
+    ): ResponseInterface
+    {
+        if (!$this->isResponseFormattable->__invoke($response, $options)) {
+            // @todo ERROR?
             return $response;
         }
 

@@ -1,28 +1,31 @@
 <?php
 
-namespace Reliv\PipeRat2\ResponseHeaders\Http;
+namespace Reliv\PipeRat2\ResponseHeaders\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ResponseHeadersAdd extends MiddlewareWithConfigOptionsAbstract
+class WithResponseHeadersAdded implements WithResponseHeaders
 {
     const OPTION_HEADERS = 'headers';
+    const DEFAULT_HEADERS = [];
 
-    public static function configKey(): string
-    {
-        return 'response-headers-add';
+    protected $defaultHeaders;
+
+    public function __construct(
+        array $defaultHeaders = self::DEFAULT_HEADERS
+    ) {
+        $this->defaultHeaders = $defaultHeaders;
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
-     * @param callable               $next
+     * @param array                  $options
      *
      * @return ResponseInterface
      * @throws \Exception
@@ -30,17 +33,13 @@ class ResponseHeadersAdd extends MiddlewareWithConfigOptionsAbstract
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        callable $next
-    ) {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
-
-        $options = $this->getOptions->__invoke(
-            $request,
-            self::configKey()
+        array $options = []
+    ):ResponseInterface {
+        $headers = Options::get(
+            $options,
+            self::OPTION_HEADERS,
+            $this->defaultHeaders
         );
-
-        $headers = Options::get($options, self::OPTION_HEADERS, []);
 
         if (empty($headers)) {
             return $response;
@@ -56,5 +55,4 @@ class ResponseHeadersAdd extends MiddlewareWithConfigOptionsAbstract
 
         return $response;
     }
-
 }

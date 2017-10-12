@@ -3,9 +3,11 @@
 namespace Reliv\PipeRat2\ResponseHeaders;
 
 use Reliv\PipeRat2\Core\Api\GetOptions;
-use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
-use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersCacheMaxAge;
-use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersExpires;
+use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\ResponseHeaders\Api\WithResponseHeadersAdded;
+use Reliv\PipeRat2\ResponseHeaders\Api\WithResponseHeadersCacheMaxAge;
+use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeaders;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -20,19 +22,23 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
-                    ResponseHeadersAdd::class => [
+                    WithResponseHeadersAdded::class => [
                         'arguments' => [
-                            GetOptions::class
+                            ['literal' => WithResponseHeadersAdded::DEFAULT_HEADERS],
                         ],
                     ],
-                    ResponseHeadersCacheMaxAge::class => [
+                    WithResponseHeadersCacheMaxAge::class => [
                         'arguments' => [
-                            GetOptions::class
+                            ['literal' => WithResponseHeadersCacheMaxAge::DEFAULT_HTTP_METHODS],
+                            ['literal' => WithResponseHeadersCacheMaxAge::DEFAULT_PRAGMA],
+                            ['literal' => WithResponseHeadersCacheMaxAge::DEFAULT_MAX_AGE],
                         ],
                     ],
-                    ResponseHeadersExpires::class => [
+                    ResponseHeaders::class => [
                         'arguments' => [
-                            GetOptions::class
+                            GetOptions::class,
+                            GetServiceFromConfigOptions::class,
+                            GetServiceOptionsFromConfigOptions::class,
                         ],
                     ],
                 ],

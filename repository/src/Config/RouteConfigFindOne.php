@@ -14,6 +14,7 @@ use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormatJson;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
+use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJsonAlways;
 use Reliv\PipeRat2\ResponseHeaders\Http\ResponseHeadersAdd;
 
 /**
@@ -83,6 +84,13 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
                 ResponseHeadersAdd::configKey() => [
                     ResponseHeadersAdd::OPTION_HEADERS
                     => [],
+                ],
+
+                ResponseFormat::configKey() => [
+                    ResponseFormat::OPTION_SERVICE_NAME => ResponseFormatJsonAlways::class,
+                    ResponseFormat::OPTION_SERVICE_OPTIONS => [
+                        ResponseFormatJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
+                    ],
                 ],
 
                 ResponseFormatJson::configKey() => [

@@ -230,7 +230,10 @@ class ResponseFormatFileData extends ResponseFormatAbstract
             return $response;
         }
 
-        $properties = $this->getProperties($request, $response);
+        $properties = $this->getProperties(
+            $request,
+            $response
+        );
 
         if (!isset($properties['file'])) {
             return $response;
@@ -241,7 +244,11 @@ class ResponseFormatFileData extends ResponseFormatAbstract
 
         $response = $response->withBody($body);
 
-        $response = $this->getResponseWithContentType($request, $response, $properties);
+        $response = $this->getResponseWithContentType(
+            $request,
+            $response,
+            $properties
+        );
 
         return $response;
     }

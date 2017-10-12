@@ -26,7 +26,8 @@ class ResponseFormatFile extends ResponseFormatAbstract
     /**
      * @param GetOptions $getOptions
      */
-    public function __construct(GetOptions $getOptions)
+    public function __construct(
+        GetOptions $getOptions)
     {
         parent::__construct($getOptions);
     }

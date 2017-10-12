@@ -1,0 +1,122 @@
+<?php
+
+namespace Reliv\PipeRat2\ResponseFormat\Http;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\GetOptions;
+use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\Core\Response;
+use Reliv\PipeRat2\Options\Options;
+use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
+use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponse;
+
+/**
+ * @author James Jervis - https://github.com/jerv13
+ */
+class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
+{
+    const OPTION_ACCEPTS = IsRequestValidAcceptType::OPTION_ACCEPTS;
+    const OPTION_NOT_ACCEPTABLE_STATUS_CODE = 'not-acceptable-status-code';
+    const OPTION_NOT_ACCEPTABLE_STATUS_MESSAGE = 'not-acceptable-status-message';
+
+    const DEFAULT_NOT_ALLOWED_STATUS_CODE = 406;
+    const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Acceptable';
+
+    /**
+     * Provide a unique config key
+     *
+     * @return string
+     */
+    public static function configKey(): string
+    {
+        return 'request-format';
+    }
+
+    protected $isRequestValidAcceptType;
+    protected $defaultNotAcceptableStatusCode;
+    protected $defaultNotAcceptableStatusMessage;
+
+    /**
+     * @param GetOptions                         $getOptions
+     * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
+     * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
+     * @param IsRequestValidAcceptType           $isRequestValidAcceptType
+     * @param string                             $defaultNotAcceptableStatusCode
+     * @param string                             $defaultNotAcceptableStatusMessage
+     */
+    public function __construct(
+        GetOptions $getOptions,
+        GetServiceFromConfigOptions $getServiceFromConfigOptions,
+        GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        IsRequestValidAcceptType $isRequestValidAcceptType,
+        string $defaultNotAcceptableStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE,
+        string $defaultNotAcceptableStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE
+    ) {
+        $this->isRequestValidAcceptType = $isRequestValidAcceptType;
+        $this->defaultNotAcceptableStatusCode = $defaultNotAcceptableStatusCode;
+        $this->defaultNotAcceptableStatusMessage = $defaultNotAcceptableStatusMessage;
+        parent::__construct(
+            $getOptions,
+            $getServiceFromConfigOptions,
+            $getServiceOptionsFromConfigOptions
+        );
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param callable|null          $next
+     *
+     * @return mixed
+     */
+    public function __invoke(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        callable $next = null
+    ) {
+        $options = $this->getOptions->__invoke(
+            $request,
+            self::configKey()
+        );
+
+        /** @var ResponseInterface $response */
+        $response = $next($request, $response);
+
+        if (!$this->isRequestValidAcceptType->__invoke($request, $options)) {
+            $failStatusCode = Options::get(
+                $options,
+                self::OPTION_NOT_ACCEPTABLE_STATUS_CODE,
+                $this->defaultNotAcceptableStatusCode
+            );
+
+            $failMessage = Options::get(
+                $options,
+                self::OPTION_NOT_ACCEPTABLE_STATUS_MESSAGE,
+                $this->defaultNotAcceptableStatusMessage
+            );
+
+            return new Response(
+                $failMessage,
+                $failStatusCode
+            );
+        }
+
+        /** @var WithFormattedResponse $withFormattedResponseApi */
+        $withFormattedResponseApi = $this->getServiceFromConfigOptions->__invoke(
+            $options,
+            WithFormattedResponse::class
+        );
+
+        $withFormattedResponseOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
+            $options
+        );
+
+        return $withFormattedResponseApi->__invoke(
+            $response,
+            $withFormattedResponseOptions
+        );
+    }
+}

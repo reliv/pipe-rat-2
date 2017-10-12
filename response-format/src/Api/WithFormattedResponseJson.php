@@ -1,88 +1,65 @@
 <?php
 
-namespace Reliv\PipeRat2\ResponseFormat\Http;
+namespace Reliv\PipeRat2\ResponseFormat\Api;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
-use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ResponseFormatJsonAlways extends ResponseFormatAbstract
+class WithFormattedResponseJson implements WithFormattedResponse
 {
-    const OPTION_JSON_ENCODING_OPTIONS = 'jsonEncodeOptions';
+    const OPTION_JSON_ENCODING_OPTIONS = 'json-encode-options';
+    const OPTION_CONTENT_TYPE = 'content-type';
 
-    /**
-     * @return string
-     */
-    public static function configKey(): string
-    {
-        return 'response-format-json';
-    }
+    const DEFAULT_JSON_ENCODING_OPTIONS = JSON_PRETTY_PRINT;
+    const DEFAULT_CONTENT_TYPE = 'application/json';
 
-    /**
-     * @var array
-     */
-    protected $defaultAcceptTypes
-        = [
-            'application/json',
-            'json'
-        ];
-
-    /**
-     * @var IsResponseFormattable
-     */
     protected $isResponseFormattable;
-
-    /**
-     * @var GetDataModel
-     */
     protected $getDataModel;
+    protected $defaultContentType;
+    protected $defaultJsonEncodingOptions;
 
     /**
-     * @param GetOptions            $getOptions
      * @param IsResponseFormattable $isResponseFormattable
      * @param GetDataModel          $getDataModel
+     * @param string                $defaultContentType
+     * @param string                $defaultJsonEncodingOptions
      */
     public function __construct(
-        GetOptions $getOptions,
         IsResponseFormattable $isResponseFormattable,
-        GetDataModel $getDataModel
+        GetDataModel $getDataModel,
+        string $defaultContentType = self::DEFAULT_CONTENT_TYPE,
+        string $defaultJsonEncodingOptions = self::DEFAULT_JSON_ENCODING_OPTIONS
     ) {
         $this->isResponseFormattable = $isResponseFormattable;
         $this->getDataModel = $getDataModel;
-        parent::__construct($getOptions);
+        $this->defaultContentType = $defaultContentType;
+        $this->defaultJsonEncodingOptions = $defaultJsonEncodingOptions;
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
-     * @param callable|null          $next
+     * @param ResponseInterface $response
+     * @param array             $options
      *
      * @return ResponseInterface
      * @throws \Exception
      */
     public function __invoke(
-        ServerRequestInterface $request,
         ResponseInterface $response,
-        callable $next = null
-    ) {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
-
-        $options = $this->getOptions->__invoke(
-            $request,
-            self::configKey()
-        );
+        array $options = []
+    ): ResponseInterface
+    {
+        if (!$this->isResponseFormattable->__invoke($response)) {
+            return $response;
+        }
 
         $jsonEncodeOptions = Options::get(
             $options,
             self::OPTION_JSON_ENCODING_OPTIONS,
-            JSON_PRETTY_PRINT
+            $this->defaultJsonEncodingOptions
         );
 
         $dataModel = $this->getDataModel->__invoke($response);
@@ -97,9 +74,15 @@ class ResponseFormatJsonAlways extends ResponseFormatAbstract
         $body->rewind();
         $body->write($content);
 
+        $contentType = Options::get(
+            $options,
+            self::OPTION_CONTENT_TYPE,
+            $this->defaultContentType
+        );
+
         return $response->withBody($body)->withHeader(
             'Content-Type',
-            'application/json'
+            $contentType
         );
     }
 }

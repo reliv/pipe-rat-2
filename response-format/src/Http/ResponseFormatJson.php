@@ -14,7 +14,7 @@ use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
  */
 class ResponseFormatJson extends ResponseFormatAbstract
 {
-    const OPTION_JSON_ENCODING_OPTIONS = 'jsonEncodeOptions';
+    const OPTION_JSON_ENCODING_OPTIONS = 'json-encode-options';
 
     /**
      * @return string

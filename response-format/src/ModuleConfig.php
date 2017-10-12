@@ -6,6 +6,8 @@ use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetQueryParam;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
+use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
+use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptTypeBasic;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattableBasic;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatFile;
@@ -28,6 +30,9 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    IsRequestValidAcceptType::class => [
+                        'class' => IsRequestValidAcceptTypeBasic::class,
+                    ],
                     IsResponseFormattable::class => [
                         'class' => IsResponseFormattableBasic::class,
                     ],

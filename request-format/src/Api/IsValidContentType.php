@@ -1,25 +1,26 @@
 <?php
 
-namespace Reliv\PipeRat2\ResponseFormat\Api;
+namespace Reliv\PipeRat2\RequestFormat\Api;
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-interface WithFormattedResponse
+interface IsValidContentType
 {
+    const ALL_TYPES = '*/*';
+
+    const OPTION_VALID_CONTENT_TYPES = 'valid-content-types';
+
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
      * @param array                  $options
      *
-     * @return ResponseInterface
+     * @return bool
      */
     public function __invoke(
         ServerRequestInterface $request,
-        ResponseInterface $response,
         array $options = []
-    ): ResponseInterface;
+    ): bool;
 }

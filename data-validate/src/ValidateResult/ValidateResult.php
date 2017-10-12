@@ -15,7 +15,7 @@ interface ValidateResult extends \JsonSerializable
     /**
      * @return string
      */
-    public function getPrimaryMessage():string;
+    public function getMessage():string;
 
     /**
      * @return array ['{field-name}' => '{message}'] | ['{field-name}' => ['{message}']]

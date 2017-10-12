@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\ResponseFormat\Api;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -26,13 +27,14 @@ class WithFormattedResponseFile implements WithFormattedResponse
     }
 
     /**
-     * @param ResponseInterface $response
-     * @param array             $options
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param array                  $options
      *
      * @return ResponseInterface
-     * @throws \Exception
      */
     public function __invoke(
+        ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
     ): ResponseInterface {

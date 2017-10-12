@@ -7,7 +7,7 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedAny;
 use Reliv\PipeRat2\Acl\Api\IsAllowedNone;
 use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
-use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
+use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -41,13 +41,13 @@ class ModuleConfig
                             \RcmUser\Api\Acl\IsAllowed::class
                         ],
                     ],
-                    RequestAclMiddleware::class => [
+                    RequestAcl::class => [
                         'arguments' => [
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
-                            ['literal' => RequestAclMiddleware::DEFAULT_NOT_ALLOWED_STATUS_CODE],
-                            ['literal' => RequestAclMiddleware::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE],
+                            ['literal' => RequestAcl::DEFAULT_NOT_ALLOWED_STATUS_CODE],
+                            ['literal' => RequestAcl::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE],
                         ],
                     ],
                 ],

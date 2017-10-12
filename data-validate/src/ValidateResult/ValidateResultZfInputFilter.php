@@ -14,13 +14,13 @@ class ValidateResultZfInputFilter extends ValidateResultAbstract implements Vali
     /**
      * @param bool   $valid
      * @param string $input
-     * @param string $primaryMessage
+     * @param string $message
      * @param null   $validData
      */
     public function __construct(
         $valid,
         $input,
-        string $primaryMessage = '',
+        string $message = '',
         $validData = null
     ) {
         $fieldMessages = $this->build(
@@ -28,7 +28,7 @@ class ValidateResultZfInputFilter extends ValidateResultAbstract implements Vali
         );
         parent::__construct(
             $valid,
-            $primaryMessage,
+            $message,
             $validData,
             $fieldMessages
         );

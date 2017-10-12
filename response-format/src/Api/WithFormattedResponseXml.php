@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\ResponseFormat\Api;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Options\Options;
 
@@ -11,37 +12,45 @@ use Reliv\PipeRat2\Options\Options;
  */
 class WithFormattedResponseXml implements WithFormattedResponse
 {
+    const OPTION_FORMATTABLE_RESPONSE_CLASSES = IsResponseFormattable::OPTION_FORMATTABLE_RESPONSE_CLASSES;
     const OPTION_CONTENT_TYPE = 'content-type';
 
+    const DEFAULT_FORMATTABLE_RESPONSE_CLASSES = IsResponseFormattable::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
     const DEFAULT_CONTENT_TYPE = 'application/xml';
 
     protected $isResponseFormattable;
     protected $getDataModel;
     protected $defaultContentType;
+    protected $defaultFormattableResponseClasses;
 
     /**
      * @param IsResponseFormattable $isResponseFormattable
      * @param GetDataModel          $getDataModel
      * @param string                $defaultContentType
+     * @param array                 $defaultFormattableResponseClasses
      */
     public function __construct(
         IsResponseFormattable $isResponseFormattable,
         GetDataModel $getDataModel,
-        string $defaultContentType = self::DEFAULT_CONTENT_TYPE
+        string $defaultContentType = self::DEFAULT_CONTENT_TYPE,
+        array $defaultFormattableResponseClasses = self::DEFAULT_FORMATTABLE_RESPONSE_CLASSES
     ) {
         $this->isResponseFormattable = $isResponseFormattable;
         $this->getDataModel = $getDataModel;
         $this->defaultContentType = $defaultContentType;
+        $this->defaultFormattableResponseClasses = $defaultFormattableResponseClasses;
     }
 
     /**
-     * @param ResponseInterface $response
-     * @param array             $options
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param array                  $options
      *
      * @return ResponseInterface
      * @throws \Exception
      */
     public function __invoke(
+        ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
     ): ResponseInterface

@@ -15,19 +15,19 @@ class DataResponseError extends Response implements DataResponse
     protected $dataBody = null;
 
     /**
-     * @param string $primaryMessage
+     * @param string $message
      * @param array  $fieldMessages
      * @param int    $status
      * @param array  $headers
      */
     public function __construct(
-        string $primaryMessage,
+        string $message,
         int $status = 400,
         array $fieldMessages = [],
         array $headers = []
     ) {
         $this->dataBody = [
-            'error' => $primaryMessage
+            'error' => $message
         ];
 
         if (!empty($fieldMessages)) {

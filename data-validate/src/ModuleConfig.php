@@ -10,7 +10,7 @@ use Reliv\PipeRat2\DataValidate\Api\ValidateNoop;
 use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Api\ValidateZfInputFilter;
 use Reliv\PipeRat2\DataValidate\Api\ValidateZfInputFilterFactory;
-use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
+use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -42,7 +42,7 @@ class ModuleConfig
                         'factory' => ValidateZfInputFilterFactory::class,
                     ],
 
-                    RequestValidateMiddleware::class => [
+                    RequestDataValidate::class => [
                         'arguments' => [
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,

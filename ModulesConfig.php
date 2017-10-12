@@ -15,6 +15,7 @@ class ModulesConfig
         $modules = [
             new \Reliv\PipeRat2\Core\ModuleConfig(),
             new \Reliv\PipeRat2\Options\ModuleConfig(),
+            new \Reliv\PipeRat2\DataError\ModuleConfig(),
             new \Reliv\PipeRat2\Acl\ModuleConfig(),
             new \Reliv\PipeRat2\DataExtractor\ModuleConfig(),
             new \Reliv\PipeRat2\DataHydrator\ModuleConfig(),
@@ -25,7 +26,7 @@ class ModulesConfig
             new \Reliv\PipeRat2\ResponseFormat\ModuleConfig(),
             new \Reliv\PipeRat2\ResponseHeaders\ModuleConfig(),
             new \Reliv\PipeRat2\RepositoryDoctrine\ModuleConfig(),
-            /** EXAMPLE ONLY *
+            /** EXAMPLE ONLY */
             new \Reliv\PipeRat2\XampleRepositoryDoctrine\ModuleConfig(),
             /* */
         ];

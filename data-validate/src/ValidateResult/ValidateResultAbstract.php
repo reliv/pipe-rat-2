@@ -8,7 +8,7 @@ namespace Reliv\PipeRat2\DataValidate\ValidateResult;
 abstract class ValidateResultAbstract
 {
     protected $valid = true;
-    protected $primaryMessage = '';
+    protected $message = '';
     /**
      * @var array ['{field-name}' => '{message}']
      */
@@ -17,18 +17,18 @@ abstract class ValidateResultAbstract
 
     /**
      * @param bool   $valid
-     * @param string $primaryMessage
+     * @param string $message
      * @param null   $validData
      * @param array  $fieldMessages
      */
     public function __construct(
         bool $valid = true,
-        string $primaryMessage = '',
+        string $message = '',
         $validData = null,
         array $fieldMessages = []
     ) {
         $this->valid = $valid;
-        $this->primaryMessage = $primaryMessage;
+        $this->message = $message;
         $this->validData = $validData;
         $this->fieldMessages = $fieldMessages;
     }
@@ -44,9 +44,9 @@ abstract class ValidateResultAbstract
     /**
      * @return string
      */
-    public function getPrimaryMessage():string
+    public function getMessage():string
     {
-        return $this->primaryMessage;
+        return $this->message;
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class ValidateResultAbstract
     {
         return [
             'valid' => $this->valid,
-            'primaryMessage' => $this->primaryMessage,
+            'error' => $this->message,
             'fieldMessages' => $this->fieldMessages,
         ];
     }

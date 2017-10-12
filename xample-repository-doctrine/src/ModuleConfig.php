@@ -3,9 +3,9 @@
 namespace Reliv\PipeRat2\XampleRepositoryDoctrine;
 
 use Reliv\PipeRat2\Acl\Api\IsAllowedAny;
-use Reliv\PipeRat2\Acl\Http\RequestAclMiddleware;
+use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\DataValidate\Api\ValidateNoop;
-use Reliv\PipeRat2\DataValidate\Http\RequestValidateMiddleware;
+use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigCount;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigCreate;
 use Reliv\PipeRat2\RepositoryDoctrine\Config\RouteConfigDeleteById;
@@ -72,11 +72,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -96,11 +96,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -120,11 +120,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -144,18 +144,18 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
-                            RequestValidateMiddleware::configKey() => [
-                                RequestValidateMiddleware::OPTION_SERVICE_NAME
+                            RequestDataValidate::configKey() => [
+                                RequestDataValidate::OPTION_SERVICE_NAME
                                 => ValidateNoop::class,
 
-                                RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [],
+                                RequestDataValidate::OPTION_SERVICE_OPTIONS => [],
                             ],
                         ]
                     ]
@@ -174,11 +174,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -198,11 +198,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -222,11 +222,11 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
                         ]
@@ -246,18 +246,18 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
-                            RequestValidateMiddleware::configKey() => [
-                                RequestValidateMiddleware::OPTION_SERVICE_NAME
+                            RequestDataValidate::configKey() => [
+                                RequestDataValidate::OPTION_SERVICE_NAME
                                 => ValidateNoop::class,
 
-                                RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [],
+                                RequestDataValidate::OPTION_SERVICE_OPTIONS => [],
                             ],
                         ]
                     ]
@@ -276,18 +276,18 @@ class ModuleConfig
                     ],
                     [
                         'options' => [
-                            RequestAclMiddleware::configKey() => [
-                                RequestAclMiddleware::OPTION_SERVICE_NAME
+                            RequestAcl::configKey() => [
+                                RequestAcl::OPTION_SERVICE_NAME
                                 => IsAllowedAny::class,
 
-                                RequestAclMiddleware::OPTION_SERVICE_OPTIONS
+                                RequestAcl::OPTION_SERVICE_OPTIONS
                                 => [],
                             ],
-                            RequestValidateMiddleware::configKey() => [
-                                RequestValidateMiddleware::OPTION_SERVICE_NAME
+                            RequestDataValidate::configKey() => [
+                                RequestDataValidate::OPTION_SERVICE_NAME
                                 => ValidateNoop::class,
 
-                                RequestValidateMiddleware::OPTION_SERVICE_OPTIONS => [],
+                                RequestDataValidate::OPTION_SERVICE_OPTIONS => [],
                             ],
                         ]
                     ]

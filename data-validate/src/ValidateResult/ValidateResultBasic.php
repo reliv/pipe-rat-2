@@ -9,19 +9,19 @@ class ValidateResultBasic extends ValidateResultAbstract implements ValidateResu
 {
     /**
      * @param bool   $valid
-     * @param string $primaryMessage
+     * @param string $message
      * @param null   $validData
      * @param array  $fieldMessages
      */
     public function __construct(
         bool $valid = true,
-        string $primaryMessage = '',
+        string $message = '',
         $validData = null,
         array $fieldMessages = []
     ) {
         parent::__construct(
             $valid,
-            $primaryMessage,
+            $message,
             $validData,
             $fieldMessages
         );

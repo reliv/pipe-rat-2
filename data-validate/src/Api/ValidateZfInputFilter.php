@@ -23,19 +23,19 @@ class ValidateZfInputFilter implements Validate
 
     protected $serviceContainer;
     protected $serviceAwareFactory;
-    protected $defaultPrimaryMessage = self::DEFAULT_PRIMARY_MESSAGE;
+    protected $defaultMessage = self::DEFAULT_PRIMARY_MESSAGE;
 
     /**
      * @param ContainerInterface $serviceContainer
-     * @param string             $defaultPrimaryMessage
+     * @param string             $defaultMessage
      */
     public function __construct(
         $serviceContainer,
-        string $defaultPrimaryMessage = self::DEFAULT_PRIMARY_MESSAGE
+        string $defaultMessage = self::DEFAULT_PRIMARY_MESSAGE
     ) {
         $this->serviceContainer = $serviceContainer;
         $this->serviceAwareFactory = $serviceContainer->get(ServiceAwareFactory::class);
-        $this->defaultPrimaryMessage = $defaultPrimaryMessage;
+        $this->defaultMessage = $defaultMessage;
     }
 
     /**
@@ -56,10 +56,10 @@ class ValidateZfInputFilter implements Validate
             $data
         );
 
-        $primaryMessage = Options::get(
+        $message = Options::get(
             $options,
             self::OPTION_PRIMARY_MESSAGE,
-            $this->defaultPrimaryMessage
+            $this->defaultMessage
         );
 
         $filterService = Options::get(
@@ -87,7 +87,7 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage,
+                $message,
                 $inputFilter->getValues()
             );
         }
@@ -114,7 +114,7 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage,
+                $message,
                 $inputFilter->getValues()
             );
         }
@@ -138,7 +138,7 @@ class ValidateZfInputFilter implements Validate
             return new ValidateResultZfInputFilter(
                 $valid,
                 $inputFilter,
-                $primaryMessage,
+                $message,
                 $inputFilter->getValues()
             );
         }

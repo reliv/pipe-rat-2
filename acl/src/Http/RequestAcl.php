@@ -8,15 +8,14 @@ use Reliv\PipeRat2\Acl\Api\IsAllowed;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\Core\DataResponseError;
+use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
-use Reliv\PipeRat2\Core\Response;
 use Reliv\PipeRat2\Options\Options;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RequestAclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstract
+class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_NOT_ALLOWED_STATUS_CODE = 'not-allowed-status-code';
     const OPTION_NOT_ALLOWED_STATUS_MESSAGE = 'not-allowed-status-message';
@@ -112,9 +111,11 @@ class RequestAclMiddleware extends MiddlewareWithConfigOptionsServiceOptionAbstr
                 $this->defaultFailStatusMessage
             );
 
-            return new Response(
-                $failMessage,
-                $failStatusCode
+            return new DataResponseBasic(
+                null,
+                $failStatusCode,
+                [],
+                $failMessage
             );
         }
 

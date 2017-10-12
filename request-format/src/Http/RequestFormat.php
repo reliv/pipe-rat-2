@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat2\ResponseFormat\Http;
+namespace Reliv\PipeRat2\RequestFormat\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,20 +9,23 @@ use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
+use Reliv\PipeRat2\DataError\Api\GetErrorArray;
 use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
-use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponse;
+use Reliv\PipeRat2\RequestFormat\Api\IsValidContentType;
+use Reliv\PipeRat2\RequestFormat\Api\IsValidRequestMethod;
+use Reliv\PipeRat2\RequestFormat\Api\WithParsedBody;
+use Reliv\PipeRat2\RequestFormat\Exception\RequestFormatDecodeFail;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
+class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
-    const OPTION_ACCEPTS = IsRequestValidAcceptType::OPTION_ACCEPTS;
+    const OPTION_VALID_CONTENT_TYPES = IsValidContentType::OPTION_VALID_CONTENT_TYPES;
     const OPTION_NOT_ACCEPTABLE_STATUS_CODE = 'not-acceptable-status-code';
     const OPTION_NOT_ACCEPTABLE_STATUS_MESSAGE = 'not-acceptable-status-message';
 
-    const DEFAULT_ACCEPTS = IsRequestValidAcceptType::ALL_TYPES;
+    const DEFAULT_VALID_CONTENT_TYPES = IsValidContentType::ALL_TYPES;
     const DEFAULT_NOT_ALLOWED_STATUS_CODE = 406;
     const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Acceptable';
 
@@ -33,11 +36,12 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      */
     public static function configKey(): string
     {
-        return 'response-format';
+        return 'request-format';
     }
 
-    protected $isRequestValidAcceptType;
-    protected $defaultAccepts;
+    protected $isValidContentType;
+    protected $isValidRequestMethod;
+    protected $defaultValidContentType;
     protected $defaultNotAcceptableStatusCode;
     protected $defaultNotAcceptableStatusMessage;
 
@@ -45,8 +49,9 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
-     * @param IsRequestValidAcceptType           $isRequestValidAcceptType
-     * @param array                              $defaultAccepts
+     * @param IsValidContentType                 $isValidContentType
+     * @param IsValidRequestMethod               $isValidRequestMethod
+     * @param array                              $defaultValidContentType
      * @param string                             $defaultNotAcceptableStatusCode
      * @param string                             $defaultNotAcceptableStatusMessage
      */
@@ -54,15 +59,18 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
-        IsRequestValidAcceptType $isRequestValidAcceptType,
-        array $defaultAccepts = self::DEFAULT_ACCEPTS,
+        IsValidContentType $isValidContentType,
+        IsValidRequestMethod $isValidRequestMethod,
+        array $defaultValidContentType = self::DEFAULT_VALID_CONTENT_TYPES,
         string $defaultNotAcceptableStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE,
         string $defaultNotAcceptableStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE
     ) {
-        $this->isRequestValidAcceptType = $isRequestValidAcceptType;
-        $this->defaultAccepts = $defaultAccepts;
+        $this->isValidContentType = $isValidContentType;
+        $this->isValidRequestMethod = $isValidRequestMethod;
+        $this->defaultValidContentType = $defaultValidContentType;
         $this->defaultNotAcceptableStatusCode = $defaultNotAcceptableStatusCode;
         $this->defaultNotAcceptableStatusMessage = $defaultNotAcceptableStatusMessage;
+
         parent::__construct(
             $getOptions,
             $getServiceFromConfigOptions,
@@ -87,10 +95,11 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
             self::configKey()
         );
 
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
+        if (!$this->isValidRequestMethod->__invoke($request, $options)) {
+            return $next($request, $response);
+        }
 
-        if (!$this->isRequestValidAcceptType->__invoke($request, $options)) {
+        if ($this->isValidContentType->__invoke($request, $options)) {
             $failStatusCode = Options::get(
                 $options,
                 self::OPTION_NOT_ACCEPTABLE_STATUS_CODE,
@@ -111,20 +120,45 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
             );
         }
 
-        /** @var WithFormattedResponse $withFormattedResponseApi */
-        $withFormattedResponseApi = $this->getServiceFromConfigOptions->__invoke(
+        /** @var WithParsedBody $withParsedBodyApi */
+        $withParsedBodyApi = $this->getServiceFromConfigOptions->__invoke(
             $options,
-            WithFormattedResponse::class
+            WithParsedBody::class
         );
 
-        $withFormattedResponseOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
+        $withParsedBodyOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
             $options
         );
 
-        return $withFormattedResponseApi->__invoke(
-            $request,
-            $response,
-            $withFormattedResponseOptions
-        );
+        try {
+            $request = $withParsedBodyApi->__invoke(
+                $request,
+                $response,
+                $withParsedBodyOptions
+            );
+        } catch (RequestFormatDecodeFail $exception) {
+            $failStatusCode = Options::get(
+                $options,
+                self::OPTION_NOT_ACCEPTABLE_STATUS_CODE,
+                $this->defaultNotAcceptableStatusCode
+            );
+
+            $failMessage = Options::get(
+                $options,
+                self::OPTION_NOT_ACCEPTABLE_STATUS_MESSAGE,
+                $this->defaultNotAcceptableStatusMessage
+            );
+
+            return new DataResponseBasic(
+                GetErrorArray::invoke(
+                    $exception->getMessage()
+                ),
+                $failStatusCode,
+                [],
+                $failMessage
+            );
+        }
+
+        return $next($request, $response);
     }
 }

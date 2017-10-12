@@ -2,18 +2,10 @@
 
 namespace Reliv\PipeRat2\ResponseFormat;
 
-use Reliv\PipeRat2\Core\Api\GetDataModel;
-use Reliv\PipeRat2\Core\Api\GetOptions;
-use Reliv\PipeRat2\Core\Api\GetQueryParam;
-use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptTypeBasic;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattableBasic;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatFile;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatFileData;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatXml;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -30,42 +22,17 @@ class ModuleConfig
                 'config_factories' => [
                     IsRequestValidAcceptType::class => [
                         'class' => IsRequestValidAcceptTypeBasic::class,
+                        'arguments' => [
+                            IsRequestValidAcceptTypeBasic::DEFAULT_ACCEPTS
+                        ]
                     ],
                     IsResponseFormattable::class => [
                         'class' => IsResponseFormattableBasic::class,
+                        'arguments' => [
+                            IsResponseFormattableBasic::DEFAULT_FORMATTABLE_RESPONSE_CLASSES
+                        ]
                     ],
                     IsResponseFormattableBasic::class => [],
-
-                    ResponseFormatFile::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                        ],
-                    ],
-
-                    ResponseFormatFileData::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                            GetQueryParam::class,
-                            GetDataModel::class,
-                            Extract::class,
-                        ],
-                    ],
-
-                    ResponseFormatJson::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                            IsResponseFormattable::class,
-                            GetDataModel::class
-                        ],
-                    ],
-
-                    ResponseFormatXml::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                            IsResponseFormattable::class,
-                            GetDataModel::class
-                        ],
-                    ],
                 ],
             ],
         ];

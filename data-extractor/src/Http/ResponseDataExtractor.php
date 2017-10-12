@@ -12,7 +12,7 @@ use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -123,7 +123,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
         array $extractOptions
     ) {
         $requestedFields = $request->getAttribute(
-            RequestAttributeFields::ATTRIBUTE,
+            WithRequestAttributeFields::ATTRIBUTE,
             null
         );
 

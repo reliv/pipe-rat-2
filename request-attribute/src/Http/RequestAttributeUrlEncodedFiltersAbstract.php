@@ -5,6 +5,9 @@ namespace Reliv\PipeRat2\RequestAttribute\Http;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsAbstract;
 
+/**
+ * @deprecated
+ */
 abstract class RequestAttributeUrlEncodedFiltersAbstract extends MiddlewareWithConfigOptionsAbstract
 {
     /**

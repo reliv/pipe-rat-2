@@ -8,6 +8,7 @@ use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 
 /**
+ * @deprecated
  * @author James Jervis - https://github.com/jerv13
  */
 class RequestAttributeUrlEncodedFiltersSkip

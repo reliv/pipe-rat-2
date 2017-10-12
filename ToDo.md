@@ -10,10 +10,10 @@ ToDo
 - Build standard return formats
 
 ```
-ResponseHeaders::configKey()
-=> ResponseHeaders::class,
+RequestAttributes::configKey()
+=> RequestAttributes::class,
 
-ResponseHeaders::configKey() => [
+RequestAttributes::configKey() => [
     ResponseHeaders::OPTION_SERVICE_NAME
     => WithResponseHeadersAdded::class,
 

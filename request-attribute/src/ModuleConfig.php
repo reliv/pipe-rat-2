@@ -3,11 +3,16 @@
 namespace Reliv\PipeRat2\RequestAttribute;
 
 use Reliv\PipeRat2\Core\Api\GetOptions;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersLimit;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersOrder;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersSkip;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
+use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\RequestAttribute\Api\GetUrlEncodedFilterValue;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedLimit;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedOrder;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedSkip;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttribute;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -22,34 +27,54 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
-                    RequestAttributeUrlEncodedFiltersFields::class => [
-                        'class' => RequestAttributeUrlEncodedFiltersFields::class,
+                    GetUrlEncodedFilterValue::class => [],
+
+                    WithRequestAttributeUrlEncodedFields::class => [
                         'arguments' => [
-                            GetOptions::class,
+                            GetUrlEncodedFilterValue::class,
                         ],
                     ],
-                    RequestAttributeUrlEncodedFiltersLimit::class => [
-                        'class' => RequestAttributeUrlEncodedFiltersLimit::class,
+
+                    WithRequestAttributeUrlEncodedLimit::class => [
                         'arguments' => [
-                            GetOptions::class,
+                            GetUrlEncodedFilterValue::class,
                         ],
                     ],
-                    RequestAttributeUrlEncodedFiltersOrder::class => [
-                        'class' => RequestAttributeUrlEncodedFiltersOrder::class,
+
+                    WithRequestAttributeUrlEncodedOrder::class => [
                         'arguments' => [
-                            GetOptions::class,
+                            GetUrlEncodedFilterValue::class,
                         ],
                     ],
-                    RequestAttributeUrlEncodedFiltersSkip::class => [
-                        'class' => RequestAttributeUrlEncodedFiltersSkip::class,
+
+                    WithRequestAttributeUrlEncodedSkip::class => [
                         'arguments' => [
-                            GetOptions::class,
+                            GetUrlEncodedFilterValue::class,
                         ],
                     ],
-                    RequestAttributeUrlEncodedFiltersWhere::class => [
-                        'class' => RequestAttributeUrlEncodedFiltersWhere::class,
+
+                    WithRequestAttributeUrlEncodedWhere::class => [
+                        'arguments' => [
+                            GetUrlEncodedFilterValue::class,
+                            ['literal' => WithRequestAttributeUrlEncodedWhere::DEFAULT_ALLOW_DEEP_WHERES],
+                        ],
+                    ],
+
+                    RequestAttribute::class => [
                         'arguments' => [
                             GetOptions::class,
+                            GetServiceFromConfigOptions::class,
+                            GetServiceOptionsFromConfigOptions::class,
+                        ],
+                    ],
+
+                    RequestAttributes::class => [
+                        'arguments' => [
+                            GetOptions::class,
+                            GetServiceFromConfigOptions::class,
+                            GetServiceOptionsFromConfigOptions::class,
+                            ['literal' => RequestAttributes::DEFAULT_SERVICE_NAMES],
+                            ['literal' => RequestAttributes::DEFAULT_SERVICE_NAMES_OPTIONS],
                         ],
                     ],
                 ],

@@ -11,7 +11,7 @@ use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\Repository\Api\Count;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhere;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -74,7 +74,7 @@ class RepositoryCount extends MiddlewareWithConfigOptionsServiceOptionAbstract
         );
 
         $where = $request->getAttribute(
-            RequestAttributeWhere::ATTRIBUTE,
+            WithRequestAttributeWhere::ATTRIBUTE,
             []
         );
 

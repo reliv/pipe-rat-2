@@ -9,6 +9,7 @@ use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
 
 /**
+ * @deprecated
  * @author James Jervis - https://github.com/jerv13
  */
 class RequestAttributeUrlEncodedFiltersWhere

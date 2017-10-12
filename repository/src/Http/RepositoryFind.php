@@ -11,10 +11,10 @@ use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\Repository\Api\Find;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeLimit;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeOrder;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeSkip;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeLimit;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeOrder;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeSkip;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhere;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -95,22 +95,22 @@ class RepositoryFind extends MiddlewareWithConfigOptionsServiceOptionAbstract
         );
 
         $filterWhere = $request->getAttribute(
-            RequestAttributeWhere::ATTRIBUTE,
+            WithRequestAttributeWhere::ATTRIBUTE,
             []
         );
 
         $filterOrder = $request->getAttribute(
-            RequestAttributeOrder::ATTRIBUTE,
+            WithRequestAttributeOrder::ATTRIBUTE,
             null
         );
 
         $filterLimit = $request->getAttribute(
-            RequestAttributeLimit::ATTRIBUTE,
+            WithRequestAttributeLimit::ATTRIBUTE,
             null
         );
 
         $filterSkip = $request->getAttribute(
-            RequestAttributeSkip::ATTRIBUTE,
+            WithRequestAttributeSkip::ATTRIBUTE,
             null
         );
 

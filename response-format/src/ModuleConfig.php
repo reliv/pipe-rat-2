@@ -13,8 +13,6 @@ use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattableBasic;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatFile;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatFileData;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJson;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJsonAlways;
-use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatJsonError;
 use Reliv\PipeRat2\ResponseFormat\Http\ResponseFormatXml;
 
 /**
@@ -54,22 +52,6 @@ class ModuleConfig
                     ],
 
                     ResponseFormatJson::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                            IsResponseFormattable::class,
-                            GetDataModel::class
-                        ],
-                    ],
-
-                    ResponseFormatJsonAlways::class => [
-                        'arguments' => [
-                            GetOptions::class,
-                            IsResponseFormattable::class,
-                            GetDataModel::class
-                        ],
-                    ],
-
-                    ResponseFormatJsonError::class => [
                         'arguments' => [
                             GetOptions::class,
                             IsResponseFormattable::class,

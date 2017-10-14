@@ -12,7 +12,8 @@ use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Api\UpsertNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryUpsert;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -39,8 +40,8 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
                 RequestAcl::configKey()
                 => RequestAcl::class,
 
-                RequestAttributeUrlEncodedFiltersFields::configKey()
-                => RequestAttributeUrlEncodedFiltersFields::class,
+                RequestAttributes::configKey()
+                => RequestAttributes::class,
 
                 RequestDataValidate::configKey()
                 => RequestDataValidate::class,
@@ -80,7 +81,12 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeUrlEncodedFiltersFields::configKey() => [],
+                RequestAttributes::configKey() => [
+                    RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeUrlEncodedFields::class
+                        => WithRequestAttributeUrlEncodedFields::class,
+                    ],
+                ],
 
                 RequestDataValidate::configKey() => [
                     RequestDataValidate::OPTION_SERVICE_NAME
@@ -142,7 +148,7 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormat::configKey() => 800,
             RequestAcl::configKey() => 700,
-            RequestAttributeUrlEncodedFiltersFields::configKey() => 600,
+            RequestAttributes::configKey() => 600,
             RequestDataValidate::configKey() => 500,
 
             /** <response-mutators> */

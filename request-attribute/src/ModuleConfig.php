@@ -11,6 +11,7 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedLimit;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedOrder;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedSkip;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutatorNoop;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttribute;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 
@@ -59,6 +60,8 @@ class ModuleConfig
                             ['literal' => WithRequestAttributeUrlEncodedWhere::DEFAULT_ALLOW_DEEP_WHERES],
                         ],
                     ],
+
+                    WithRequestAttributeWhereMutatorNoop::class => [],
 
                     RequestAttribute::class => [
                         'arguments' => [

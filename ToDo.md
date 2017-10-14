@@ -8,17 +8,29 @@ ToDo
     - RequestAttribute
     - ResponseHeaders
 - Build standard return formats
+- 
 
 ```
 RequestAttributes::configKey()
 => RequestAttributes::class,
 
 RequestAttributes::configKey() => [
-    ResponseHeaders::OPTION_SERVICE_NAME
-    => WithResponseHeadersAdded::class,
+    RequestAttributes::OPTION_SERVICE_NAMES => [
+        WithRequestAttributeUrlEncodedWhere::class
+        => WithRequestAttributeUrlEncodedWhere::class,
+    ],
 
-    ResponseHeaders::OPTION_SERVICE_OPTIONS => [
-        WithResponseHeadersAdded::OPTION_HEADERS => []
+    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+        WithRequestAttributeUrlEncodedWhere::class => [
+            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+        ]
+    ],
+],
+
+RequestAttributes::configKey() => [
+    RequestAttributes::OPTION_SERVICE_NAMES => [
+        WithRequestAttributeUrlEncodedFields::class
+        => WithRequestAttributeUrlEncodedFields::class,
     ],
 ],
 

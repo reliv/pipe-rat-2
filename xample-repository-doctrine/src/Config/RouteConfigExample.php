@@ -13,8 +13,8 @@ use Reliv\PipeRat2\DataValidate\Api\Validate;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
 use Reliv\PipeRat2\RepositoryDoctrine\Api\FindById;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -54,8 +54,8 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                 RequestAcl::configKey()
                 => RequestAcl::class,
 
-                RequestAttributeUrlEncodedFiltersWhere::configKey()
-                => RequestAttributeUrlEncodedFiltersWhere::class,
+                RequestAttributes::configKey()
+                => RequestAttributes::class,
 
                 RequestDataValidate::configKey()
                 => RequestDataValidate::class,
@@ -102,8 +102,17 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                     RequestAcl::OPTION_NOT_ALLOWED_STATUS_MESSAGE => 'No way man!',
                 ],
 
-                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
-                    RequestAttributeWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                RequestAttributes::configKey() => [
+                    RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeUrlEncodedWhere::class
+                        => WithRequestAttributeUrlEncodedWhere::class,
+                    ],
+
+                    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+                        WithRequestAttributeUrlEncodedWhere::class => [
+                            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                        ]
+                    ],
                 ],
 
                 RequestDataValidate::configKey() => [
@@ -165,7 +174,7 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormat::configKey() => 800,
             RequestAcl::configKey() => 700,
-            RequestAttributeUrlEncodedFiltersWhere::configKey() => 600,
+            RequestAttributes::configKey() => 600,
             RequestDataValidate::configKey() => 500,
             /** <response-mutators> */
             ResponseHeaders::configKey() => 400,

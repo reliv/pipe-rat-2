@@ -10,7 +10,8 @@ use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
 use Reliv\PipeRat2\RepositoryDoctrine\Api\FindById;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -45,8 +46,8 @@ class RouteConfigFindById extends RouteConfigAbstract implements RouteConfig
                 RequestAcl::configKey()
                 => RequestAcl::class,
 
-                RequestAttributeUrlEncodedFiltersFields::configKey()
-                => RequestAttributeUrlEncodedFiltersFields::class,
+                RequestAttributes::configKey()
+                => RequestAttributes::class,
 
                 /** <response-mutators> */
                 ResponseHeaders::configKey()
@@ -83,7 +84,12 @@ class RouteConfigFindById extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeUrlEncodedFiltersFields::configKey() => [],
+                RequestAttributes::configKey() => [
+                    RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeUrlEncodedFields::class
+                        => WithRequestAttributeUrlEncodedFields::class,
+                    ],
+                ],
 
                 /** <response-mutators> */
                 ResponseHeaders::configKey() => [
@@ -131,7 +137,7 @@ class RouteConfigFindById extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormat::configKey() => 700,
             RequestAcl::configKey() => 600,
-            RequestAttributeUrlEncodedFiltersFields::configKey() => 500,
+            RequestAttributes::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeaders::configKey() => 400,

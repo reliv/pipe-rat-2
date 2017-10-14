@@ -10,7 +10,8 @@ use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Api\CountNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryCount;
-use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributeUrlEncodedFiltersWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -37,8 +38,8 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                 RequestAcl::configKey()
                 => RequestAcl::class,
 
-                RequestAttributeUrlEncodedFiltersWhere::configKey()
-                => RequestAttributeUrlEncodedFiltersWhere::class,
+                RequestAttributes::configKey()
+                => RequestAttributes::class,
 
                 /** <response-mutators> */
                 ResponseHeaders::configKey()
@@ -75,9 +76,17 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
-                RequestAttributeUrlEncodedFiltersWhere::configKey() => [
-                    RequestAttributeUrlEncodedFiltersWhere::OPTION_ALLOW_DEEP_WHERES
-                    => false,
+                RequestAttributes::configKey() => [
+                    RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeUrlEncodedWhere::class
+                        => WithRequestAttributeUrlEncodedWhere::class,
+                    ],
+
+                    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+                        WithRequestAttributeUrlEncodedWhere::class => [
+                            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                        ]
+                    ],
                 ],
 
                 /** <response-mutators> */
@@ -131,7 +140,7 @@ class RouteConfigCount extends RouteConfigAbstract implements RouteConfig
         return [
             RequestFormat::configKey() => 700,
             RequestAcl::configKey() => 600,
-            RequestAttributeUrlEncodedFiltersWhere::configKey() => 500,
+            RequestAttributes::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeaders::configKey() => 400,

@@ -10,8 +10,10 @@ use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Api\FindOneNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindOne;
-use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutator;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutatorNoop;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
@@ -79,15 +81,15 @@ class RouteConfigFindOne extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey() => [
                     RequestAttributes::OPTION_SERVICE_NAMES => [
-                        WithRequestAttributeUrlEncodedWhere::class
+                        WithRequestAttributeWhere::class
                         => WithRequestAttributeUrlEncodedWhere::class,
 
-                        WithRequestAttributeUrlEncodedFields::class
-                        => WithRequestAttributeUrlEncodedFields::class,
+                        WithRequestAttributeWhereMutator::class
+                        => WithRequestAttributeWhereMutatorNoop::class,
                     ],
 
                     RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                        WithRequestAttributeUrlEncodedWhere::class => [
+                        WithRequestAttributeWhere::class => [
                             WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
                         ]
                     ],

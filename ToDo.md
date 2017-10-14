@@ -16,13 +16,16 @@ RequestAttributes::configKey()
 
 RequestAttributes::configKey() => [
     RequestAttributes::OPTION_SERVICE_NAMES => [
-        WithRequestAttributeUrlEncodedWhere::class
+        WithRequestAttributeWhere::class
         => WithRequestAttributeUrlEncodedWhere::class,
+
+        WithRequestAttributeWhereMutator::class
+        => WithRequestAttributeWhereMutatorNoop::class,
     ],
 
     RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-        WithRequestAttributeUrlEncodedWhere::class => [
-            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+        WithRequestAttributeWhere::class => [
+            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => true,
         ]
     ],
 ],
@@ -33,6 +36,9 @@ RequestAttributes::configKey() => [
         => WithRequestAttributeUrlEncodedFields::class,
     ],
 ],
+
+WithRequestAttributeWhere::class
+=> WithRequestAttributeUrlEncodedWhere::class,
 
 
 ```

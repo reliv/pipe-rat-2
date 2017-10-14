@@ -14,6 +14,9 @@ use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Http\RepositoryFindById;
 use Reliv\PipeRat2\RepositoryDoctrine\Api\FindById;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutator;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutatorNoop;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
@@ -104,12 +107,15 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey() => [
                     RequestAttributes::OPTION_SERVICE_NAMES => [
-                        WithRequestAttributeUrlEncodedWhere::class
+                        WithRequestAttributeWhere::class
                         => WithRequestAttributeUrlEncodedWhere::class,
+
+                        WithRequestAttributeWhereMutator::class
+                        => WithRequestAttributeWhereMutatorNoop::class,
                     ],
 
                     RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                        WithRequestAttributeUrlEncodedWhere::class => [
+                        WithRequestAttributeWhere::class => [
                             WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
                         ]
                     ],

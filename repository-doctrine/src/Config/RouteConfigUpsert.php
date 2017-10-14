@@ -12,6 +12,7 @@ use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Http\RepositoryUpsert;
 use Reliv\PipeRat2\RepositoryDoctrine\Api\Upsert;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
@@ -91,7 +92,7 @@ class RouteConfigUpsert extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey() => [
                     RequestAttributes::OPTION_SERVICE_NAMES => [
-                        WithRequestAttributeUrlEncodedFields::class
+                        WithRequestAttributeFields::class
                         => WithRequestAttributeUrlEncodedFields::class,
                     ],
                 ],

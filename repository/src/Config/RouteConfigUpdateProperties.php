@@ -13,6 +13,7 @@ use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
 use Reliv\PipeRat2\Repository\Api\UpdatePropertiesNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryUpdateProperties;
 use Reliv\PipeRat2\Repository\Http\RepositoryUpsert;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
@@ -84,7 +85,7 @@ class RouteConfigUpdateProperties extends RouteConfigAbstract implements RouteCo
 
                 RequestAttributes::configKey() => [
                     RequestAttributes::OPTION_SERVICE_NAMES => [
-                        WithRequestAttributeUrlEncodedFields::class
+                        WithRequestAttributeFields::class
                         => WithRequestAttributeUrlEncodedFields::class,
                     ],
                 ],

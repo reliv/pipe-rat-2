@@ -26,7 +26,7 @@ class ModulesConfig
             new \Reliv\PipeRat2\ResponseFormat\ModuleConfig(),
             new \Reliv\PipeRat2\ResponseHeaders\ModuleConfig(),
             new \Reliv\PipeRat2\RepositoryDoctrine\ModuleConfig(),
-            /** EXAMPLE ONLY */
+            /** EXAMPLE ONLY *
             new \Reliv\PipeRat2\XampleRepositoryDoctrine\ModuleConfig(),
             /* */
         ];

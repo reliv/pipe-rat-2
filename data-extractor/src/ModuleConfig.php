@@ -9,6 +9,7 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractNoop;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 
@@ -29,6 +30,7 @@ class ModuleConfig
                         'class' => ExtractPropertyGetter::class,
                     ],
                     ExtractCollectionPropertyGetter::class => [],
+                    ExtractNoop::class => [],
                     ExtractPropertyGetter::class => [],
 
                     ResponseDataExtractor::class => [

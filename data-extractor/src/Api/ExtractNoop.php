@@ -5,11 +5,8 @@ namespace Reliv\PipeRat2\DataExtractor\Api;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-interface Extract
+class ExtractNoop implements Extract
 {
-    const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
-    const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
-
     /**
      * extract and return data if possible
      *
@@ -18,5 +15,8 @@ interface Extract
      *
      * @return array
      */
-    public function __invoke($dataModel, array $options);
+    public function __invoke($dataModel, array $options)
+    {
+        return $dataModel;
+    }
 }

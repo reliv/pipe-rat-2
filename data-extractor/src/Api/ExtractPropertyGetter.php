@@ -5,6 +5,10 @@ namespace Reliv\PipeRat2\DataExtractor\Api;
 use Reliv\PipeRat2\Options\Options;
 
 /**
+ * @todo   This does too much, should be slit into:
+ *         - ExtractJsonSerializable
+ *         - ExtractTraversable
+ *         - ExtractCollection
  * @author James Jervis - https://github.com/jerv13
  */
 class ExtractPropertyGetter implements Extract
@@ -81,8 +85,14 @@ class ExtractPropertyGetter implements Extract
 
             $data[$property] = $dataModel;
 
-            if (is_object($dataModel)) {
+            $isJsonSerializableObject = $this->isJsonSerializableObject($dataModel);
+
+            if (is_object($dataModel) && !$isJsonSerializableObject) {
                 $data[$property] = $this->getDataFromObject($property, $dataModel);
+            }
+
+            if ($isJsonSerializableObject) {
+                $data[$property] = $this->getDataFromArray($property, $dataModel->jsonSerialize());
             }
 
             if (is_array($dataModel)) {
@@ -263,6 +273,16 @@ class ExtractPropertyGetter implements Extract
     }
 
     /**
+     * @param $dataModel
+     *
+     * @return bool
+     */
+    protected function isJsonSerializableObject($dataModel)
+    {
+        return (is_object($dataModel) && $dataModel instanceOf \JsonSerializable);
+    }
+
+    /**
      * getPropertyListProperties
      *
      * @param $dataModel
@@ -271,19 +291,50 @@ class ExtractPropertyGetter implements Extract
      */
     protected function getPropertyListFromProperties($dataModel)
     {
+        if ($this->isJsonSerializableObject($dataModel)) {
+            return $this->getPropertyListJsonSerializable($dataModel);
+        }
 
         if (is_object($dataModel)) {
             return $this->getPropertyListByMethods($dataModel);
         }
 
-        $properties = [];
-
         if (!$this->isTraversable($dataModel)) {
             return [];
         }
 
+        return $this->getPropertyList($dataModel);
+    }
+
+    /**
+     * @param $dataModel
+     *
+     * @return array
+     */
+    protected function getPropertyList($dataModel): array
+    {
+        $properties = [];
+
         foreach ($dataModel as $property => $value) {
             $properties[$property] = true;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @param JsonSerializable $dataModel
+     *
+     * @return array
+     */
+    protected function getPropertyListJsonSerializable(\JsonSerializable $dataModel): array
+    {
+        $dataModelArray = $dataModel->jsonSerialize();
+
+        $properties = [];
+
+        foreach ($dataModelArray as $key => $value) {
+            $properties[$key] = true;
         }
 
         return $properties;
@@ -296,7 +347,7 @@ class ExtractPropertyGetter implements Extract
      *
      * @return array
      */
-    protected function getPropertyListByMethods($dataModel)
+    protected function getPropertyListByMethods($dataModel): array
     {
         $properties = [];
 

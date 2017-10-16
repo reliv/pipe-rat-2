@@ -87,13 +87,13 @@ class RequestAttributes implements MiddlewareWithConfigKey
             $this->defaultServiceNames
         );
 
-        foreach ($serviceNames as $serviceName) {
+        foreach ($serviceNames as $serviceKey => $serviceName) {
             // @todo This can be more efficient
             $serviceOptions = [
                 OptionsService::SERVICE_NAME => $serviceName,
                 OptionsService::SERVICE_OPTIONS => Options::get(
                     $serviceNamesOptions,
-                    $serviceName,
+                    $serviceKey,
                     []
                 )
             ];

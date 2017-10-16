@@ -17,7 +17,7 @@ class WithFormattedResponseJson implements WithFormattedResponse
     const OPTION_CONTENT_TYPE = 'content-type';
 
     const DEFAULT_FORMATTABLE_RESPONSE_CLASSES = IsResponseFormattable::DEFAULT_FORMATTABLE_RESPONSE_CLASSES;
-    const DEFAULT_JSON_ENCODING_OPTIONS = JSON_PRETTY_PRINT;
+    const DEFAULT_JSON_ENCODING_OPTIONS = 0;
     const DEFAULT_CONTENT_TYPE = 'application/json';
 
     protected $isResponseFormattable;

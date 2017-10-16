@@ -11,4 +11,6 @@ class OptionsService extends Options
 {
     const SERVICE_NAME = 'service-name';
     const SERVICE_OPTIONS = 'service-options';
+    const OPTION_SERVICE_NAMES = 'service-names';
+    const OPTION_SERVICE_NAMES_OPTIONS = 'service-names-options';
 }

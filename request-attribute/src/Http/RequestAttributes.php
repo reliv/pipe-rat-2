@@ -17,8 +17,8 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttribute;
  */
 class RequestAttributes implements MiddlewareWithConfigKey
 {
-    const OPTION_SERVICE_NAMES = 'service-names';
-    const OPTION_SERVICE_NAMES_OPTIONS = 'service-names-options';
+    const OPTION_SERVICE_NAMES = OptionsService::OPTION_SERVICE_NAMES;
+    const OPTION_SERVICE_NAMES_OPTIONS = OptionsService::OPTION_SERVICE_NAMES_OPTIONS;
 
     const DEFAULT_SERVICE_NAMES = [];
     const DEFAULT_SERVICE_NAMES_OPTIONS = [];
@@ -87,8 +87,8 @@ class RequestAttributes implements MiddlewareWithConfigKey
             $this->defaultServiceNames
         );
 
+        // @todo This can be more efficient and can be moved to an API service
         foreach ($serviceNames as $serviceKey => $serviceName) {
-            // @todo This can be more efficient
             $serviceOptions = [
                 OptionsService::SERVICE_NAME => $serviceName,
                 OptionsService::SERVICE_OPTIONS => Options::get(

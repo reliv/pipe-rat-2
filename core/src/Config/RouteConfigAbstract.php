@@ -106,13 +106,6 @@ abstract class RouteConfigAbstract
      */
     protected static function merge(array $defaults, array $overrides)
     {
-        /* NOTE: This style of merging leaves orphan values from defaults *
-        $providerDefault = new \Zend\ConfigAggregator\ArrayProvider($defaults);
-        $provider = new \Zend\ConfigAggregator\ArrayProvider($overrides);
-        $aggregator = new \Zend\ConfigAggregator\ConfigAggregator([$providerDefault, $provider]);
-        return $aggregator->getMergedConfig();
-        /* */
-
         /**
          * NOTE: This means overriding the config, completely removes the default values
          * @var string $name

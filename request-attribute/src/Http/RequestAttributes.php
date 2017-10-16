@@ -5,8 +5,8 @@ namespace Reliv\PipeRat2\RequestAttribute\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetOptions;
-use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
-use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\OptionsService;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigKey;
 use Reliv\PipeRat2\Options\Options;
@@ -32,30 +32,30 @@ class RequestAttributes implements MiddlewareWithConfigKey
     }
 
     protected $getOptions;
-    protected $getServiceFromConfigOptions;
-    protected $getServiceOptionsFromConfigOptions;
+    protected $getServicesFromConfigOptions;
+    protected $getServicesOptionsFromConfigOptions;
     protected $defaultServiceNames;
     protected $defaultServiceNamesOptions;
 
     /**
-     * @param GetOptions                         $getOptions
-     * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
-     * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
-     * @param array                              $defaultServiceNames
-     * @param array                              $defaultServiceNamesOptions
+     * @param GetOptions                          $getOptions
+     * @param GetServicesFromConfigOptions        $getServicesFromConfigOptions
+     * @param GetServicesOptionsFromConfigOptions $getServicesOptionsFromConfigOptions
+     * @param array                               $defaultServiceNames
+     * @param array                               $defaultServiceNamesOptions
      */
     public function __construct(
         GetOptions $getOptions,
-        GetServiceFromConfigOptions $getServiceFromConfigOptions,
-        GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        GetServicesFromConfigOptions $getServicesFromConfigOptions,
+        GetServicesOptionsFromConfigOptions $getServicesOptionsFromConfigOptions,
         array $defaultServiceNames = self::DEFAULT_SERVICE_NAMES,
         array $defaultServiceNamesOptions = self::DEFAULT_SERVICE_NAMES_OPTIONS
     ) {
         $this->defaultServiceNames = $defaultServiceNames;
         $this->defaultServiceNamesOptions = $defaultServiceNamesOptions;
         $this->getOptions = $getOptions;
-        $this->getServiceFromConfigOptions = $getServiceFromConfigOptions;
-        $this->getServiceOptionsFromConfigOptions = $getServiceOptionsFromConfigOptions;
+        $this->getServicesFromConfigOptions = $getServicesFromConfigOptions;
+        $this->getServicesOptionsFromConfigOptions = $getServicesOptionsFromConfigOptions;
     }
 
     /**
@@ -75,39 +75,29 @@ class RequestAttributes implements MiddlewareWithConfigKey
             self::configKey()
         );
 
-        $serviceNames = Options::get(
+        $withRequestAttributeApiServices = $this->getServicesFromConfigOptions->__invoke(
             $options,
-            self::OPTION_SERVICE_NAMES,
+            WithRequestAttribute::class,
             $this->defaultServiceNames
         );
 
-        $serviceNamesOptions = Options::get(
-            $options,
-            self::OPTION_SERVICE_NAMES_OPTIONS,
-            $this->defaultServiceNames
+        $withRequestAttributeServicesOptions = $this->getServicesOptionsFromConfigOptions->__invoke(
+            $options
         );
 
-        // @todo This can be more efficient and can be moved to an API service
-        foreach ($serviceNames as $serviceKey => $serviceName) {
-            $serviceOptions = [
-                OptionsService::SERVICE_NAME => $serviceName,
-                OptionsService::SERVICE_OPTIONS => Options::get(
-                    $serviceNamesOptions,
-                    $serviceKey,
-                    []
-                )
-            ];
+        /**
+         * @var string               $serviceKey
+         * @var WithRequestAttribute $apiService
+         */
+        foreach ($withRequestAttributeApiServices as $serviceKey => $apiService) {
 
-            $withRequestAttributeApi = $this->getServiceFromConfigOptions->__invoke(
-                $serviceOptions,
-                WithRequestAttribute::class
+            $withRequestAttributeOptions = Options::get(
+                $withRequestAttributeServicesOptions,
+                $serviceKey,
+                []
             );
 
-            $withRequestAttributeOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
-                $serviceOptions
-            );
-
-            $request = $withRequestAttributeApi->__invoke(
+            $request = $apiService->__invoke(
                 $request,
                 $response,
                 $withRequestAttributeOptions

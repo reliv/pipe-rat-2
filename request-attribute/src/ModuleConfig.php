@@ -5,6 +5,8 @@ namespace Reliv\PipeRat2\RequestAttribute;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
 use Reliv\PipeRat2\RequestAttribute\Api\GetUrlEncodedFilterValue;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedLimit;
@@ -74,8 +76,8 @@ class ModuleConfig
                     RequestAttributes::class => [
                         'arguments' => [
                             GetOptions::class,
-                            GetServiceFromConfigOptions::class,
-                            GetServiceOptionsFromConfigOptions::class,
+                            GetServicesFromConfigOptions::class,
+                            GetServicesOptionsFromConfigOptions::class,
                             ['literal' => RequestAttributes::DEFAULT_SERVICE_NAMES],
                             ['literal' => RequestAttributes::DEFAULT_SERVICE_NAMES_OPTIONS],
                         ],

@@ -58,10 +58,10 @@ class ExtractPropertyGetter implements Extract
     /**
      * getProperties
      *
-     * @param \stdClass|array $dataModel $dataModel
-     * @param array           $properties
-     * @param int             $depth
-     * @param int             $depthLimit
+     * @param object|array $dataModel $dataModel
+     * @param array        $properties
+     * @param int          $depth
+     * @param int          $depthLimit
      *
      * @return array
      */
@@ -176,9 +176,9 @@ class ExtractPropertyGetter implements Extract
     /**
      * getDataFromObject
      *
-     * @param string    $property
-     * @param \stdClass $dataModel
-     * @param null      $default
+     * @param string $property
+     * @param object $dataModel
+     * @param null   $default
      *
      * @return mixed|null
      */
@@ -343,7 +343,7 @@ class ExtractPropertyGetter implements Extract
     /**
      * getPropertyListByMethods
      *
-     * @param \stdClass|array $dataModel
+     * @param object|array $dataModel
      *
      * @return array
      */

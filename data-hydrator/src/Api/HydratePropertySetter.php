@@ -107,7 +107,7 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
     /**
      * getPropertiesByMethods
      *
-     * @param \stdClass|array $dataModel
+     * @param object|array $dataModel
      *
      * @return array
      */

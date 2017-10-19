@@ -42,7 +42,7 @@ class ExtractCollectionPropertyGetter extends ExtractPropertyGetter implements E
     /**
      * getPropertyListByCollectionMethods
      *
-     * @param \stdClass|array $collectionDataModel
+     * @param object|array $collectionDataModel
      *
      * @return array
      */

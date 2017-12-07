@@ -89,7 +89,7 @@ class ModuleConfig
                     GetEntityIdFieldName::class => [
                         'class' => GetEntityIdFieldNameBasic::class,
                         'arguments' => [
-                            '0-' => GetEntityClass::class,
+                            GetEntityClass::class,
                         ],
                     ],
                     UpdatePropertiesNotConfigured::class => [

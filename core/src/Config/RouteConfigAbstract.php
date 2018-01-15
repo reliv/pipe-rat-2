@@ -14,6 +14,7 @@ abstract class RouteConfigAbstract
      * @param array  $prioritiesOverride
      *
      * @return array
+     * @throws \Exception
      */
     public static function build(
         string $resourceName,

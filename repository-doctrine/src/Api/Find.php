@@ -31,6 +31,7 @@ class Find implements \Reliv\PipeRat2\Repository\Api\Find
      * @param array      $options
      *
      * @return array|null
+     * @throws \Exception
      */
     public function __invoke(
         array $criteria = [],
@@ -40,6 +41,7 @@ class Find implements \Reliv\PipeRat2\Repository\Api\Find
         array $options = []
     ) {
         $repository = $this->getEntityRepository->__invoke($options);
+
         return $repository->findBy(
             $criteria,
             $orderBy,

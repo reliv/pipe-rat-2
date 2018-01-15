@@ -28,9 +28,12 @@ class ValidateZfInputFilter implements Validate
     /**
      * @param ContainerInterface $serviceContainer
      * @param string             $defaultMessage
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __construct(
-        $serviceContainer,
+        ContainerInterface $serviceContainer,
         string $defaultMessage = self::DEFAULT_PRIMARY_MESSAGE
     ) {
         $this->serviceContainer = $serviceContainer;
@@ -44,6 +47,8 @@ class ValidateZfInputFilter implements Validate
      *
      * @return ValidateResult
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         $data,

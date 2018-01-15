@@ -18,7 +18,7 @@ class GetHydratorBasic implements GetHydrator
      * @param ContainerInterface $serviceContainer
      */
     public function __construct(
-        $serviceContainer
+        ContainerInterface $serviceContainer
     ) {
         $this->serviceContainer = $serviceContainer;
     }
@@ -28,11 +28,12 @@ class GetHydratorBasic implements GetHydrator
      *
      * @return Hydrate
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         array $options
-    ):Hydrate
-    {
+    ): Hydrate {
         if (!array_key_exists(GetHydrator::OPTION_DATA_HYDRATE_API, $options)) {
             throw new \Exception("Hydrator service name not found in options: " . json_encode($options, 0, 5));
         }

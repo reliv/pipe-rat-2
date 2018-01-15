@@ -67,7 +67,8 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return mixed
+     * @return mixed|ResponseInterface
+     * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,

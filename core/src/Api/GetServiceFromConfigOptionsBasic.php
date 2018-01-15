@@ -25,7 +25,7 @@ class GetServiceFromConfigOptionsBasic implements GetServiceFromConfigOptions
      * @param GetOptions         $getOptions
      */
     public function __construct(
-        $serviceContainer,
+        ContainerInterface $serviceContainer,
         GetOptions $getOptions
     ) {
         $this->serviceContainer = $serviceContainer;
@@ -36,8 +36,10 @@ class GetServiceFromConfigOptionsBasic implements GetServiceFromConfigOptions
      * @param array  $options
      * @param string $serviceInterfaceClass
      *
-     * @return object
+     * @return mixed|object
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         array $options,

@@ -13,9 +13,11 @@ class GetServiceFromConfigOptionsBasicFactory
      * @param ContainerInterface $serviceContainer
      *
      * @return GetServiceFromConfigOptionsBasic
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
-        $serviceContainer
+        ContainerInterface $serviceContainer
     ) {
         return new GetServiceFromConfigOptionsBasic(
             $serviceContainer,

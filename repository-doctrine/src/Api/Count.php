@@ -47,12 +47,14 @@ class Count implements \Reliv\PipeRat2\Repository\Api\Count
      * @param array $options
      *
      * @return int
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
      */
     public function __invoke(
         array $criteria = [],
         array $options = []
-    ):int
-    {
+    ): int {
         if (empty($criteria)) {
             //When there is no $criteria, running a query is likely faster than findBy.
             $entityName = $this->getEntityClass->__invoke($options);

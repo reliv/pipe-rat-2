@@ -8,7 +8,7 @@ namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 class FindOne implements \Reliv\PipeRat2\Repository\Api\FindOne
 {
     const OPTION_ENTITY_CLASS_NAME = GetEntityRepository::OPTION_ENTITY_CLASS_NAME;
-    
+
     /**
      * @var GetEntityRepository
      */
@@ -24,11 +24,12 @@ class FindOne implements \Reliv\PipeRat2\Repository\Api\FindOne
     }
 
     /**
-     * @param array $criteria
-     * @param null  $orderBy
-     * @param array $options
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param array      $options
      *
      * @return null|object
+     * @throws \Exception
      */
     public function __invoke(
         array $criteria = [],

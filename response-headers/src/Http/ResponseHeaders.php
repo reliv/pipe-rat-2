@@ -45,7 +45,8 @@ class ResponseHeaders extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return mixed
+     * @return ResponseInterface
+     * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,

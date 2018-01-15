@@ -14,10 +14,11 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
 
     /**
      * @param array        $data
-     * @param object|array $dataModel
+     * @param array|object $dataModel
      * @param array        $options
      *
-     * @return object|array
+     * @return array|object
+     * @throws \Exception
      */
     public function __invoke(array $data, $dataModel, array $options)
     {
@@ -34,13 +35,12 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
     }
 
     /**
-     * setProperties
-     *
      * @param array $data
      * @param       $dataModel
      * @param array $properties
      *
-     * @return object|array
+     * @return array|object
+     * @throws \Exception
      */
     protected function setProperties(
         array $data,

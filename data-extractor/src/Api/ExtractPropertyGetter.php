@@ -26,10 +26,11 @@ class ExtractPropertyGetter implements Extract
     /**
      * extract and return data if possible
      *
-     * @param object|array $dataModel
+     * @param array|object $dataModel
      * @param array        $options
      *
-     * @return array|mixed
+     * @return array
+     * @throws \Exception
      */
     public function __invoke($dataModel, array $options)
     {
@@ -56,14 +57,13 @@ class ExtractPropertyGetter implements Extract
     }
 
     /**
-     * getProperties
-     *
-     * @param object|array $dataModel $dataModel
-     * @param array        $properties
-     * @param int          $depth
-     * @param int          $depthLimit
+     * @param       $dataModel
+     * @param array $properties
+     * @param       $depth
+     * @param       $depthLimit
      *
      * @return array
+     * @throws \Exception
      */
     protected function getProperties(
         $dataModel,

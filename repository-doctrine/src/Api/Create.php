@@ -77,10 +77,11 @@ class Create implements \Reliv\PipeRat2\Repository\Api\Create
     }
 
     /**
-     * @param object|array $data
+     * @param array|object $data
      * @param array        $options
      *
-     * @return mixed $data
+     * @return array|null|object|string
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
     public function __invoke(

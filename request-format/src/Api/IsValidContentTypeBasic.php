@@ -32,8 +32,7 @@ class IsValidContentTypeBasic implements IsValidContentType
     public function __invoke(
         ServerRequestInterface $request,
         array $options = []
-    ): bool
-    {
+    ): bool {
         $validContentTypes = Options::get(
             $options,
             self::OPTION_VALID_CONTENT_TYPES,

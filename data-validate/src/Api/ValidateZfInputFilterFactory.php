@@ -15,7 +15,7 @@ class ValidateZfInputFilterFactory
      * @return ValidateZfInputFilter
      */
     public function __invoke(
-        $serviceContainer
+        ContainerInterface $serviceContainer
     ) {
         return new ValidateZfInputFilter(
             $serviceContainer,

@@ -15,9 +15,8 @@ class GetHydratorBasicFactory
      * @return GetHydratorBasic
      */
     public function __invoke(
-        $serviceContainer
-    )
-    {
+        ContainerInterface $serviceContainer
+    ) {
         return new GetHydratorBasic($serviceContainer);
     }
 }

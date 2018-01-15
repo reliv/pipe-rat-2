@@ -40,6 +40,12 @@ class ConfigParamsServiceOptions
         return $config;
     }
 
+    /**
+     * @param array $configOptions
+     * @param array $params
+     *
+     * @return array
+     */
     public static function parseServiceOptions(
         array $configOptions,
         array $params
@@ -53,6 +59,12 @@ class ConfigParamsServiceOptions
         return $configOptions;
     }
 
+    /**
+     * @param array $configValue
+     * @param array $paramValue
+     *
+     * @return array
+     */
     public static function parseServiceOption(
         array $configValue,
         array $paramValue

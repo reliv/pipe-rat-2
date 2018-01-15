@@ -4,7 +4,7 @@ Pipe Rat
 Create REST APIs with just a few lines of Expressive config. 
 This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at its core.
 
-- Allows creation of API end points using only config for doctrine entities
+- Allows creation of API end points using only config for Doctrine entities
 - Allows configuration of common API concerns:
     - data-extractor - Getting arrays from data objects abd object arrays
     - data-hydrator - Getting data from client into data objects and arrays

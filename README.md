@@ -2,15 +2,20 @@ Pipe Rat
 ========
 
 Create REST APIs with just a few lines of Expressive config. 
-This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core.
+This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at its core.
 
-## Concept ##
+- Allows creation of API end points using only config for doctrine entities
+- Allows configuration of common API concerns:
+    - data-extractor - Getting arrays from data objects abd object arrays
+    - data-hydrator - Getting data from client into data objects and arrays
+    - data-validate - Validating data form client
+    - repository - General repository methods
+    - request-attributes - Common query params for 'where', 'fields', 'limit', 'order', 'skip'
+    - request-format - Data format parsing the request data
+    - response-format - Data format for response (JSON, etc...)
+    - response-headers - Common headers for caching etc...
 
-- Remove unneeded complexity. Take the simplicity of pipe-rat to the next level
-- Use standard expressive config format
-- Split repository into discrete parts (separate concerns and improve security) 
-
-- Config example:
+## Config example ##
     
 ```php
 'routes' => [

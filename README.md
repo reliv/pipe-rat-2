@@ -15,46 +15,127 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core
 ```php
 'routes' => [
     /* might key on path for speed */
-    '/' . Api::ROOT . '/some-resource/' . RepositoryMiddleware::ROUTE_FIND => [
+    '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.find' => [
         /* Use standard route names for client simplicity */
-        'name' => Api::ROOT . '.some-resource.' . RepositoryMiddleware::NAME_FIND,
+        'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.find',
         
         /* Use standard route paths for client simplicity */
-        'path' => '/' . Api::ROOT . '/some-resource/' . RepositoryMiddleware::ROUTE_FIND,
+        'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}',
         
         /* Wire each API independently */
         'middleware' => [
-            OptionsMiddleware::class => OptionsMiddleware::class,
-            BodyParamsMiddleware::class => BodyParamsMiddleware::class,
-            AclMiddleware::class => AclMiddleware::class,
-            RequestFormatMiddlware::class => RequestFormatMiddlware::class,
-            InputValidateMiddleware::class => InputValidateMiddleware::class,
-            RepositoryMiddleware::class => RepositoryMiddleware::class,
-            ResponseExtractorMiddlware::class => ResponseExtractorMiddlware::class;
+            RequestFormat::configKey()
+            => RequestFormat::class,
+
+            RequestAcl::configKey()
+            => RequestAcl::class,
+
+            RequestAttributes::configKey()
+            => RequestAttributes::class,
+
+            /** <response-mutators> */
+            ResponseHeaders::configKey()
+            => ResponseHeaders::class,
+
+            ResponseFormat::configKey()
+            => ResponseFormat::class,
+
+            ResponseDataExtractor::configKey()
+            => ResponseDataExtractor::class,
+            /** </response-mutators> */
+
+            RepositoryFind::configKey()
+            => RepositoryFind::class,
         ],
         
         /* Use route to find options at runtime */
         'options' => [
-            AclMiddleware::class => [
-                'some-option' => 'some-value'
+            RequestFormat::configKey() => [
+                RequestFormat::OPTION_SERVICE_NAME
+                => WithParsedBodyJson::class,
+
+                RequestFormat::OPTION_SERVICE_OPTIONS => [],
             ],
-            RequestFormatMiddlware::class => [
-                'some-option' => 'some-value'
+
+            RequestAcl::configKey() => [
+                RequestAcl::OPTION_SERVICE_NAME
+                => IsAllowedNotConfigured::class,
+
+                RequestAcl::OPTION_SERVICE_OPTIONS => [
+                    IsAllowedNotConfigured::OPTION_MESSAGE
+                    => IsAllowedNotConfigured::DEFAULT_MESSAGE
+                        . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                        . ' in file: "{pipe-rat-2-config.source-config-file}"',
+                ],
             ],
-            AclMiddleware::class => [
-                'some-option' => 'some-value'
+
+            RequestAttributes::configKey() => [
+                RequestAttributes::OPTION_SERVICE_NAMES => [
+                    WithRequestAttributeWhere::class
+                    => WithRequestAttributeUrlEncodedWhere::class,
+
+                    WithRequestAttributeWhereMutator::class
+                    => WithRequestAttributeWhereMutatorNoop::class,
+
+                    WithRequestAttributeFields::class
+                    => WithRequestAttributeUrlEncodedFields::class,
+
+                    WithRequestAttributeOrder::class
+                    => WithRequestAttributeUrlEncodedOrder::class,
+
+                    WithRequestAttributeSkip::class
+                    => WithRequestAttributeUrlEncodedSkip::class,
+
+                    WithRequestAttributeLimit::class
+                    => WithRequestAttributeUrlEncodedLimit::class,
+                ],
+
+                RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+                    WithRequestAttributeWhere::class => [
+                        WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                    ]
+                ],
             ],
-            RepositoryMiddleware::class => [
-                'some-entity' => 'some-entity',
-                'some-hydrator' => 'some-hydrator'
+
+            /** <response-mutators> */
+            ResponseHeaders::configKey() => [
+                ResponseHeaders::OPTION_SERVICE_NAME
+                => WithResponseHeadersAdded::class,
+
+                ResponseHeaders::OPTION_SERVICE_OPTIONS => [
+                    WithResponseHeadersAdded::OPTION_HEADERS => []
+                ],
             ],
-            ResponseExtractorMiddlware::class => [
-                'some-option' => 'some-value'
+
+            ResponseFormat::configKey() => [
+                ResponseFormat::OPTION_SERVICE_NAME
+                => WithFormattedResponseJson::class,
+
+                ResponseFormat::OPTION_SERVICE_OPTIONS => [],
+            ],
+
+            ResponseDataExtractor::configKey() => [
+                ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractCollectionPropertyGetter::class,
+                ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
+                    ExtractCollectionPropertyGetter::OPTION_PROPERTY_LIST => null,
+                    ExtractCollectionPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
+                ],
+            ],
+            /** </response-mutators> */
+
+            RepositoryFind::configKey() => [
+                RepositoryFind::OPTION_SERVICE_NAME
+                => Find::class,
+
+                RepositoryFind::OPTION_SERVICE_OPTIONS => [
+                    Find::OPTION_ENTITY_CLASS_NAME
+                    => '{pipe-rat-2-config.entity-class}',
+                ],
             ],
         ],
         
-        /* Use expressive to define allowed methods */
-        'allowed_methods' => Zend\Expressive\Router\Route::POST,
+        /* Use to define allowed methods */
+        'allowed_methods' => ['GET'],
     ],
 ],
 ```

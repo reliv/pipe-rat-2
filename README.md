@@ -13,7 +13,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
     - request-attributes - Common query params for 'where', 'fields', 'limit', 'order', 'skip'
     - request-format - Data format parsing the request data
     - response-format - Data format for response (JSON, etc...)
-    - response-headers - Common headers for caching etc...
+    - response-headers - Common headers for response (caching etc...)
 
 ## Config example ##
     

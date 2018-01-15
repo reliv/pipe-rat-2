@@ -6,7 +6,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
 
 - Allows creation of API end points using only config for Doctrine entities
 - Allows configuration of common API concerns:
-    - data-extractor - Getting arrays from data objects abd object arrays
+    - data-extractor - Getting arrays from data objects and object arrays
     - data-hydrator - Getting data from client into data objects and arrays
     - data-validate - Validating data form client
     - repository - General repository methods

@@ -20,8 +20,7 @@ class GetOptionsExpressiveRoute implements GetOptions
     public function __invoke(
         ServerRequestInterface $request,
         string $configKey
-    ): array
-    {
+    ): array {
         /** @var RouteResult $routeResult */
         $routeResult = $request->getAttribute(RouteResult::class);
 

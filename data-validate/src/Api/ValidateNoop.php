@@ -34,8 +34,7 @@ class ValidateNoop implements Validate
     public function __invoke(
         $data,
         array $options = []
-    ): ValidateResult
-    {
+    ): ValidateResult {
         $message = Options::get(
             $options,
             self::OPTION_PRIMARY_MESSAGE,

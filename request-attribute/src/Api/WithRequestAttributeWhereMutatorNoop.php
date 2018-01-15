@@ -21,8 +21,7 @@ class WithRequestAttributeWhereMutatorNoop implements WithRequestAttributeWhereM
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
-    ): ServerRequestInterface
-    {
+    ): ServerRequestInterface {
         // Do nothing
         return $request;
     }

@@ -18,8 +18,7 @@ class IsAllowedNone implements IsAllowed
     public function __invoke(
         ServerRequestInterface $request,
         array $options = []
-    ): bool
-    {
+    ): bool {
         return false;
     }
 }

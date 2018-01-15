@@ -92,7 +92,6 @@ class RequestAttributes implements MiddlewareWithConfigKey
          * @var WithRequestAttribute $apiService
          */
         foreach ($withRequestAttributeApiServices as $serviceKey => $apiService) {
-
             $withRequestAttributeOptions = Options::get(
                 $withRequestAttributeServicesOptions,
                 $serviceKey,

@@ -53,8 +53,7 @@ class ValidateZfInputFilter implements Validate
     public function __invoke(
         $data,
         array $options = []
-    ): ValidateResult
-    {
+    ): ValidateResult {
         $context = Options::get(
             $options,
             self::OPTION_INPUT_CONTEXT,

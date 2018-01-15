@@ -48,7 +48,6 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
         array $properties
     ) {
         foreach ($properties as $property => $value) {
-
             if ($value === false) {
                 continue;
             }
@@ -122,7 +121,6 @@ class HydratePropertySetter extends HydrateAbstract implements Hydrate
         $methods = get_class_methods(get_class($dataModel));
 
         foreach ($methods as $method) {
-
             $prefixLen = strlen(self::METHOD_PREFIX);
             if (substr($method, 0, $prefixLen) == self::METHOD_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));

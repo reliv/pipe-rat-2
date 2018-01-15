@@ -18,8 +18,7 @@ class IsAllowedAny implements IsAllowed
     public function __invoke(
         ServerRequestInterface $request,
         array $options = []
-    ): bool
-    {
+    ): bool {
         return true;
     }
 }

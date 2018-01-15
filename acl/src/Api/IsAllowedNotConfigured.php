@@ -39,8 +39,7 @@ class IsAllowedNotConfigured implements IsAllowed
     public function __invoke(
         ServerRequestInterface $request,
         array $options = []
-    ): bool
-    {
+    ): bool {
         $message = Options::get(
             $options,
             self::OPTION_MESSAGE,

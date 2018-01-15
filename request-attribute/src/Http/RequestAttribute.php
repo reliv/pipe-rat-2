@@ -77,5 +77,4 @@ class RequestAttribute extends MiddlewareWithConfigOptionsServiceOptionAbstract
 
         return $next($request, $response);
     }
-
 }

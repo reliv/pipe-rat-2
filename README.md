@@ -14,13 +14,13 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core
     
 ```php
 'routes' => [
-    /* might key on path for speed */
-    '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.find' => [
+    /* Put your path here */
+    'my.thing.find' => [
         /* Use standard route names for client simplicity */
-        'name' => '{pipe-rat-2-config.root-path}.{pipe-rat-2-config.resource-name}.find',
+        'name' => 'my.thing.find',
         
         /* Use standard route paths for client simplicity */
-        'path' => '{pipe-rat-2-config.root-path}/{pipe-rat-2-config.resource-name}',
+        'path' => 'my/thing',
         
         /* Wire each API independently */
         'middleware' => [
@@ -64,8 +64,8 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core
                 RequestAcl::OPTION_SERVICE_OPTIONS => [
                     IsAllowedNotConfigured::OPTION_MESSAGE
                     => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                        . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
-                        . ' in file: "{pipe-rat-2-config.source-config-file}"',
+                        . ' for pipe-rat-2 resource: "thing"'
+                        . ' in file: __FILE__',
                 ],
             ],
 
@@ -129,7 +129,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware at its core
 
                 RepositoryFind::OPTION_SERVICE_OPTIONS => [
                     Find::OPTION_ENTITY_CLASS_NAME
-                    => '{pipe-rat-2-config.entity-class}',
+                    => MyThingEntity::class',
                 ],
             ],
         ],

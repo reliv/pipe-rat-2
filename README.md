@@ -9,7 +9,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
     - data-extractor - Getting arrays from data objects and object arrays
     - data-hydrator - Getting data from client into data objects and arrays
     - data-validate - Validating data from client
-    - repository - General repository methods
+    - repository - Common repository methods
     - request-attributes - Common query params ('where', 'fields', 'limit', 'order', 'skip', etc...)
     - request-format - Data format parsing the request data
     - response-format - Data format for response (JSON, etc...)

@@ -10,7 +10,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
     - data-hydrator - Getting data from client into data objects and arrays
     - data-validate - Validating data form client
     - repository - General repository methods
-    - request-attributes - Common query params for 'where', 'fields', 'limit', 'order', 'skip'
+    - request-attributes - Common query params ('where', 'fields', 'limit', 'order', 'skip', etc...)
     - request-format - Data format parsing the request data
     - response-format - Data format for response (JSON, etc...)
     - response-headers - Common headers for response (caching etc...)

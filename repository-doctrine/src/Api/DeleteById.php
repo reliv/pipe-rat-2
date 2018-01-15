@@ -38,6 +38,8 @@ class DeleteById implements \Reliv\PipeRat2\Repository\Api\DeleteById
      * @param array      $options
      *
      * @return bool
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      */
     public function __invoke(
         $id,

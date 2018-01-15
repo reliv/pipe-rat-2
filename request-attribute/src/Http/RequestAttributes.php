@@ -64,6 +64,8 @@ class RequestAttributes implements MiddlewareWithConfigKey
      * @param callable|null          $next
      *
      * @return mixed
+     * @throws \Exception
+     * @throws \Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -90,7 +92,6 @@ class RequestAttributes implements MiddlewareWithConfigKey
          * @var WithRequestAttribute $apiService
          */
         foreach ($withRequestAttributeApiServices as $serviceKey => $apiService) {
-
             $withRequestAttributeOptions = Options::get(
                 $withRequestAttributeServicesOptions,
                 $serviceKey,

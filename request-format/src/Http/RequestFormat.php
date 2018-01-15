@@ -83,7 +83,8 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return mixed
+     * @return DataResponseBasic
+     * @throws \Exception
      */
     public function __invoke(
         ServerRequestInterface $request,

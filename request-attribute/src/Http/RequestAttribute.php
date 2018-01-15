@@ -46,6 +46,8 @@ class RequestAttribute extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param callable|null          $next
      *
      * @return mixed
+     * @throws \Exception
+     * @throws \Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -75,5 +77,4 @@ class RequestAttribute extends MiddlewareWithConfigOptionsServiceOptionAbstract
 
         return $next($request, $response);
     }
-
 }

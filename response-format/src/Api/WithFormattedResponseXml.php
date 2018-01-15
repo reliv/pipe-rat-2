@@ -53,8 +53,7 @@ class WithFormattedResponseXml implements WithFormattedResponse
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         if (!$this->isResponseFormattable->__invoke($response, $options)) {
             // @todo ERROR?
             return $response;

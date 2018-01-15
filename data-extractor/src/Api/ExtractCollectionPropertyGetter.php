@@ -12,10 +12,11 @@ class ExtractCollectionPropertyGetter extends ExtractPropertyGetter implements E
     /**
      * extract and return data if possible
      *
-     * @param object|array $collectionDataModel
+     * @param array|object $collectionDataModel
      * @param array        $options
      *
      * @return array|mixed
+     * @throws \Exception
      */
     public function __invoke($collectionDataModel, array $options)
     {
@@ -40,8 +41,6 @@ class ExtractCollectionPropertyGetter extends ExtractPropertyGetter implements E
     }
 
     /**
-     * getPropertyListByCollectionMethods
-     *
      * @param object|array $collectionDataModel
      *
      * @return array

@@ -3,7 +3,6 @@
 namespace Reliv\PipeRat2\ResponseFormat\Api;
 
 use Psr\Http\Message\ResponseInterface;
-use Reliv\PipeRat2\Core\DataResponse;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -31,7 +30,7 @@ class IsResponseFormattableBasic implements IsResponseFormattable
     public function __invoke(
         ResponseInterface $response,
         array $options = []
-    ):bool {
+    ): bool {
         $formattableResponseClasses = Options::get(
             $options,
             self::OPTION_FORMATTABLE_RESPONSE_CLASSES,

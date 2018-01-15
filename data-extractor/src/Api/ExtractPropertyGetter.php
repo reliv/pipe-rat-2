@@ -26,10 +26,11 @@ class ExtractPropertyGetter implements Extract
     /**
      * extract and return data if possible
      *
-     * @param object|array $dataModel
+     * @param array|object $dataModel
      * @param array        $options
      *
-     * @return array|mixed
+     * @return array
+     * @throws \Exception
      */
     public function __invoke($dataModel, array $options)
     {
@@ -56,14 +57,13 @@ class ExtractPropertyGetter implements Extract
     }
 
     /**
-     * getProperties
-     *
-     * @param object|array $dataModel $dataModel
-     * @param array        $properties
-     * @param int          $depth
-     * @param int          $depthLimit
+     * @param       $dataModel
+     * @param array $properties
+     * @param       $depth
+     * @param       $depthLimit
      *
      * @return array
+     * @throws \Exception
      */
     protected function getProperties(
         $dataModel,
@@ -78,7 +78,6 @@ class ExtractPropertyGetter implements Extract
         }
 
         foreach ($properties as $property => $configValue) {
-
             if ($configValue === false) {
                 continue;
             }
@@ -120,7 +119,6 @@ class ExtractPropertyGetter implements Extract
             }
 
             if (is_array($configValue) && is_object($data[$property]) && $this->isTraversable($data[$property])) {
-
                 $collection = $this->getCollectionProperties(
                     $data[$property],
                     $configValue,
@@ -149,7 +147,6 @@ class ExtractPropertyGetter implements Extract
 
                 continue;
             }
-
         }
 
         return $data;
@@ -269,7 +266,7 @@ class ExtractPropertyGetter implements Extract
      */
     protected function isTraversable($dataModel)
     {
-        return (is_array($dataModel) || $dataModel instanceOf \Traversable);
+        return (is_array($dataModel) || $dataModel instanceof \Traversable);
     }
 
     /**
@@ -279,7 +276,7 @@ class ExtractPropertyGetter implements Extract
      */
     protected function isJsonSerializableObject($dataModel)
     {
-        return (is_object($dataModel) && $dataModel instanceOf \JsonSerializable);
+        return (is_object($dataModel) && $dataModel instanceof \JsonSerializable);
     }
 
     /**
@@ -358,7 +355,6 @@ class ExtractPropertyGetter implements Extract
         $methods = get_class_methods(get_class($dataModel));
 
         foreach ($methods as $method) {
-
             $prefixLen = strlen(self::METHOD_PREFIX);
             if (substr($method, 0, $prefixLen) === self::METHOD_PREFIX) {
                 $property = lcfirst(substr($method, $prefixLen));

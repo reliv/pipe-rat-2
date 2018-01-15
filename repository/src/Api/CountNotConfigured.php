@@ -37,7 +37,7 @@ class CountNotConfigured implements Count
     public function __invoke(
         array $criteria = [],
         array $options = []
-    ):int  {
+    ):int {
         $message = Options::get(
             $options,
             self::OPTION_MESSAGE,

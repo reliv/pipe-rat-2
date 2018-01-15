@@ -28,6 +28,7 @@ class Exists implements \Reliv\PipeRat2\Repository\Api\Exists
      * @param array      $options
      *
      * @return bool
+     * @throws \Exception
      */
     public function __invoke(
         $id,

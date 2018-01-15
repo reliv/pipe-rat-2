@@ -107,7 +107,6 @@ class ValidateResultZfInputFilter extends ValidateResultAbstract implements Vali
         $errors = []
     ) {
         foreach ($inputMessages as $errorKey => $message) {
-
             $errors[] = [
                 'message' => $message,
                 'field' => $fieldName,

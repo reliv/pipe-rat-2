@@ -2,8 +2,6 @@
 
 namespace Reliv\PipeRat2\RepositoryDoctrine\Api;
 
-use Reliv\PipeRat2\Options\Options;
-
 /**
  * @author James Jervis - https://github.com/jerv13
  */
@@ -29,7 +27,8 @@ class FindById implements \Reliv\PipeRat2\Repository\Api\FindById
      * @param int|string $id
      * @param array      $options
      *
-     * @return mixed $data
+     * @return null|object
+     * @throws \Exception
      */
     public function __invoke(
         $id,

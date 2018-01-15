@@ -9,6 +9,7 @@ class ConfigParams
 {
     /**
      * @return array
+     * @throws \Exception
      */
     public static function defaultParams(): array
     {
@@ -23,6 +24,7 @@ class ConfigParams
      * @param array $config
      *
      * @return array
+     * @throws \Exception
      */
     public static function build(
         array $params,

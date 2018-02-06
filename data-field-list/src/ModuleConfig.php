@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\DataFieldList;
 
 use Reliv\PipeRat2\DataFieldList\Api\ObjectToArray;
 use Reliv\PipeRat2\DataFieldList\Api\ObjectToArrayBasic;
+use Reliv\PipeRat2\DataFieldList\Api\WithRequestAttributeAllowedFieldsFromOptions;
 use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\DataFieldList\Service\FieldConfigBasic;
 
@@ -23,6 +24,9 @@ class ModuleConfig
                     ObjectToArray::class => [
                         'class' => ObjectToArrayBasic::class
                     ],
+
+                    WithRequestAttributeAllowedFieldsFromOptions::class => [],
+
                     /**
                      * Service
                      */

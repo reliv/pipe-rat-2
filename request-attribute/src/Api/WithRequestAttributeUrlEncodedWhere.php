@@ -56,24 +56,6 @@ class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
             return $request;
         }
 
-        $allowDeepWheres = Options::get(
-            $options,
-            self::OPTION_ALLOW_DEEP_WHERES,
-            $this->defaultAllowDeepWheres
-        );
-
-        if ($allowDeepWheres) {
-            return $request->withAttribute(self::ATTRIBUTE, $where);
-        }
-
-        foreach ($where as $whereChunk) {
-            if (is_array($whereChunk)) {
-                throw new InvalidWhere(
-                    'Nested where params are not allowed'
-                );
-            }
-        }
-
         return $request->withAttribute(self::ATTRIBUTE, $where);
     }
 }

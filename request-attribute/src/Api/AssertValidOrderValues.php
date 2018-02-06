@@ -35,6 +35,13 @@ class AssertValidOrderValues implements AssertValidOrder
             return;
         }
 
+
+        if (!is_array($order)) {
+            throw new InvalidOrder(
+                'Order must be array'
+            );
+        }
+
         foreach ($order as $fieldName => $orderValue) {
             if (!in_array($orderValue, $this->validOrderValues)) {
                 throw new InvalidOrder(

@@ -30,18 +30,17 @@ class WithRequestAttributeUrlEncodedLimit implements WithRequestAttributeLimit
      * @param array                  $options
      *
      * @return ServerRequestInterface
-     * @throws InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
     ): ServerRequestInterface {
-        $value = $this->getUrlEncodedFilterValue->__invoke(
+        $limit = $this->getUrlEncodedFilterValue->__invoke(
             $request,
             self::URL_KEY
         );
 
-        return $request->withAttribute(self::ATTRIBUTE, $value);
+        return $request->withAttribute(self::ATTRIBUTE, $limit);
     }
 }

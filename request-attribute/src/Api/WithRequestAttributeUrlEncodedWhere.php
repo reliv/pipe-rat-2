@@ -56,10 +56,6 @@ class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
             self::URL_KEY
         );
 
-        if ($where === null) {
-            return $request;
-        }
-
         return $request->withAttribute(self::ATTRIBUTE, $where);
     }
 }

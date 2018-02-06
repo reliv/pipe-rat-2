@@ -41,10 +41,6 @@ class WithRequestAttributeUrlEncodedFields implements WithRequestAttributeFields
             self::URL_KEY
         );
 
-        if ($fields === null) {
-            return $request;
-        }
-
         return $request->withAttribute(self::ATTRIBUTE, $fields);
     }
 }

@@ -31,6 +31,10 @@ use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
  */
 class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 {
+    /**
+     * @return array
+     * @throws \Exception
+     */
     protected static function defaultParams(): array
     {
         $defaultParams = parent::defaultParams();
@@ -39,6 +43,9 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
         return $defaultParams;
     }
 
+    /**
+     * @return array
+     */
     protected static function defaultConfig(): array
     {
         return [

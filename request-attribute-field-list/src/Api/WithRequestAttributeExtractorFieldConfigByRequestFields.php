@@ -11,7 +11,7 @@ use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldList;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class WithRequestAttributeFilteredFieldConfigByRequestFields implements WithRequestAttributeFilteredFieldConfig
+class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithRequestAttributeExtractorFieldConfig
 {
     const OPTION_FIELD_LIST = 'field-list';
 
@@ -66,10 +66,10 @@ class WithRequestAttributeFilteredFieldConfigByRequestFields implements WithRequ
             $requestFieldList
         );
 
-        $allowedFieldConfig = $this->filterAllowedFieldListByIncludeKey->__invoke(
+        $extractorFieldConfig = $this->filterAllowedFieldListByIncludeKey->__invoke(
             $allowedFieldConfig
         );
 
-        return $request->withAttribute(self::ATTRIBUTE, $allowedFieldConfig);
+        return $request->withAttribute(self::ATTRIBUTE, $extractorFieldConfig);
     }
 }

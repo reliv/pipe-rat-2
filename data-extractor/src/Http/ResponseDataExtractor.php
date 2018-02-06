@@ -11,7 +11,7 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
-use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeFilteredFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -80,8 +80,9 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
             Extract::class
         );
 
+        // Filtered field config
         $fieldConfig = $request->getAttribute(
-            WithRequestAttributeFilteredFieldConfig::ATTRIBUTE,
+            WithRequestAttributeExtractorFieldConfig::ATTRIBUTE,
             []
         );
 

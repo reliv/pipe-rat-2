@@ -9,7 +9,8 @@ use Reliv\PipeRat2\RequestAttributeFieldList\Api\AssertValidWhereAllowedFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\FilterAllowedFieldListByIncludeKey;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\FilterAllowedFieldListByRequestFieldList;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeAllowedFieldConfigFromOptions;
-use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeFilteredFieldConfigByRequestFields;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfigByRequestFields;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfigFromOptions;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfigBasic;
 
@@ -45,12 +46,14 @@ class ModuleConfig
 
                     WithRequestAttributeAllowedFieldConfigFromOptions::class => [],
 
-                    WithRequestAttributeFilteredFieldConfigByRequestFields::class => [
+                    WithRequestAttributeExtractorFieldConfigByRequestFields::class => [
                         'arguments' => [
                             FilterAllowedFieldListByRequestFieldList::class,
                             FilterAllowedFieldListByIncludeKey::class,
                         ],
                     ],
+
+                    WithRequestAttributeExtractorFieldConfigFromOptions::class => [],
 
                     /**
                      * Service

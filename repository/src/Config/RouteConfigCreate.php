@@ -6,7 +6,7 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\ValidateNotConfigured;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
@@ -14,7 +14,14 @@ use Reliv\PipeRat2\Repository\Api\CreateNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryCreate;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestValidAttributesAsserts;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributesValidate;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeAllowedFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeAllowedFieldConfigFromOptions;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfigByRequestFields;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -43,6 +50,9 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey()
                 => RequestAttributes::class,
+
+                RequestAttributesValidate::configKey()
+                => RequestAttributesValidate::class,
 
                 RequestDataValidate::configKey()
                 => RequestDataValidate::class,
@@ -85,7 +95,29 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                     RequestAttributes::OPTION_SERVICE_NAMES => [
                         WithRequestAttributeFields::class
                         => WithRequestAttributeUrlEncodedFields::class,
+
+                        WithRequestAttributeAllowedFieldConfig::class
+                        => WithRequestAttributeAllowedFieldConfigFromOptions::class,
+
+                        WithRequestAttributeExtractorFieldConfig::class
+                        => WithRequestAttributeExtractorFieldConfigByRequestFields::class,
                     ],
+
+                    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+                        WithRequestAttributeAllowedFieldConfig::class => [
+                            WithRequestAttributeAllowedFieldConfigFromOptions::OPTION_ALLOWED_FIELDS
+                            /* @todo Over-ride with YOUR FieldsConfig */
+                            => [
+                                FieldConfig::KEY_TYPE => FieldConfig::PRIMITIVE,
+                                FieldConfig::KEY_INCLUDE => true,
+                            ],
+                        ],
+                    ],
+                ],
+
+                RequestAttributesValidate::configKey() => [
+                    RequestAttributesValidate::OPTION_SERVICE_NAME
+                    => WithRequestValidAttributesAsserts::class,
                 ],
 
                 RequestDataValidate::configKey() => [
@@ -118,11 +150,7 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
-                    ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => null,
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
-                    ],
+                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractByType::class,
                 ],
                 /** </response-mutators> */
 
@@ -146,9 +174,10 @@ class RouteConfigCreate extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormat::configKey() => 800,
-            RequestAcl::configKey() => 700,
-            RequestAttributes::configKey() => 600,
+            RequestFormat::configKey() => 900,
+            RequestAcl::configKey() => 800,
+            RequestAttributes::configKey() => 700,
+            RequestAttributesValidate::configKey() => 600,
             RequestDataValidate::configKey() => 500,
 
             /** <response-mutators> */

@@ -6,8 +6,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
-use Reliv\PipeRat2\DataExtractor\Api\OptionsExtract;
 use Reliv\PipeRat2\Options\Options;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -37,6 +38,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
 
     protected $isResponseFormattable;
     protected $getDataModel;
+    protected $fieldConfig;
     protected $extract;
     protected $defaultContentType = self::DEFAULT_CONTENT_TYPE;
     protected $defaultFileName = self::DEFAULT_FILE_NAME;
@@ -50,6 +52,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
     /**
      * @param IsResponseFormattable $isResponseFormattable
      * @param GetDataModel          $getDataModel
+     * @param FieldConfig           $fieldConfig
      * @param Extract               $extract
      * @param string                $defaultContentType
      * @param string                $defaultFileName
@@ -63,6 +66,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
     public function __construct(
         IsResponseFormattable $isResponseFormattable,
         GetDataModel $getDataModel,
+        FieldConfig $fieldConfig,
         Extract $extract,
         string $defaultContentType = self::DEFAULT_CONTENT_TYPE,
         string $defaultFileName = self::DEFAULT_FILE_NAME,
@@ -75,6 +79,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
     ) {
         $this->isResponseFormattable = $isResponseFormattable;
         $this->getDataModel = $getDataModel;
+        $this->fieldConfig = $fieldConfig;
         $this->extract = $extract;
         $this->defaultContentType = $defaultContentType;
         $this->defaultFileName = $defaultFileName;
@@ -209,19 +214,11 @@ class WithFormattedResponseFileData implements WithFormattedResponse
             );
         }
 
-        $propertyList = [
-            $fileBase64Property => true,
-        ];
-
         $fileContentTypeProperty = Options::get(
             $options,
             self::OPTION_FILE_CONTENT_TYPE_PROPERTY,
             $this->defaultFileContentTypeProperty
         );
-
-        if (!empty($fileContentTypeProperty)) {
-            $propertyList[$fileContentTypeProperty] = true;
-        }
 
         $fileNameProperty = Options::get(
             $options,
@@ -229,15 +226,13 @@ class WithFormattedResponseFileData implements WithFormattedResponse
             $this->defaultFileNameProperty
         );
 
-        if (!empty($fileNameProperty)) {
-            $propertyList[$fileNameProperty] = true;
-        }
-
         $properties = $this->extract->__invoke(
             $dataModel,
-            [
-                OptionsExtract::PROPERTY_LIST => $propertyList
-            ]
+            $this->buildFieldConfig(
+                $fileBase64Property,
+                $fileContentTypeProperty,
+                $fileNameProperty
+            )
         );
 
         $fileBase64 = Options::get(
@@ -262,5 +257,49 @@ class WithFormattedResponseFileData implements WithFormattedResponse
             'contentType' => $fileContentType,
             'fileName' => $fileName,
         ];
+    }
+
+    /**
+     * @param string $fileBase64Property
+     * @param null   $fileContentTypeProperty
+     * @param null   $fileNameProperty
+     *
+     * @return array
+     * @throws UnknownFieldType
+     */
+    protected function buildFieldConfig(
+        string $fileBase64Property,
+        $fileContentTypeProperty = null,
+        $fileNameProperty = null
+    ) {
+        $propertyList = [];
+
+        $propertyList[$fileBase64Property] = $this->fieldConfig->buildFieldConfig(
+            FieldConfig::PRIMITIVE,
+            [],
+            true
+        );
+
+        if (!empty($fileContentTypeProperty)) {
+            $propertyList[$fileContentTypeProperty] = $this->fieldConfig->buildFieldConfig(
+                FieldConfig::PRIMITIVE,
+                [],
+                true
+            );
+        }
+
+        if (!empty($fileNameProperty)) {
+            $propertyList[$fileNameProperty] = $this->fieldConfig->buildFieldConfig(
+                FieldConfig::PRIMITIVE,
+                [],
+                true
+            );
+        }
+
+        return $this->fieldConfig->buildFieldConfig(
+            FieldConfig::OBJECT,
+            $propertyList,
+            true
+        );
     }
 }

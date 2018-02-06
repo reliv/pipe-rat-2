@@ -6,10 +6,16 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Api\ExistsNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryExists;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestValidAttributesAsserts;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributesValidate;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfigFromOptions;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -35,6 +41,12 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
 
                 RequestAcl::configKey()
                 => RequestAcl::class,
+
+                RequestAttributes::configKey()
+                => RequestAttributes::class,
+
+                RequestAttributesValidate::configKey()
+                => RequestAttributesValidate::class,
 
                 /** <response-mutators> */
                 ResponseHeaders::configKey()
@@ -71,6 +83,25 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
                     ],
                 ],
 
+                RequestAttributes::configKey() => [
+                    RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeExtractorFieldConfig::class
+                        => WithRequestAttributeExtractorFieldConfigFromOptions::class,
+                    ],
+
+                    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
+                        WithRequestAttributeExtractorFieldConfig::class => [
+                            WithRequestAttributeExtractorFieldConfigFromOptions::OPTION_EXTRACTOR_FIELDS
+                            => [FieldConfig::KEY_TYPE => FieldConfig::PRIMITIVE],
+                        ],
+                    ],
+                ],
+
+                RequestAttributesValidate::configKey() => [
+                    RequestAttributesValidate::OPTION_SERVICE_NAME
+                    => WithRequestValidAttributesAsserts::class,
+                ],
+
                 /** <response-mutators> */
                 ResponseHeaders::configKey() => [
                     ResponseHeaders::OPTION_SERVICE_NAME
@@ -89,10 +120,8 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
-                    ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => null,
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
+                    ResponseDataExtractor::configKey() => [
+                        ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractByType::class,
                     ],
                 ],
                 /** </response-mutators> */
@@ -117,8 +146,10 @@ class RouteConfigExists extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormat::configKey() => 600,
-            RequestAcl::configKey() => 500,
+            RequestFormat::configKey() => 800,
+            RequestAcl::configKey() => 700,
+            RequestAttributes::configKey() => 600,
+            RequestAttributesValidate::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeaders::configKey() => 400,

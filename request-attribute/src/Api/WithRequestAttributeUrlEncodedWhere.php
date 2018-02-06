@@ -13,21 +13,29 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
  */
 class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
 {
+    /**
+     * @deprecated
+     */
     const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
-
+    /**
+     * @deprecated
+     */
     const DEFAULT_ALLOW_DEEP_WHERES = false;
 
     const URL_KEY = 'where';
 
     protected $getUrlEncodedFilterValue;
+    protected $assertValidWhere;
     protected $defaultAllowDeepWheres;
 
     /**
      * @param GetUrlEncodedFilterValue $getUrlEncodedFilterValue
-     * @param bool                     $defaultAllowDeepWheres
+     * @param AssertValidWhere         $assertValidWhere
+     * @param bool                     $defaultAllowDeepWheres\
      */
     public function __construct(
         GetUrlEncodedFilterValue $getUrlEncodedFilterValue,
+        AssertValidWhere $assertValidWhere,
         bool $defaultAllowDeepWheres = self::DEFAULT_ALLOW_DEEP_WHERES
     ) {
         $this->getUrlEncodedFilterValue = $getUrlEncodedFilterValue;

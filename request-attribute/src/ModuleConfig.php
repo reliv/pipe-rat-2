@@ -7,11 +7,14 @@ use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
+use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrder;
+use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrderValues;
+use Reliv\PipeRat2\RequestAttribute\Api\AssertValidWhere;
+use Reliv\PipeRat2\RequestAttribute\Api\AssertValidWhereNoDeepWheres;
 use Reliv\PipeRat2\RequestAttribute\Api\GetUrlEncodedFilterValue;
 use Reliv\PipeRat2\RequestAttribute\Api\QueryParamValueDecode;
 use Reliv\PipeRat2\RequestAttribute\Api\QueryParamValueDecodeJson;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
-use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedInclude;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedLimit;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedOrder;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedSkip;
@@ -33,6 +36,14 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    AssertValidWhere::class => [
+                        'class' => AssertValidWhereNoDeepWheres::class
+                    ],
+
+                    AssertValidOrder::class => [
+                        'class' => AssertValidOrderValues::class
+                    ],
+
                     GetUrlEncodedFilterValue::class => [
                         'arguments' => [
                             QueryParamValueDecode::class,

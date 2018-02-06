@@ -20,8 +20,12 @@ class ModulesConfig
             new \Reliv\PipeRat2\DataExtractor\ModuleConfig(),
             new \Reliv\PipeRat2\DataHydrator\ModuleConfig(),
             new \Reliv\PipeRat2\DataValidate\ModuleConfig(),
+            new \Reliv\PipeRat2\DataValueTypes\ModuleConfig(),
             new \Reliv\PipeRat2\Repository\ModuleConfig(),
             new \Reliv\PipeRat2\RequestAttribute\ModuleConfig(),
+            // Overrides RequestAttribute
+            new \Reliv\PipeRat2\DataFieldList\ModuleConfig(),
+
             new \Reliv\PipeRat2\RequestFormat\ModuleConfig(),
             new \Reliv\PipeRat2\ResponseFormat\ModuleConfig(),
             new \Reliv\PipeRat2\ResponseHeaders\ModuleConfig(),

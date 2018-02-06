@@ -11,42 +11,42 @@ use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
 class FilterAllowedFieldListByRequestFieldList
 {
     /**
-     * @param array $allowedFieldList
+     * @param array $allowedFieldConfig
      * @param array $requestFieldList
      *
      * @return array
      * @throws FieldNotAllowed
      */
     public function __invoke(
-        array $allowedFieldList,
+        array $allowedFieldConfig,
         array $requestFieldList
     ): array {
         if (empty($requestFieldList)) {
-            return $allowedFieldList;
+            return $allowedFieldConfig;
         }
 
         return $this->filter(
-            $allowedFieldList,
+            $allowedFieldConfig,
             $requestFieldList
         );
     }
 
     /**
-     * @param array $allowedFieldList
+     * @param array $allowedFieldConfig
      * @param array $requestFieldList
      *
      * @return array
      * @throws FieldNotAllowed
      */
     public function filter(
-        array $allowedFieldList,
+        array $allowedFieldConfig,
         array $requestFieldList
     ): array {
-        $fieldListFiltered = [];
+        $allowedFieldConfigFiltered = [];
 
         foreach ($requestFieldList as $fieldName => $value) {
             // IF no whitelist config, then error
-            if (!array_key_exists($fieldName, $allowedFieldList)) {
+            if (!array_key_exists($fieldName, $allowedFieldConfig)) {
                 throw new FieldNotAllowed(
                     'Field is not allowed for: ' . $fieldName
                 );
@@ -60,8 +60,8 @@ class FilterAllowedFieldListByRequestFieldList
 
             // If field is true, then include it
             if ($requestFieldList[$fieldName] === true) {
-                $fieldListFiltered[$fieldName] = $allowedFieldList[$fieldName];
-                $fieldListFiltered[$fieldName][FieldConfig::KEY_INCLUDE] = true;
+                $allowedFieldConfigFiltered[$fieldName] = $allowedFieldConfig[$fieldName];
+                $allowedFieldConfigFiltered[$fieldName][FieldConfig::KEY_INCLUDE] = true;
                 continue;
             }
 
@@ -71,12 +71,12 @@ class FilterAllowedFieldListByRequestFieldList
             }
 
             // is array, recurse
-            $fieldListFiltered[$fieldName] = $this->filter(
-                $allowedFieldList[$fieldName],
+            $allowedFieldConfigFiltered[$fieldName] = $this->filter(
+                $allowedFieldConfig[$fieldName],
                 $value
             );
         }
 
-        return $fieldListFiltered;
+        return $allowedFieldConfigFiltered;
     }
 }

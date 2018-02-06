@@ -24,6 +24,14 @@ class AssertValidWhereNoDeepWheres implements AssertValidWhere
         ServerRequestInterface $request,
         array $options = []
     ) {
+        $where = $request->getAttribute(
+            WithRequestAttributeWhere::ATTRIBUTE
+        );
+
+        if ($where === null) {
+            return;
+        }
+
         $allowDeepWheres = Options::get(
             $options,
             self::OPTION_ALLOW_DEEP_WHERES,
@@ -33,10 +41,6 @@ class AssertValidWhereNoDeepWheres implements AssertValidWhere
         if ($allowDeepWheres) {
             return;
         }
-
-        $where = $request->getAttribute(
-            WithRequestAttributeWhere::ATTRIBUTE
-        );
 
         foreach ($where as $whereChunk) {
             if (is_array($whereChunk)) {

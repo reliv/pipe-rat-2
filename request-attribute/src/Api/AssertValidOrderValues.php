@@ -31,7 +31,7 @@ class AssertValidOrderValues implements AssertValidOrder
             WithRequestAttributeOrder::ATTRIBUTE
         );
 
-        if (empty($order)) {
+        if ($order === null) {
             return;
         }
 

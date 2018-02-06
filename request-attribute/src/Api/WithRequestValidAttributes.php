@@ -9,21 +9,8 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class WithRequestAttributeUrlEncodedLimit implements WithRequestAttributeLimit
+interface WithRequestValidAttributes
 {
-    const URL_KEY = 'limit';
-
-    protected $getUrlEncodedFilterValue;
-
-    /**
-     * @param GetUrlEncodedFilterValue $getUrlEncodedFilterValue
-     */
-    public function __construct(
-        GetUrlEncodedFilterValue $getUrlEncodedFilterValue
-    ) {
-        $this->getUrlEncodedFilterValue = $getUrlEncodedFilterValue;
-    }
-
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
@@ -36,12 +23,5 @@ class WithRequestAttributeUrlEncodedLimit implements WithRequestAttributeLimit
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $options = []
-    ): ServerRequestInterface {
-        $value = $this->getUrlEncodedFilterValue->__invoke(
-            $request,
-            self::URL_KEY
-        );
-
-        return $request->withAttribute(self::ATTRIBUTE, $value);
-    }
+    ): ServerRequestInterface;
 }

@@ -25,17 +25,14 @@ class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
     const URL_KEY = 'where';
 
     protected $getUrlEncodedFilterValue;
-    protected $assertValidWhere;
     protected $defaultAllowDeepWheres;
 
     /**
      * @param GetUrlEncodedFilterValue $getUrlEncodedFilterValue
-     * @param AssertValidWhere         $assertValidWhere
      * @param bool                     $defaultAllowDeepWheres\
      */
     public function __construct(
         GetUrlEncodedFilterValue $getUrlEncodedFilterValue,
-        AssertValidWhere $assertValidWhere,
         bool $defaultAllowDeepWheres = self::DEFAULT_ALLOW_DEEP_WHERES
     ) {
         $this->getUrlEncodedFilterValue = $getUrlEncodedFilterValue;
@@ -48,7 +45,6 @@ class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
      * @param array                  $options
      *
      * @return ServerRequestInterface
-     * @throws InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,

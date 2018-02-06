@@ -31,19 +31,21 @@ abstract class RouteConfigAbstract
 
         $defaultConfig = static::defaultConfig();
 
-        $name = static::getValue(
+        $config = $configOverride;
+
+        $config['name'] = static::getValue(
             $configOverride,
             'name',
             $defaultConfig['name']
         );
 
-        $path = static::getValue(
+        $config['path'] = static::getValue(
             $configOverride,
             'path',
             $defaultConfig['path']
         );
 
-        $allowedMethods = static::getValue(
+        $config['allowed_methods'] = static::getValue(
             $configOverride,
             'allowed_methods',
             $defaultConfig['allowed_methods']
@@ -61,14 +63,6 @@ abstract class RouteConfigAbstract
             $defaultConfig['options']
         );
 
-        $config = [
-            'name' => $name,
-            'path' => $path,
-            'middleware' => [],
-            'options' => [],
-            'allowed_methods' => $allowedMethods,
-        ];
-
         $config['options'] = self::merge($defaultConfig['options'], $options);
 
         $middlewareServices = self::merge($defaultConfig['middleware'], $middlewareServices);
@@ -84,6 +78,8 @@ abstract class RouteConfigAbstract
             $queue->insert($key, $priority);
             $index--;
         }
+
+        $config['middleware'] = [];
 
         foreach ($queue as $key) {
             $config['middleware'][$key] = $middlewareServices[$key];
@@ -133,6 +129,7 @@ abstract class RouteConfigAbstract
 
     /**
      * @return array
+     * @throws \Exception
      */
     protected static function defaultParams(): array
     {
@@ -184,6 +181,7 @@ abstract class RouteConfigAbstract
      * @param array  $params
      *
      * @return array
+     * @throws \Exception
      */
     protected static function prepareParams(
         string $resourceName,

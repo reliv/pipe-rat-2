@@ -11,10 +11,12 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
+use Reliv\PipeRat2\DataExtractor\Api\OptionsExtract;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 
 /**
+ * @deprecated
  * @author James Jervis - https://github.com/jerv13
  */
 class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbstract
@@ -92,7 +94,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
             $options
         );
 
-        $extractOptions[Extract::OPTION_PROPERTY_LIST] = $this->buildPropertyListOption(
+        $extractOptions[OptionsExtract::PROPERTY_LIST] = $this->buildPropertyListOption(
             $request,
             $extractOptions
         );
@@ -130,7 +132,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
 
         $extractorPropertyList = Options::get(
             $extractOptions,
-            Extract::OPTION_PROPERTY_LIST,
+            OptionsExtract::PROPERTY_LIST,
             null
         );
 

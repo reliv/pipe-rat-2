@@ -5,6 +5,7 @@ namespace Reliv\PipeRat2\DataExtractor\Api;
 use Reliv\PipeRat2\Options\Options;
 
 /**
+ * @deprecated Use ExtractByType
  * @todo   This does too much, should be slit into:
  *         - ExtractJsonSerializable
  *         - ExtractTraversable
@@ -13,14 +14,10 @@ use Reliv\PipeRat2\Options\Options;
  */
 class ExtractPropertyGetter implements Extract
 {
-    /**
-     * const
-     */
-    const METHOD_PREFIX = 'get';
+    const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
+    const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
 
-    /**
-     * const
-     */
+    const METHOD_PREFIX = 'get';
     const METHOD_BOOL_PREFIX = 'is';
 
     /**
@@ -32,7 +29,7 @@ class ExtractPropertyGetter implements Extract
      * @return array
      * @throws \Exception
      */
-    public function __invoke($dataModel, array $options)
+    public function __invoke($dataModel, array $options = []): array
     {
         $propertyList = Options::get(
             $options,
@@ -320,7 +317,7 @@ class ExtractPropertyGetter implements Extract
     }
 
     /**
-     * @param JsonSerializable $dataModel
+     * @param \JsonSerializable $dataModel
      *
      * @return array
      */

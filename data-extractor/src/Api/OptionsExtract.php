@@ -9,6 +9,8 @@ use Reliv\PipeRat2\Options\Options;
  */
 class OptionsExtract extends Options
 {
+    const FIELD_LIST = 'field-list';
+
     const PROPERTY_LIST = 'property-list';
     const PROPERTY_DEPTH_LIMIT = 'property-depth-limit';
 }

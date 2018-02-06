@@ -3,10 +3,15 @@
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
 /**
+ * @deprecated
+ *
  * @author James Jervis - https://github.com/jerv13
  */
 abstract class ExtractAbstract
 {
+    const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
+    const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
+
     /**
      * getPropertyList
      *

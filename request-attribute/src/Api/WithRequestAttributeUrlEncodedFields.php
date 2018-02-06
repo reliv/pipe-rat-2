@@ -52,10 +52,39 @@ class WithRequestAttributeUrlEncodedFields implements WithRequestAttributeFields
             );
         }
 
-        foreach ($fields as $key => $value) {
-            $fields[$key] = ($value == 'true' || $value == '1' ? true : false);
-        }
+        $this->assertValid($fields);
 
         return $request->withAttribute(self::ATTRIBUTE, $fields);
+    }
+
+    /**
+     * @param $fields
+     *
+     * @return void
+     * @throws InvalidRequestAttribute
+     */
+    protected function assertValid($fields)
+    {
+        foreach ($fields as $value) {
+            $this->assertValidValue($value);
+            if (is_array($value)) {
+                $this->assertValid($value);
+            }
+        }
+    }
+
+    /**
+     * @param array|bool $value
+     *
+     * @return void
+     * @throws InvalidRequestAttribute
+     */
+    protected function assertValidValue($value)
+    {
+        if (!is_array($value) && !is_bool($value)) {
+            throw new InvalidRequestAttribute(
+                'Fields must be array or bool for value: ' . json_encode($value)
+            );
+        }
     }
 }

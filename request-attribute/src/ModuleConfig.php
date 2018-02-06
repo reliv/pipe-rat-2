@@ -8,7 +8,10 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
 use Reliv\PipeRat2\RequestAttribute\Api\GetUrlEncodedFilterValue;
+use Reliv\PipeRat2\RequestAttribute\Api\QueryParamValueDecode;
+use Reliv\PipeRat2\RequestAttribute\Api\QueryParamValueDecodeJson;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedFields;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedInclude;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedLimit;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedOrder;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedSkip;
@@ -30,7 +33,15 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
-                    GetUrlEncodedFilterValue::class => [],
+                    GetUrlEncodedFilterValue::class => [
+                        'arguments' => [
+                            QueryParamValueDecode::class,
+                        ],
+                    ],
+
+                    QueryParamValueDecode::class => [
+                        'class' => QueryParamValueDecodeJson::class,
+                    ],
 
                     WithRequestAttributeUrlEncodedFields::class => [
                         'arguments' => [

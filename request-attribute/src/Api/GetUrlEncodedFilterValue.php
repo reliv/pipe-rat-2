@@ -9,6 +9,17 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class GetUrlEncodedFilterValue
 {
+    protected $queryParamValueDecode;
+
+    /**
+     * @param QueryParamValueDecode $queryParamValueDecode
+     */
+    public function __construct(
+        QueryParamValueDecode $queryParamValueDecode
+    ) {
+        $this->queryParamValueDecode = $queryParamValueDecode;
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @param string                 $urlParamKey
@@ -21,13 +32,22 @@ class GetUrlEncodedFilterValue
     ) {
         $params = $request->getQueryParams();
 
-        if (!array_key_exists('filter', $params)
-            || !array_key_exists($urlParamKey, $params['filter'])
-        ) {
-            //Nothing in params for us so leave
+        if (!array_key_exists('filter', $params))
+        {
+            // No filter
             return null;
         }
 
-        return $params['filter'][$urlParamKey];
+        $filterParams = $this->queryParamValueDecode->__invoke(
+            $params['filter']
+        );
+
+        if (!array_key_exists($urlParamKey, $filterParams))
+        {
+            // No params for us so leave
+            return null;
+        }
+
+        return $filterParams[$urlParamKey];
     }
 }

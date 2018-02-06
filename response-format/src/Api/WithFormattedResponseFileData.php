@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
+use Reliv\PipeRat2\DataExtractor\Api\OptionsExtract;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -235,7 +236,7 @@ class WithFormattedResponseFileData implements WithFormattedResponse
         $properties = $this->extract->__invoke(
             $dataModel,
             [
-                Extract::OPTION_PROPERTY_LIST => $propertyList
+                OptionsExtract::PROPERTY_LIST => $propertyList
             ]
         );
 

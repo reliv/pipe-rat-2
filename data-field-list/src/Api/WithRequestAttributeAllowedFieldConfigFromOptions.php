@@ -9,7 +9,7 @@ use Reliv\PipeRat2\Options\Options;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class WithRequestAttributeAllowedFieldsFromOptions implements WithRequestAttributeAllowedFields
+class WithRequestAttributeAllowedFieldConfigFromOptions implements WithRequestAttributeAllowedFieldConfig
 {
     const OPTION_ALLOWED_FIELDS = 'allowed-fields';
 

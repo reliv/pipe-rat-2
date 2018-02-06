@@ -33,7 +33,7 @@ class AssertValidOrderAllowedFields extends AssertValidOrderValues implements As
         }
 
         $allowedFields = $request->getAttribute(
-            WithRequestAttributeAllowedFields::ATTRIBUTE
+            WithRequestAttributeAllowedFieldConfig::ATTRIBUTE
         );
 
         if (empty($allowedFields)) {

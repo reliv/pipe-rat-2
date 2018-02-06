@@ -7,7 +7,7 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttribute;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-interface WithRequestAttributeAllowedFields extends WithRequestAttribute
+interface WithRequestAttributeFilteredFieldConfig extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-allowed-fields';
+    const ATTRIBUTE = 'pipe-rat-request-filtered-field-config';
 }

@@ -32,7 +32,7 @@ class AssertValidWhereAllowedFields implements AssertValidWhere
         }
 
         $allowedFields = $request->getAttribute(
-            WithRequestAttributeAllowedFields::ATTRIBUTE
+            WithRequestAttributeAllowedFieldConfig::ATTRIBUTE
         );
 
         if (empty($allowedFields)) {

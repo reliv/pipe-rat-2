@@ -11,7 +11,7 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class WithRequestAttributeFieldListFromRequestFields implements WithRequestAttributeFieldList
+class WithRequestAttributeFilteredFieldConfigByRequestFields implements WithRequestAttributeFilteredFieldConfig
 {
     const OPTION_FIELD_LIST = 'field-list';
 
@@ -43,12 +43,12 @@ class WithRequestAttributeFieldListFromRequestFields implements WithRequestAttri
         array $options = []
     ): ServerRequestInterface {
         $allowedFieldConfig = $request->getAttribute(
-            WithRequestAttributeAllowedFields::ATTRIBUTE
+            WithRequestAttributeAllowedFieldConfig::ATTRIBUTE
         );
 
         if (empty($allowedFieldConfig)) {
             throw new InvalidFieldList(
-                'No allowed fields found build list'
+                'No allowed fields found to build list'
             );
         }
 

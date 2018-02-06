@@ -6,7 +6,7 @@ use Reliv\PipeRat2\DataFieldList\Api\AssertValidOrderAllowedFields;
 use Reliv\PipeRat2\DataFieldList\Api\AssertValidWhereAllowedFields;
 use Reliv\PipeRat2\DataFieldList\Api\ObjectToArray;
 use Reliv\PipeRat2\DataFieldList\Api\ObjectToArrayBasic;
-use Reliv\PipeRat2\DataFieldList\Api\WithRequestAttributeAllowedFieldsFromOptions;
+use Reliv\PipeRat2\DataFieldList\Api\WithRequestAttributeAllowedFieldConfigFromOptions;
 use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\DataFieldList\Service\FieldConfigBasic;
 use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrder;
@@ -38,7 +38,9 @@ class ModuleConfig
                         'class' => ObjectToArrayBasic::class
                     ],
 
-                    WithRequestAttributeAllowedFieldsFromOptions::class => [],
+                    WithRequestAttributeAllowedFieldConfigFromOptions::class => [
+                        'class' => ObjectToArrayBasic::class
+                    ],
 
                     /**
                      * Service

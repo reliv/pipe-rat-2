@@ -11,12 +11,12 @@ interface Extract
      * extract and return data if possible
      *
      * @param object|array $dataModel
-     * @param array        $options
+     * @param array        $fieldConfig
      *
      * @return array|string|int|bool|null
      */
     public function __invoke(
         $dataModel,
-        array $options = []
+        array $fieldConfig = []
     );
 }

@@ -24,7 +24,7 @@ class ModulesConfig
             new \Reliv\PipeRat2\Repository\ModuleConfig(),
             new \Reliv\PipeRat2\RequestAttribute\ModuleConfig(),
             // Overrides RequestAttribute
-            new \Reliv\PipeRat2\DataFieldList\ModuleConfig(),
+            new \Reliv\PipeRat2\RequestAttributeFieldList\ModuleConfig(),
 
             new \Reliv\PipeRat2\RequestFormat\ModuleConfig(),
             new \Reliv\PipeRat2\ResponseFormat\ModuleConfig(),

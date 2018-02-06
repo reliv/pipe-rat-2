@@ -33,14 +33,7 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'request-acl';
     }
 
-    /**
-     * @var int
-     */
     protected $defaultFailStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE;
-
-    /**
-     * @var string
-     */
     protected $defaultFailStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE;
 
     /**

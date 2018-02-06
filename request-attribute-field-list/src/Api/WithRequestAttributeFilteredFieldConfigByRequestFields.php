@@ -1,12 +1,12 @@
 <?php
 
-namespace Reliv\PipeRat2\DataFieldList\Api;
+namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\DataFieldList\Exception\FieldNotAllowed;
-use Reliv\PipeRat2\DataFieldList\Exception\InvalidFieldList;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldNotAllowed;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldList;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -20,6 +20,10 @@ class WithRequestAttributeFilteredFieldConfigByRequestFields implements WithRequ
     protected $filterAllowedFieldListByRequestFieldList;
     protected $filterAllowedFieldListByIncludeKey;
 
+    /**
+     * @param FilterAllowedFieldListByRequestFieldList $filterAllowedFieldListByRequestFieldList
+     * @param FilterAllowedFieldListByIncludeKey       $filterAllowedFieldListByIncludeKey
+     */
     public function __construct(
         FilterAllowedFieldListByRequestFieldList $filterAllowedFieldListByRequestFieldList,
         FilterAllowedFieldListByIncludeKey $filterAllowedFieldListByIncludeKey

@@ -9,7 +9,7 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class WithRequestValidAttributesBasic implements WithRequestValidAttributes
+class WithRequestValidAttributesAsserts implements WithRequestValidAttributes
 {
     protected $assertValidFields;
     protected $assertValidLimit;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Reliv\PipeRat2\DataFieldList\Service;
+namespace Reliv\PipeRat2\RequestAttributeFieldList\Service;
 
-use Reliv\PipeRat2\DataFieldList\Exception\InvalidFieldType;
-use Reliv\PipeRat2\DataFieldList\Exception\UnknownFieldType;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldType;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
 
 /**
  * @author James Jervis - https://github.com/jerv13

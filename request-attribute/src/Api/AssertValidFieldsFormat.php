@@ -34,6 +34,8 @@ class AssertValidFieldsFormat implements AssertValidFields
                 'Fields must be array'
             );
         }
+
+        $this->assertValid($fields);
     }
 
     /**

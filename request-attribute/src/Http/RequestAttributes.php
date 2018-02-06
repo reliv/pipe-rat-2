@@ -65,7 +65,6 @@ class RequestAttributes implements MiddlewareWithConfigKey
      *
      * @return mixed
      * @throws \Exception
-     * @throws \Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,

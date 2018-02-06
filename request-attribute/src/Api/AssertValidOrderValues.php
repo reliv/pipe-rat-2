@@ -35,7 +35,6 @@ class AssertValidOrderValues implements AssertValidOrder
             return;
         }
 
-
         if (!is_array($order)) {
             throw new InvalidOrder(
                 'Order must be array'

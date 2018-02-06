@@ -11,6 +11,8 @@ class OptionsExtract extends Options
 {
     const FIELD_LIST = 'field-list';
 
-    const PROPERTY_LIST = 'property-list';
-    const PROPERTY_DEPTH_LIMIT = 'property-depth-limit';
+    /* @deprecated */
+    //const PROPERTY_LIST = 'property-list';
+    /* @deprecated */
+    //const PROPERTY_DEPTH_LIMIT = 'property-depth-limit';
 }

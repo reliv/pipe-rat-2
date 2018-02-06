@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat2\DataFieldList\Api;
+namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

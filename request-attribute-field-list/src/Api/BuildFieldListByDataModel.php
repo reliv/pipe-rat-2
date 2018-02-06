@@ -1,13 +1,15 @@
 <?php
 
-namespace Reliv\PipeRat2\DataFieldList\Api;
+namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
-use Reliv\PipeRat2\DataFieldList\Exception\UnknownFieldType;
-use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
+use Reliv\PipeRat2\Core\Api\ObjectToArray;
 use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
+ * @todo Not used
  * @author James Jervis - https://github.com/jerv13
  */
 class BuildFieldListByDataModel

@@ -16,6 +16,8 @@ use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptionsBasic;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptionsBasic;
+use Reliv\PipeRat2\Core\Api\ObjectToArray;
+use Reliv\PipeRat2\Core\Api\ObjectToArrayBasic;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBodyDataResponse;
 
@@ -66,6 +68,10 @@ class ModuleConfig
                         'arguments' => [
                             GetServiceOptionsFromConfigOptionsBasic::class
                         ]
+                    ],
+
+                    ObjectToArray::class => [
+                        'class' => ObjectToArrayBasic::class
                     ],
 
                     ResponseWithDataBody::class => [

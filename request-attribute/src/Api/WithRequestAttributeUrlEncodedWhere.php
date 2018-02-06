@@ -4,39 +4,28 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
-use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
 class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
 {
-    /**
-     * @deprecated
-     */
-    const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
-    /**
-     * @deprecated
-     */
-    const DEFAULT_ALLOW_DEEP_WHERES = false;
+    /* deprecated */
+    //const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
+    /* deprecated */
+    //const DEFAULT_ALLOW_DEEP_WHERES = false;
 
     const URL_KEY = 'where';
 
     protected $getUrlEncodedFilterValue;
-    protected $defaultAllowDeepWheres;
 
     /**
      * @param GetUrlEncodedFilterValue $getUrlEncodedFilterValue
-     * @param bool                     $defaultAllowDeepWheres\
      */
     public function __construct(
-        GetUrlEncodedFilterValue $getUrlEncodedFilterValue,
-        bool $defaultAllowDeepWheres = self::DEFAULT_ALLOW_DEEP_WHERES
+        GetUrlEncodedFilterValue $getUrlEncodedFilterValue
     ) {
         $this->getUrlEncodedFilterValue = $getUrlEncodedFilterValue;
-        $this->defaultAllowDeepWheres = $defaultAllowDeepWheres;
     }
 
     /**

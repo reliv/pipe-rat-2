@@ -2,7 +2,7 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
-use Reliv\PipeRat2\DataFieldList\Api\ObjectToArray;
+use Reliv\PipeRat2\Core\Api\ObjectToArray;
 use Reliv\PipeRat2\DataValueTypes\Exception\InvalidValueType;
 
 /**

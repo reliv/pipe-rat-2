@@ -2,8 +2,8 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
-use Reliv\PipeRat2\DataFieldList\Exception\InvalidFieldType;
-use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldType;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\DataValueTypes\Exception\InvalidValueType;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
 

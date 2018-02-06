@@ -6,19 +6,16 @@ use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\Api\ObjectToArray;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractCollection;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractNoop;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractObject;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractObjectProperty;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPrimitive;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
-use Reliv\PipeRat2\DataFieldList\Api\ObjectToArray;
-use Reliv\PipeRat2\DataFieldList\Service\FieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
 
 /**
@@ -35,8 +32,14 @@ class ModuleConfig
             'dependencies' => [
                 'config_factories' => [
                     Extract::class => [
-                        'class' => ExtractPropertyGetter::class,
+                        'class' => ExtractByType::class,
+                        'arguments' => [
+                            ValueTypes::class,
+                            FieldConfig::class,
+                            ExtractObjectProperty::class
+                        ]
                     ],
+
                     ExtractByType::class => [
                         'arguments' => [
                             ValueTypes::class,
@@ -51,9 +54,7 @@ class ModuleConfig
                         ]
                     ],
 
-                    ExtractCollectionPropertyGetter::class => [],
                     ExtractNoop::class => [],
-                    ExtractPropertyGetter::class => [],
 
                     ResponseDataExtractor::class => [
                         'arguments' => [

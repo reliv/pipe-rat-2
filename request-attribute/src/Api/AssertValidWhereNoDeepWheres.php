@@ -31,16 +31,12 @@ class AssertValidWhereNoDeepWheres implements AssertValidWhere
         if ($where === null) {
             return;
         }
-
-        $allowDeepWheres = Options::get(
-            $options,
-            self::OPTION_ALLOW_DEEP_WHERES,
-            false
-        );
-
-        if ($allowDeepWheres) {
-            return;
+        if (!is_array($where)) {
+            throw new InvalidWhere(
+                'Where must be array'
+            );
         }
+
 
         foreach ($where as $whereChunk) {
             if (is_array($whereChunk)) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Reliv\PipeRat2\DataFieldList\Api;
+namespace Reliv\PipeRat2\Core\Api;
 
 /**
  * @author James Jervis - https://github.com/jerv13

@@ -14,8 +14,10 @@ use Reliv\PipeRat2\Options\Options;
  */
 class ExtractPropertyGetter implements Extract
 {
-    const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
-    const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
+    /* @deprecated */
+    //const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
+    /* @deprecated */
+    //const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
 
     const METHOD_PREFIX = 'get';
     const METHOD_BOOL_PREFIX = 'is';

@@ -118,6 +118,14 @@ abstract class RouteConfigAbstract
         return $overrides;
     }
 
+    /**
+     * Merge over-rides 2 layers deep
+     *
+     * @param array $defaults
+     * @param array $overrides
+     *
+     * @return array
+     */
     protected static function mergeOptions(array $defaults, array $overrides)
     {
         /**

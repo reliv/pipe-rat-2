@@ -10,11 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class WithRequestAttributeUrlEncodedWhere implements WithRequestAttributeWhere
 {
-    /* deprecated */
-    //const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
-    /* deprecated */
-    //const DEFAULT_ALLOW_DEEP_WHERES = false;
-
     const URL_KEY = 'where';
 
     protected $getUrlEncodedFilterValue;

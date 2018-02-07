@@ -11,8 +11,6 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
  */
 class AssertValidWhereNoDeepWheres implements AssertValidWhere
 {
-    const OPTION_ALLOW_DEEP_WHERES = 'allow-deep-wheres';
-
     /**
      * @param ServerRequestInterface $request
      * @param array                  $options
@@ -36,7 +34,6 @@ class AssertValidWhereNoDeepWheres implements AssertValidWhere
                 'Where must be array'
             );
         }
-
 
         foreach ($where as $whereChunk) {
             if (is_array($whereChunk)) {

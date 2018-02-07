@@ -94,12 +94,6 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
                     WithRequestAttributeLimit::class
                     => WithRequestAttributeUrlEncodedLimit::class,
                 ],
-
-                RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                    WithRequestAttributeWhere::class => [
-                        WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
-                    ]
-                ],
             ],
 
             /** <response-mutators> */

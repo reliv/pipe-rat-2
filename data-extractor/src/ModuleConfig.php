@@ -10,13 +10,11 @@ use Reliv\PipeRat2\Core\Api\ObjectToArray;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractNoop;
 use Reliv\PipeRat2\DataExtractor\Api\ExtractObjectProperty;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
-use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13

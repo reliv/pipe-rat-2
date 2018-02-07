@@ -6,7 +6,7 @@ use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptTypeBasic;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
@@ -53,7 +53,7 @@ class ModuleConfig
                         'arguments' => [
                             IsResponseFormattable::class,
                             GetDataModel::class,
-                            ExtractPropertyGetter::class,
+                            ExtractByType::class,
                             ['literal' => WithFormattedResponseFileData::DEFAULT_CONTENT_TYPE],
                             ['literal' => WithFormattedResponseFileData::DEFAULT_FILE_NAME],
                             ['literal' => WithFormattedResponseFileData::DEFAULT_FILE_BASE_64_PROPERTY],

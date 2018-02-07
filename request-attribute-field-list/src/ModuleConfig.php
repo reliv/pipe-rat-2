@@ -29,11 +29,17 @@ class ModuleConfig
                 'config_factories' => [
                     // @override
                     AssertValidWhere::class => [
-                        'class' => AssertValidWhereAllowedFields::class
+                        'class' => AssertValidWhereAllowedFields::class,
+                        'arguments' => [
+                            FieldConfig::class,
+                        ],
                     ],
                     // @override
                     AssertValidOrder::class => [
-                        'class' => AssertValidOrderAllowedFields::class
+                        'class' => AssertValidOrderAllowedFields::class,
+                        'arguments' => [
+                            FieldConfig::class,
+                        ],
                     ],
 
                     FilterAllowedFieldListByIncludeKey::class => [

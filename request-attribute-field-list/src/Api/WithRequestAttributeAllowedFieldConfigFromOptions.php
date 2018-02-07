@@ -33,6 +33,14 @@ class WithRequestAttributeAllowedFieldConfigFromOptions implements WithRequestAt
             self::DEFAULT_ALLOWED_FIELDS
         );
 
-        return $request->withAttribute(self::ATTRIBUTE, $allowedFields);
+        // NOTE: we set both the allowed and the extractor field config,
+        //       the extractor field config may be over written in later middleware
+        return $request->withAttribute(
+            self::ATTRIBUTE,
+            $allowedFields
+        )->withAttribute(
+            WithRequestAttributeExtractorFieldConfig::ATTRIBUTE,
+            $allowedFields
+        );
     }
 }

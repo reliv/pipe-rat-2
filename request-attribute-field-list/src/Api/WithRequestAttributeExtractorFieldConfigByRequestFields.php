@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldNotAllowed;
-use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldList;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -38,7 +38,7 @@ class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithReq
      * @param array                  $options
      *
      * @return ServerRequestInterface
-     * @throws InvalidFieldList
+     * @throws InvalidFieldConfig
      * @throws FieldNotAllowed
      */
     public function __invoke(
@@ -51,12 +51,12 @@ class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithReq
         );
 
         if (empty($allowedFieldConfig)) {
-            throw new InvalidFieldList(
+            throw new InvalidFieldConfig(
                 'No allowed fields found to build list'
             );
         }
 
-        $requestFieldList = $request->getAttribute(
+        $requestFieldList = (array)$request->getAttribute(
             WithRequestAttributeFields::ATTRIBUTE,
             []
         );

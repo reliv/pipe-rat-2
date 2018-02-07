@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\Core\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Json;
 use Zend\Expressive\Router\RouteResult;
 
 /**
@@ -41,7 +42,7 @@ class GetOptionsExpressiveRoute implements GetOptions
         if (!is_array($optionsAll[$configKey])) {
             throw new \Exception(
                 'Options must be array for config key: ' . $configKey
-                . ' got: ' . json_encode($optionsAll[$configKey], 0, 5)
+                . ' got: ' . Json::encode($optionsAll[$configKey], 0, 5)
             );
         }
 

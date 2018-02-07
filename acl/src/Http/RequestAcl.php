@@ -5,9 +5,11 @@ namespace Reliv\PipeRat2\Acl\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Acl\Api\IsAllowed;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
+use Reliv\PipeRat2\Core\DataResponse;
 use Reliv\PipeRat2\Core\DataResponseBasic;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\Options\Options;
@@ -21,7 +23,7 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
     const OPTION_NOT_ALLOWED_STATUS_MESSAGE = 'not-allowed-status-message';
 
     const DEFAULT_NOT_ALLOWED_STATUS_CODE = 401;
-    const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Authorized';
+    const DEFAULT_NOT_ALLOWED_STATUS_MESSAGE = 'Not Authorized: ACL';
 
     /**
      * Provide a unique config key
@@ -33,6 +35,7 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'request-acl';
     }
 
+    protected $buildFailDataResponse;
     protected $defaultFailStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE;
     protected $defaultFailStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE;
 
@@ -40,6 +43,7 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param int                                $defaultFailStatusCode
      * @param string                             $defaultFailStatusMessage
      */
@@ -47,9 +51,11 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        BuildFailDataResponse $buildFailDataResponse,
         int $defaultFailStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE,
         string $defaultFailStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultFailStatusCode = $defaultFailStatusCode;
         $this->defaultFailStatusMessage = $defaultFailStatusMessage;
         parent::__construct(
@@ -64,7 +70,7 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return DataResponseBasic
+     * @return DataResponse
      * @throws \Exception
      */
     public function __invoke(
@@ -105,8 +111,9 @@ class RequestAcl extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultFailStatusMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage

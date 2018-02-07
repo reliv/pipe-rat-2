@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\ResponseFormat\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -36,6 +37,7 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'response-format';
     }
 
+    protected $buildFailDataResponse;
     protected $isRequestValidAcceptType;
     protected $defaultAccepts;
     protected $defaultNotAcceptableStatusCode;
@@ -46,6 +48,7 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
      * @param IsRequestValidAcceptType           $isRequestValidAcceptType
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param array                              $defaultAccepts
      * @param string                             $defaultNotAcceptableStatusCode
      * @param string                             $defaultNotAcceptableStatusMessage
@@ -55,10 +58,12 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
         IsRequestValidAcceptType $isRequestValidAcceptType,
+        BuildFailDataResponse $buildFailDataResponse,
         array $defaultAccepts = self::DEFAULT_ACCEPTS,
         string $defaultNotAcceptableStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE,
         string $defaultNotAcceptableStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->isRequestValidAcceptType = $isRequestValidAcceptType;
         $this->defaultAccepts = $defaultAccepts;
         $this->defaultNotAcceptableStatusCode = $defaultNotAcceptableStatusCode;
@@ -104,8 +109,9 @@ class ResponseFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultNotAcceptableStatusMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage

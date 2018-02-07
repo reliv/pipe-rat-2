@@ -4,10 +4,11 @@ namespace Reliv\PipeRat2\RequestAttribute\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\Core\DataResponseBasic;
+use Reliv\PipeRat2\Core\DataResponse;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestValidAttributes;
@@ -22,7 +23,7 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
     const OPTION_BAD_REQUEST_STATUS_MESSAGE = 'bad-request-status-message';
 
     const DEFAULT_BAD_REQUEST_STATUS_CODE = 400;
-    const DEFAULT_BAD_REQUEST_STATUS_MESSAGE = 'Bad Request';
+    const DEFAULT_BAD_REQUEST_STATUS_MESSAGE = 'Bad Request: Invalid Attribute';
 
     /**
      * @return string
@@ -32,6 +33,7 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
         return 'request-attributes-validate';
     }
 
+    protected $buildFailDataResponse;
     protected $defaultFailStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE;
     protected $defaultFailStatusMessage = self::DEFAULT_BAD_REQUEST_STATUS_MESSAGE;
 
@@ -46,9 +48,11 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        BuildFailDataResponse $buildFailDataResponse,
         int $defaultFailStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE,
         string $defaultFailStatusMessage = self::DEFAULT_BAD_REQUEST_STATUS_MESSAGE
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultFailStatusCode = $defaultFailStatusCode;
         $this->defaultFailStatusMessage = $defaultFailStatusMessage;
 
@@ -95,6 +99,7 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
             );
         } catch (InvalidRequestAttribute $exception) {
             return $this->getFailResponse(
+                $request,
                 $exception,
                 $options
             );
@@ -104,12 +109,14 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
     }
 
     /**
+     * @param ServerRequestInterface  $request
      * @param InvalidRequestAttribute $exception
      * @param array                   $options
      *
-     * @return DataResponseBasic
+     * @return DataResponse
      */
     protected function getFailResponse(
+        ServerRequestInterface $request,
         InvalidRequestAttribute $exception,
         array $options = []
     ) {
@@ -125,11 +132,9 @@ class RequestAttributesValidate extends MiddlewareWithConfigOptionsServiceOption
             $this->defaultFailStatusMessage
         );
 
-        return new DataResponseBasic(
-            [
-                'error' => $exception->getMessage()
-                // . '(' . get_class($exception) . ')'
-            ],
+        return $this->buildFailDataResponse->__invoke(
+            $request,
+            $exception->getMessage(),
             $failStatusCode,
             [],
             $failMessage

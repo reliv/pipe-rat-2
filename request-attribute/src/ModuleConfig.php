@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\RequestAttribute;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -137,8 +138,9 @@ class ModuleConfig
                     RequestAttributesValidate::class => [
                         'arguments' => [
                             GetOptions::class,
-                            GetServicesFromConfigOptions::class,
-                            GetServicesOptionsFromConfigOptions::class,
+                            GetServiceFromConfigOptions::class,
+                            GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RequestAttributesValidate::DEFAULT_BAD_REQUEST_STATUS_CODE],
                             ['literal' => RequestAttributesValidate::DEFAULT_BAD_REQUEST_STATUS_MESSAGE],
                         ],

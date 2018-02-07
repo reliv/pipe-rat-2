@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\RequestAttributeFieldList\Service;
 
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldType;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
@@ -67,7 +68,7 @@ class FieldConfigBasic implements FieldConfig
     {
         if (!array_key_exists($type, $this->validTypes)) {
             throw new UnknownFieldType(
-                'Unknown field type: ' . json_encode($type)
+                'Unknown field type: ' . Json::encode($type)
             );
         }
     }

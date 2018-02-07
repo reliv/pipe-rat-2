@@ -9,5 +9,5 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttribute;
  */
 interface WithRequestAttributeExtractorFieldConfig extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-extractor-field-config';
+    const ATTRIBUTE = 'pipe-rat-2-request-extractor-field-config';
 }

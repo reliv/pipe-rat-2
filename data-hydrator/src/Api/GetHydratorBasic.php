@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\DataHydrator\Api;
 
 use Psr\Container\ContainerInterface;
+use Reliv\PipeRat2\Core\Json;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -35,7 +36,7 @@ class GetHydratorBasic implements GetHydrator
         array $options
     ): Hydrate {
         if (!array_key_exists(GetHydrator::OPTION_DATA_HYDRATE_API, $options)) {
-            throw new \Exception("Hydrator service name not found in options: " . json_encode($options, 0, 5));
+            throw new \Exception("Hydrator service name not found in options: " . Json::encode($options, 0, 5));
         }
 
         $hydratorServiceName = $options[GetHydrator::OPTION_DATA_HYDRATE_API];

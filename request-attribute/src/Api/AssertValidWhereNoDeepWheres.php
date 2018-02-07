@@ -3,7 +3,6 @@
 namespace Reliv\PipeRat2\RequestAttribute\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttribute\Exception\InvalidWhere;
 
 /**

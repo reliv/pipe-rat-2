@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\ResponseFormat;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
@@ -90,6 +91,7 @@ class ModuleConfig
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
                             IsRequestValidAcceptType::class,
+                            BuildFailDataResponse::class,
                             ['literal' => ResponseFormat::DEFAULT_ACCEPTS],
                             ['literal' => ResponseFormat::DEFAULT_NOT_ALLOWED_STATUS_CODE],
                             ['literal' => ResponseFormat::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE],

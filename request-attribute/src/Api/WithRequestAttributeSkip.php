@@ -7,5 +7,5 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
  */
 interface WithRequestAttributeSkip extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-attribute-skip-param';
+    const ATTRIBUTE = 'pipe-rat-2-request-attribute-skip-param';
 }

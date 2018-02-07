@@ -8,7 +8,7 @@ use Reliv\PipeRat2\RequestAttribute\Exception\InvalidSkip;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class AssertValidSkipInt
+class AssertValidSkipInt implements AssertValidSkip
 {
     /**
      * @param ServerRequestInterface $request

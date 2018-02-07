@@ -76,7 +76,7 @@ class FilterAllowedFieldListByIncludeKey
                 continue;
             }
 
-            $fieldListFiltered[$fieldConfig] = $filteredConfig;
+            $fieldListFiltered[$fieldName] = $filteredConfig;
         }
 
         return $fieldListFiltered;

@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\DataValueTypes\Service;
 
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\DataExtractor\Api\IsAssociativeArray;
 use Reliv\PipeRat2\DataExtractor\Api\IsJsonSerializableObject;
 use Reliv\PipeRat2\DataExtractor\Api\IsTraversable;
@@ -13,6 +14,31 @@ use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
  */
 class ValueTypesBasic implements ValueTypes
 {
+    protected $isTypeMap = [
+        'string' => [
+            ValueTypes::PRIMITIVE,
+        ],
+        'numeric' => [
+            ValueTypes::PRIMITIVE,
+        ],
+        'null' => [
+            ValueTypes::PRIMITIVE,
+            ValueTypes::OBJECT,
+        ],
+        'bool' => [
+            ValueTypes::PRIMITIVE,
+        ],
+        'object' => [
+            ValueTypes::PRIMITIVE,
+            ValueTypes::OBJECT,
+            ValueTypes::COLLECTION,
+        ],
+        'array' => [
+            ValueTypes::PRIMITIVE,
+            ValueTypes::OBJECT,
+            ValueTypes::COLLECTION,
+        ],
+    ];
     /**
      * @param mixed $dataModel
      * @param array $options
@@ -56,7 +82,7 @@ class ValueTypesBasic implements ValueTypes
             return ValueTypes::OBJECT;
         }
 
-        throw new UnknownValueType('Unknown type for: ' . json_encode($dataModel));
+        throw new UnknownValueType('Unknown type for: ' . Json::encode($dataModel));
     }
 
     /**

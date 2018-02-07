@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\DataValidate;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -47,6 +48,7 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => 400]
                         ],
                     ]

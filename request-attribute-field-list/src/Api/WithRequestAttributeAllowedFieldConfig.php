@@ -9,5 +9,5 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttribute;
  */
 interface WithRequestAttributeAllowedFieldConfig extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-allowed-field-config';
+    const ATTRIBUTE = 'pipe-rat-2-request-allowed-field-config';
 }

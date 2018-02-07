@@ -7,5 +7,5 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
  */
 interface WithRequestAttributeLimit extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-attribute-limit-param';
+    const ATTRIBUTE = 'pipe-rat-2-request-attribute-limit-param';
 }

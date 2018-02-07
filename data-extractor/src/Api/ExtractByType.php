@@ -2,10 +2,11 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
+use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
+use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldType;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
-use Reliv\PipeRat2\DataValueTypes\Exception\InvalidValueType;
-use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -42,8 +43,10 @@ class ExtractByType implements Extract
         $dataModel,
         array $fieldConfig = []
     ) {
+        // NOTE: Assumes primitive if no value found
         $type = $this->fieldConfig->getType(
-            $fieldConfig
+            $fieldConfig,
+            FieldConfig::PRIMITIVE
         );
 
         if ($type === FieldConfig::PRIMITIVE) {
@@ -76,18 +79,19 @@ class ExtractByType implements Extract
      * @param array|object $dataModel
      * @param array        $fieldConfig
      *
-     * @return array|bool|int|null|object|string
+     * @return array|bool|int|null|object|string|InvalidFieldType
      * @throws \Exception
      */
     public function extractPrimitive(
         $dataModel,
         array $fieldConfig = []
     ) {
-        $this->valueTypes->assertType(
-            $dataModel,
-            ValueTypes::PRIMITIVE
-        );
-
+        if (!$this->canExtract($dataModel, ValueTypes::PRIMITIVE)) {
+            return new InvalidFieldType(
+                'Can not extract type: ' . FieldConfig::PRIMITIVE
+                . ' from value that is type: ' . $this->getValueType($dataModel)
+            );
+        }
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::PRIMITIVE
@@ -112,18 +116,13 @@ class ExtractByType implements Extract
             return null;
         }
 
-        $this->valueTypes->assertType(
-            $dataModel,
-            ValueTypes::OBJECT
-        );
-
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::OBJECT
         );
 
         if (!$this->fieldConfig->hasProperties($fieldConfig)) {
-            throw new \Exception(
+            throw new InvalidFieldConfig(
                 'Object extractor requires a property list'
             );
         }
@@ -157,11 +156,6 @@ class ExtractByType implements Extract
         $dataModel,
         array $fieldConfig = []
     ) {
-        $this->valueTypes->assertType(
-            $dataModel,
-            ValueTypes::COLLECTION
-        );
-
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::COLLECTION
@@ -197,5 +191,36 @@ class ExtractByType implements Extract
         }
 
         return $array;
+    }
+
+    /**
+     * @param $dataModel
+     *
+     * @return bool
+     * @throws UnknownValueType
+     */
+    protected function getValueType(
+        $dataModel
+    ): bool {
+        return $this->valueTypes->getType(
+            $dataModel
+        );
+    }
+
+    /**
+     * @param $dataModel
+     * @param $valueType
+     *
+     * @return bool
+     * @throws UnknownValueType
+     */
+    protected function canExtract(
+        $dataModel,
+        $valueType
+    ): bool {
+        return $this->valueTypes->isType(
+            $dataModel,
+            $valueType
+        );
     }
 }

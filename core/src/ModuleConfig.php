@@ -2,6 +2,8 @@
 
 namespace Reliv\PipeRat2\Core;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponseBasic;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetDataModelDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
@@ -34,6 +36,9 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    BuildFailDataResponse::class => [
+                        'class' => BuildFailDataResponseBasic::class,
+                    ],
                     GetDataModel::class => [
                         'class' => GetDataModelDataResponse::class,
                     ],

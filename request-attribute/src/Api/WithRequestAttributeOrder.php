@@ -7,5 +7,5 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
  */
 interface WithRequestAttributeOrder extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-attribute-order-by-param';
+    const ATTRIBUTE = 'pipe-rat-2-request-attribute-order-by-param';
 }

@@ -4,12 +4,12 @@ namespace Reliv\PipeRat2\RequestFormat\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\Core\DataResponseBasic;
+use Reliv\PipeRat2\Core\DataResponse;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
-use Reliv\PipeRat2\DataError\Api\GetErrorArray;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestFormat\Api\IsValidContentType;
 use Reliv\PipeRat2\RequestFormat\Api\IsValidRequestMethod;
@@ -39,6 +39,7 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'request-format';
     }
 
+    protected $buildFailDataResponse;
     protected $isValidContentType;
     protected $isValidRequestMethod;
     protected $defaultValidContentType;
@@ -51,6 +52,7 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
      * @param IsValidContentType                 $isValidContentType
      * @param IsValidRequestMethod               $isValidRequestMethod
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param array                              $defaultValidContentType
      * @param string                             $defaultNotAcceptableStatusCode
      * @param string                             $defaultNotAcceptableStatusMessage
@@ -61,12 +63,14 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
         IsValidContentType $isValidContentType,
         IsValidRequestMethod $isValidRequestMethod,
+        BuildFailDataResponse $buildFailDataResponse,
         array $defaultValidContentType = self::DEFAULT_VALID_CONTENT_TYPES,
         string $defaultNotAcceptableStatusCode = self::DEFAULT_NOT_ALLOWED_STATUS_CODE,
         string $defaultNotAcceptableStatusMessage = self::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE
     ) {
         $this->isValidContentType = $isValidContentType;
         $this->isValidRequestMethod = $isValidRequestMethod;
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultValidContentType = $defaultValidContentType;
         $this->defaultNotAcceptableStatusCode = $defaultNotAcceptableStatusCode;
         $this->defaultNotAcceptableStatusMessage = $defaultNotAcceptableStatusMessage;
@@ -83,7 +87,7 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param ResponseInterface      $response
      * @param callable|null          $next
      *
-     * @return DataResponseBasic
+     * @return DataResponse
      * @throws \Exception
      */
     public function __invoke(
@@ -113,8 +117,9 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultNotAcceptableStatusMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage
@@ -150,10 +155,9 @@ class RequestFormat extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultNotAcceptableStatusMessage
             );
 
-            return new DataResponseBasic(
-                GetErrorArray::invoke(
-                    $exception->getMessage()
-                ),
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $exception->getMessage(),
                 $failStatusCode,
                 [],
                 $failMessage

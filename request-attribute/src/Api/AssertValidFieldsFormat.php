@@ -3,6 +3,7 @@
 namespace Reliv\PipeRat2\RequestAttribute\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\RequestAttribute\Exception\InvalidFields;
 
 /**
@@ -64,7 +65,7 @@ class AssertValidFieldsFormat implements AssertValidFields
     {
         if (!is_array($value) && !is_bool($value)) {
             throw new InvalidFields(
-                'Fields must be array or bool for value: ' . json_encode($value)
+                'Fields must be array or bool for value: ' . Json::encode($value)
             );
         }
     }

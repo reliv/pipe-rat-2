@@ -7,5 +7,5 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
  */
 interface WithRequestAttributeWhere extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-attribute-where-param';
+    const ATTRIBUTE = 'pipe-rat-2-request-attribute-where-param';
 }

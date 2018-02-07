@@ -3,16 +3,29 @@
 namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrder;
 use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrderValues;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeOrder;
 use Reliv\PipeRat2\RequestAttribute\Exception\InvalidOrder;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
  */
 class AssertValidOrderAllowedFields extends AssertValidOrderValues implements AssertValidOrder
 {
+    protected $fieldConfig;
+
+    /**
+     * @param FieldConfig $fieldConfig
+     */
+    public function __construct(
+        FieldConfig $fieldConfig
+    ) {
+        $this->fieldConfig = $fieldConfig;
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @param array                  $options
@@ -64,10 +77,17 @@ class AssertValidOrderAllowedFields extends AssertValidOrderValues implements As
         array $allowedFields,
         array $order
     ) {
+        $allowedProperties = $this->fieldConfig->getProperties($allowedFields);
+        if (empty($allowedProperties) && is_array($order)) {
+            throw new InvalidOrder(
+                'Order is not allowed: ' . Json::encode($order)
+            );
+        }
+
         foreach ($order as $fieldName => $orderValue) {
             if (!array_key_exists($fieldName, $allowedFields)) {
                 throw new InvalidOrder(
-                    'Field is not allowed in where: ' . $fieldName
+                    'Field is not allowed in order: ' . $fieldName
                 );
             }
         }

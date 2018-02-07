@@ -8,6 +8,7 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedNone;
 use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Api\IsAllowedRcmUser;
 use Reliv\PipeRat2\Acl\Http\RequestAcl;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -46,6 +47,7 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RequestAcl::DEFAULT_NOT_ALLOWED_STATUS_CODE],
                             ['literal' => RequestAcl::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE],
                         ],

@@ -2,7 +2,9 @@
 
 namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldNotAllowed;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
@@ -10,21 +12,29 @@ use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
  */
 class FilterAllowedFieldListByRequestFieldList
 {
+    protected $fieldConfig;
+
+    /**
+     * @param FieldConfig $fieldConfig
+     */
+    public function __construct(
+        FieldConfig $fieldConfig
+    ) {
+        $this->fieldConfig = $fieldConfig;
+    }
+
     /**
      * @param array $allowedFieldConfig
      * @param array $requestFieldList
      *
      * @return array
      * @throws FieldNotAllowed
+     * @throws UnknownFieldType
      */
     public function __invoke(
         array $allowedFieldConfig,
         array $requestFieldList
     ): array {
-        if (empty($requestFieldList)) {
-            return $allowedFieldConfig;
-        }
-
         return $this->filter(
             $allowedFieldConfig,
             $requestFieldList
@@ -37,46 +47,50 @@ class FilterAllowedFieldListByRequestFieldList
      *
      * @return array
      * @throws FieldNotAllowed
+     * @throws UnknownFieldType
      */
     public function filter(
         array $allowedFieldConfig,
         array $requestFieldList
     ): array {
-        $allowedFieldConfigFiltered = [];
-
-        foreach ($requestFieldList as $fieldName => $value) {
-            // IF no whitelist config, then error
-            if (!array_key_exists($fieldName, $allowedFieldConfig)) {
-                throw new FieldNotAllowed(
-                    'Field is not allowed for: ' . $fieldName
-                );
-            }
-
-            if (!is_array($requestFieldList[$fieldName]) && !is_bool($requestFieldList[$fieldName])) {
-                throw new FieldNotAllowed(
-                    'Field request must be bool or array: ' . $fieldName
-                );
-            }
-
-            // If field is true, then include it
-            if ($requestFieldList[$fieldName] === true) {
-                $allowedFieldConfigFiltered[$fieldName] = $allowedFieldConfig[$fieldName];
-                $allowedFieldConfigFiltered[$fieldName][FieldConfig::KEY_INCLUDE] = true;
-                continue;
-            }
-
-            // If field is false, then do not include it
-            if ($requestFieldList[$fieldName] === false) {
-                continue;
-            }
-
-            // is array, recurse
-            $allowedFieldConfigFiltered[$fieldName] = $this->filter(
-                $allowedFieldConfig[$fieldName],
-                $value
-            );
+        // not fields requested
+        if (empty($requestFieldList)) {
+            return $allowedFieldConfig;
         }
 
-        return $allowedFieldConfigFiltered;
+        if (!$this->fieldConfig->hasProperties($allowedFieldConfig)) {
+            return $allowedFieldConfig;
+        }
+
+        $allowedFieldConfigProperties = $this->fieldConfig->getProperties($allowedFieldConfig);
+
+        $allowedFieldConfigPropertiesFiltered = [];
+
+        foreach ($allowedFieldConfigProperties as $fieldName => $subFieldConfig) {
+            if (!array_key_exists($fieldName, $requestFieldList)) {
+                $allowedFieldConfigPropertiesFiltered[$fieldName] = $subFieldConfig;
+                continue;
+            }
+
+            if (is_bool($requestFieldList[$fieldName])) {
+                $allowedFieldConfigPropertiesFiltered[$fieldName] = $subFieldConfig;
+                $allowedFieldConfigPropertiesFiltered[$fieldName][FieldConfig::KEY_INCLUDE] = $requestFieldList[$fieldName];
+                continue;
+            }
+
+            // recurse
+            if (is_array($requestFieldList[$fieldName])) {
+                $allowedFieldConfigPropertiesFiltered[$fieldName] = $this->filter(
+                    $subFieldConfig,
+                    $requestFieldList[$fieldName]
+                );
+            }
+        }
+
+        return [
+            FieldConfig::KEY_TYPE => $this->fieldConfig->getType($allowedFieldConfig),
+            FieldConfig::KEY_PROPERTIES => $allowedFieldConfigPropertiesFiltered,
+            FieldConfig::KEY_INCLUDE => $this->fieldConfig->canInclude($allowedFieldConfig),
+        ];
     }
 }

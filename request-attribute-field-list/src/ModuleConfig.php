@@ -2,8 +2,10 @@
 
 namespace Reliv\PipeRat2\RequestAttributeFieldList;
 
+use Reliv\PipeRat2\RequestAttribute\Api\AssertValidFields;
 use Reliv\PipeRat2\RequestAttribute\Api\AssertValidOrder;
 use Reliv\PipeRat2\RequestAttribute\Api\AssertValidWhere;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\AssertValidFieldsAllowedFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\AssertValidOrderAllowedFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\AssertValidWhereAllowedFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\FilterAllowedFieldListByIncludeKey;
@@ -28,6 +30,13 @@ class ModuleConfig
             'dependencies' => [
                 'config_factories' => [
                     // @override
+                    AssertValidFields::class => [
+                        'class' => AssertValidFieldsAllowedFields::class,
+                        'arguments' => [
+                            FieldConfig::class,
+                        ],
+                    ],
+                    // @override
                     AssertValidWhere::class => [
                         'class' => AssertValidWhereAllowedFields::class,
                         'arguments' => [
@@ -48,7 +57,11 @@ class ModuleConfig
                         ],
                     ],
 
-                    FilterAllowedFieldListByRequestFieldList::class => [],
+                    FilterAllowedFieldListByRequestFieldList::class => [
+                        'arguments' => [
+                            FieldConfig::class,
+                        ],
+                    ],
 
                     WithRequestAttributeAllowedFieldConfigFromOptions::class => [],
 

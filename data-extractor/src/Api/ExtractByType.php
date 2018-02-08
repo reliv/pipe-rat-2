@@ -2,8 +2,10 @@
 
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
+use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldType;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
@@ -13,9 +15,22 @@ use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
  */
 class ExtractByType implements Extract
 {
+    const OPTION_CONTEXT = 'context';
+    const DEFAULT_CONTEXT = 'unknown';
+
     protected $valueTypes;
     protected $fieldConfig;
     protected $extractObjectProperty;
+
+    protected $methodMap
+        = [
+            FieldConfig::PRIMITIVE => 'extractPrimitive',
+            FieldConfig::OBJECT => 'extractObject',
+            FieldConfig::COLLECTION => 'extractCollection',
+            FieldConfig::PRIMITIVE_COLLECTION => 'extractCollection',
+            FieldConfig::OBJECT_COLLECTION => 'extractCollection',
+            FieldConfig::COLLECTION_COLLECTION => 'extractCollection',
+        ];
 
     /**
      * @param ValueTypes            $valueTypes
@@ -43,35 +58,9 @@ class ExtractByType implements Extract
         $dataModel,
         array $fieldConfig = []
     ) {
-        // NOTE: Assumes primitive if no value found
-        $type = $this->fieldConfig->getType(
-            $fieldConfig,
-            FieldConfig::PRIMITIVE
-        );
-
-        if ($type === FieldConfig::PRIMITIVE) {
-            return $this->extractPrimitive(
-                $dataModel,
-                $fieldConfig
-            );
-        }
-
-        if ($type === FieldConfig::OBJECT) {
-            return $this->extractObject(
-                $dataModel,
-                $fieldConfig
-            );
-        }
-
-        if ($type === FieldConfig::COLLECTION) {
-            return $this->extractCollection(
-                $dataModel,
-                $fieldConfig
-            );
-        }
-
-        throw new InvalidFieldType(
-            'Could not get field type for data model'
+        return $this->extract(
+            $dataModel,
+            $fieldConfig
         );
     }
 
@@ -79,19 +68,56 @@ class ExtractByType implements Extract
      * @param array|object $dataModel
      * @param array        $fieldConfig
      *
-     * @return array|bool|int|null|object|string|InvalidFieldType
+     * @return array|bool|int|null|object|string
+     * @throws \Exception
+     */
+    protected function extract(
+        $dataModel,
+        array $fieldConfig = []
+    ) {
+        // NOTE: Assumes primitive if no value found
+        $type = $this->fieldConfig->getType(
+            $fieldConfig,
+            FieldConfig::PRIMITIVE
+        );
+
+        if (!array_key_exists($type, $this->methodMap)) {
+            throw new InvalidFieldType(
+                'Could not get field type for data model'
+                . ' with type: (' . $type . ')'
+            );
+        }
+
+        $method = $this->methodMap[$type];
+
+        return $this->$method(
+            $dataModel,
+            $fieldConfig
+        );
+    }
+
+    /**
+     * @param array|object $dataModel
+     * @param array        $fieldConfig
+     *
+     * @return array|bool|int|null|object|string
      * @throws \Exception
      */
     public function extractPrimitive(
         $dataModel,
         array $fieldConfig = []
     ) {
-        if (!$this->canExtract($dataModel, ValueTypes::PRIMITIVE)) {
-            return new InvalidFieldType(
-                'Can not extract type: ' . FieldConfig::PRIMITIVE
-                . ' from value that is type: ' . $this->getValueType($dataModel)
-            );
-        }
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::PRIMITIVE,
+            $context
+        );
+
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::PRIMITIVE
@@ -116,6 +142,18 @@ class ExtractByType implements Extract
             return null;
         }
 
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::OBJECT,
+            $context
+        );
+
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::OBJECT
@@ -124,6 +162,8 @@ class ExtractByType implements Extract
         if (!$this->fieldConfig->hasProperties($fieldConfig)) {
             throw new InvalidFieldConfig(
                 'Object extractor requires a property list'
+                . ' in context: (' . $context . ')'
+                . ' for field config: ' . Json::encode($fieldConfig)
             );
         }
 
@@ -136,7 +176,8 @@ class ExtractByType implements Extract
                 $fieldName,
                 $dataModel
             );
-            $array[$fieldName] = $this->__invoke(
+            $propertyFieldConfig[self::OPTION_CONTEXT] = $fieldName;
+            $array[$fieldName] = $this->extract(
                 $rawValue,
                 $propertyFieldConfig
             );
@@ -156,6 +197,11 @@ class ExtractByType implements Extract
         $dataModel,
         array $fieldConfig = []
     ) {
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::COLLECTION
+        );
+
         $this->fieldConfig->assertIsType(
             $fieldConfig,
             FieldConfig::COLLECTION
@@ -191,36 +237,5 @@ class ExtractByType implements Extract
         }
 
         return $array;
-    }
-
-    /**
-     * @param $dataModel
-     *
-     * @return bool
-     * @throws UnknownValueType
-     */
-    protected function getValueType(
-        $dataModel
-    ): bool {
-        return $this->valueTypes->getType(
-            $dataModel
-        );
-    }
-
-    /**
-     * @param $dataModel
-     * @param $valueType
-     *
-     * @return bool
-     * @throws UnknownValueType
-     */
-    protected function canExtract(
-        $dataModel,
-        $valueType
-    ): bool {
-        return $this->valueTypes->isType(
-            $dataModel,
-            $valueType
-        );
     }
 }

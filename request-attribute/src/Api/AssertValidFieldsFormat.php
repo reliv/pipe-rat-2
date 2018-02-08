@@ -47,8 +47,8 @@ class AssertValidFieldsFormat implements AssertValidFields
      */
     protected function assertValid($fields)
     {
-        foreach ($fields as $value) {
-            $this->assertValidValue($value);
+        foreach ($fields as $name => $value) {
+            $this->assertValidValue($name, $value);
             if (is_array($value)) {
                 $this->assertValid($value);
             }
@@ -61,11 +61,12 @@ class AssertValidFieldsFormat implements AssertValidFields
      * @return void
      * @throws InvalidFields
      */
-    protected function assertValidValue($value)
+    protected function assertValidValue($name, $value)
     {
         if (!is_array($value) && !is_bool($value)) {
             throw new InvalidFields(
-                'Fields must be array or bool for value: ' . Json::encode($value)
+                'Fields must be array or bool for field: ' . $name
+                . ' with value: ' . Json::encode($value)
             );
         }
     }

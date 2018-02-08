@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\RequestAttributeFieldList\Api;
 
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
 use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 
 /**
@@ -24,61 +25,52 @@ class FilterAllowedFieldListByIncludeKey
      * @param array $fieldConfig
      *
      * @return array
+     * @throws UnknownFieldType
      */
     public function __invoke(
         array $fieldConfig
     ): array {
-        $filteredConfig = $this->filterConfig($fieldConfig);
-
-        if ($filteredConfig === null) {
-            return [];
-        }
-
-        return $filteredConfig;
+        return $this->filter(
+            $fieldConfig
+        );
     }
 
     /**
      * @param array $fieldConfig
      *
-     * @return array|null
-     */
-    public function filterConfig(
-        array $fieldConfig
-    ) {
-        if (!$this->fieldConfig->canInclude($fieldConfig)) {
-            return null;
-        }
-
-        if ($this->fieldConfig->hasProperties($fieldConfig)) {
-            return $this->filter(
-                $this->fieldConfig->getProperties(
-                    $fieldConfig
-                )
-            );
-        }
-
-        return $fieldConfig;
-    }
-
-    /**
-     * @param array $fieldProperties
-     *
      * @return array
+     * @throws UnknownFieldType
      */
     public function filter(
-        array $fieldProperties
+        array $fieldConfig
     ): array {
-        $fieldListFiltered = [];
-        foreach ($fieldProperties as $fieldName => $fieldConfig) {
-            $filteredConfig = $this->filterConfig($fieldConfig);
+        if (!$this->fieldConfig->canInclude($fieldConfig)) {
+            return [];
+        }
 
-            if ($filteredConfig === null) {
+        if (!$this->fieldConfig->hasProperties($fieldConfig)) {
+            return $fieldConfig;
+        }
+
+        $fieldConfigProperties = $this->fieldConfig->getProperties($fieldConfig);
+
+        $fieldConfigPropertiesFiltered = [];
+
+        foreach ($fieldConfigProperties as $fieldName => $subFieldConfig) {
+            if (!$this->fieldConfig->canInclude($subFieldConfig)) {
                 continue;
             }
 
-            $fieldListFiltered[$fieldName] = $filteredConfig;
+            // recurse
+            $fieldConfigPropertiesFiltered[$fieldName] = $this->filter(
+                $subFieldConfig
+            );
         }
 
-        return $fieldListFiltered;
+        return [
+            FieldConfig::KEY_TYPE => $this->fieldConfig->getType($fieldConfig),
+            FieldConfig::KEY_PROPERTIES => $fieldConfigPropertiesFiltered,
+            FieldConfig::KEY_INCLUDE => true,
+        ];
     }
 }

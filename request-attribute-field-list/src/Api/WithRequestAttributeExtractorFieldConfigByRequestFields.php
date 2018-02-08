@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldNotAllowed;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\UnknownFieldType;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -38,8 +39,9 @@ class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithReq
      * @param array                  $options
      *
      * @return ServerRequestInterface
-     * @throws InvalidFieldConfig
      * @throws FieldNotAllowed
+     * @throws InvalidFieldConfig
+     * @throws UnknownFieldType
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -61,14 +63,26 @@ class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithReq
             []
         );
 
-        $allowedFieldConfig = $this->filterAllowedFieldListByRequestFieldList->__invoke(
+        $requestFieldConfig = $this->filterAllowedFieldListByRequestFieldList->__invoke(
             $allowedFieldConfig,
             $requestFieldList
         );
 
         $extractorFieldConfig = $this->filterAllowedFieldListByIncludeKey->__invoke(
-            $allowedFieldConfig
+            $requestFieldConfig
         );
+
+
+//        ddd(
+//            'requestFieldList',
+//            $requestFieldList,
+//            'allowedFieldConfig',
+//            $allowedFieldConfig,
+//            'requestFieldConfig',
+//            $requestFieldConfig,
+//            'extractorFieldConfig',
+//            $extractorFieldConfig
+//        );
 
         return $request->withAttribute(self::ATTRIBUTE, $extractorFieldConfig);
     }

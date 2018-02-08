@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\DataExtractor;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
@@ -60,6 +61,7 @@ class ModuleConfig
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
                             GetDataModel::class,
+                            BuildFailDataResponse::class,
                             ResponseWithDataBody::class
                         ]
                     ],

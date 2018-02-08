@@ -14,6 +14,9 @@ interface FieldConfig
     const PRIMITIVE = ValueTypes::PRIMITIVE;
     const OBJECT = ValueTypes::OBJECT;
     const COLLECTION = ValueTypes::COLLECTION;
+    const PRIMITIVE_COLLECTION = ValueTypes::PRIMITIVE_COLLECTION;
+    const OBJECT_COLLECTION = ValueTypes::OBJECT_COLLECTION;
+    const COLLECTION_COLLECTION = ValueTypes::COLLECTION_COLLECTION;
 
     const KEY_TYPE = '_type';
     const KEY_PROPERTIES = '_properties';

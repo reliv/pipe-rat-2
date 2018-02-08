@@ -25,8 +25,8 @@ class ExtractObjectProperty
     }
 
     /**
-     * @param string $property
-     * @param        $dataModel
+     * @param string       $property
+     * @param object|array $dataModel
      *
      * @return mixed
      * @throws InvalidValueType
@@ -43,6 +43,12 @@ class ExtractObjectProperty
             throw new InvalidValueType('Not object or associative array');
         }
 
+        $publicProperties = $this->objectToArray->__invoke($dataModel);
+
+        if (array_key_exists($property, $publicProperties)) {
+            return $publicProperties[$property];
+        }
+
         $methodBool = self::METHOD_BOOL_PREFIX . ucfirst($property);
 
         if (method_exists($dataModel, $methodBool)) {
@@ -53,12 +59,6 @@ class ExtractObjectProperty
 
         if (method_exists($dataModel, $method)) {
             return $dataModel->$method();
-        }
-
-        $publicProperties = $this->objectToArray->__invoke($dataModel);
-
-        if (array_key_exists($property, $publicProperties)) {
-            return $publicProperties[$property];
         }
 
         throw new InvalidValueType(

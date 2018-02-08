@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\DataExtractor\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
@@ -11,7 +12,10 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
+use Reliv\PipeRat2\DataValueTypes\Exception\ValueTypeException;
 use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldTypeException;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -29,6 +33,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
     }
 
     protected $getDataModel;
+    protected $buildFailDataResponse;
     protected $responseWithDataBody;
 
     /**
@@ -36,6 +41,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
      * @param GetDataModel                       $getDataModel
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param ResponseWithDataBody               $responseWithDataBody
      */
     public function __construct(
@@ -43,9 +49,11 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
         GetDataModel $getDataModel,
+        BuildFailDataResponse $buildFailDataResponse,
         ResponseWithDataBody $responseWithDataBody
     ) {
         $this->getDataModel = $getDataModel;
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->responseWithDataBody = $responseWithDataBody;
         parent::__construct(
             $getOptions,
@@ -90,10 +98,28 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
             $response
         );
 
-        $dataArray = $extract->__invoke(
-            $dataModel,
-            $fieldConfig
-        );
+        try {
+            $dataArray = $extract->__invoke(
+                $dataModel,
+                $fieldConfig
+            );
+        } catch (ValueTypeException $exception) {
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $exception->getMessage(),
+                400,
+                [],
+                'Bad Request: Value Type'
+            );
+        } catch (FieldTypeException $exception) {
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $exception->getMessage(),
+                400,
+                [],
+                'Bad Request: Field Type'
+            );
+        }
 
         return $this->responseWithDataBody->__invoke(
             $response,

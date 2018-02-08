@@ -10,6 +10,7 @@ use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
  */
 interface ValueTypes
 {
+    /** TYPES */
     /*
      * (json-encode-able) int, string, bool, null, array, basic object
      */
@@ -21,26 +22,97 @@ interface ValueTypes
     const OBJECT = 'object';
 
     /**
-     * array, traversable
+     * array, traversable of unknown values
      */
     const COLLECTION = 'collection';
 
     /**
-     * @param mixed $dataModel
-     * @param array $options
+     * array, traversable of primitives
+     */
+    const PRIMITIVE_COLLECTION = 'primitive-collection';
+
+    /**
+     * array, traversable of objects
+     */
+    const OBJECT_COLLECTION = 'object-collection';
+
+    /**
+     * array, traversable of collection
+     */
+    const COLLECTION_COLLECTION = 'collection-collection';
+
+    /** VALUE TYPES */
+    const ACTUAL_STRING = 'string';
+    const ACTUAL_NUMERIC = 'numeric';
+    const ACTUAL_NULL = 'null';
+    const ACTUAL_BOOL = 'bool';
+    const ACTUAL_OBJECT = 'object';
+    const ACTUAL_ARRAY = 'array';
+
+    /**
+     * [
+     *  '{value-type' => ['{default-type}', '{other-type}']
+     * ]
+     */
+    const TYPE_MAP
+        = [
+            self::ACTUAL_STRING => [
+                ValueTypes::PRIMITIVE,
+            ],
+            self::ACTUAL_NUMERIC => [
+                ValueTypes::PRIMITIVE,
+            ],
+            self::ACTUAL_NULL => [
+                ValueTypes::PRIMITIVE,
+                ValueTypes::OBJECT,
+            ],
+            self::ACTUAL_BOOL => [
+                ValueTypes::PRIMITIVE,
+            ],
+            self::ACTUAL_OBJECT => [
+                ValueTypes::OBJECT,
+                ValueTypes::COLLECTION,
+                ValueTypes::PRIMITIVE_COLLECTION,
+                ValueTypes::OBJECT_COLLECTION,
+                ValueTypes::COLLECTION_COLLECTION,
+            ],
+            self::ACTUAL_ARRAY => [
+                ValueTypes::COLLECTION,
+                ValueTypes::PRIMITIVE_COLLECTION,
+                ValueTypes::OBJECT_COLLECTION,
+                ValueTypes::COLLECTION_COLLECTION,
+                ValueTypes::OBJECT,
+            ],
+        ];
+
+    /**
+     * @param mixed  $dataModel
+     * @param string $context
+     *
+     * @return string
+     * @throws UnknownValueType
+     */
+    public function getActualType(
+        $dataModel,
+        string $context = 'undefined'
+    ): string;
+
+    /**
+     * @param mixed  $dataModel
+     * @param string $context
      *
      * @return string
      * @throws UnknownValueType
      */
     public function getType(
         $dataModel,
-        array $options = []
+        string $context = 'undefined'
     ): string;
 
     /**
      * @param mixed  $dataModel
      * @param string $type
-     * @param array  $options
+     * @param string $context
      *
      * @return bool
      * @throws UnknownValueType
@@ -48,13 +120,13 @@ interface ValueTypes
     public function isType(
         $dataModel,
         string $type,
-        array $options = []
+        string $context = 'undefined'
     ): bool;
 
     /**
      * @param mixed  $dataModel
      * @param string $type
-     * @param array  $options
+     * @param string $context
      *
      * @return void
      * @throws UnknownValueType|InvalidValueType
@@ -62,6 +134,6 @@ interface ValueTypes
     public function assertType(
         $dataModel,
         string $type,
-        array $options = []
+        string $context = 'undefined'
     );
 }

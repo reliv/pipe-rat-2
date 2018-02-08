@@ -4,7 +4,6 @@ namespace Reliv\PipeRat2\DataValueTypes\Service;
 
 use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\DataExtractor\Api\IsAssociativeArray;
-use Reliv\PipeRat2\DataExtractor\Api\IsJsonSerializableObject;
 use Reliv\PipeRat2\DataExtractor\Api\IsTraversable;
 use Reliv\PipeRat2\DataValueTypes\Exception\InvalidValueType;
 use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
@@ -14,41 +13,57 @@ use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
  */
 class ValueTypesBasic implements ValueTypes
 {
-    protected $isTypeMap = [
-        'string' => [
-            ValueTypes::PRIMITIVE,
-        ],
-        'numeric' => [
-            ValueTypes::PRIMITIVE,
-        ],
-        'null' => [
-            ValueTypes::PRIMITIVE,
-            ValueTypes::OBJECT,
-        ],
-        'bool' => [
-            ValueTypes::PRIMITIVE,
-        ],
-        'object' => [
-            ValueTypes::PRIMITIVE,
-            ValueTypes::OBJECT,
-            ValueTypes::COLLECTION,
-        ],
-        'array' => [
-            ValueTypes::PRIMITIVE,
-            ValueTypes::OBJECT,
-            ValueTypes::COLLECTION,
-        ],
-    ];
     /**
-     * @param mixed $dataModel
-     * @param array $options
+     * @param mixed  $dataModel
+     * @param string $context
+     *
+     * @return string
+     * @throws UnknownValueType
+     */
+    public function getActualType(
+        $dataModel,
+        string $context = 'undefined'
+    ): string {
+        if (is_string($dataModel)) {
+            return ValueTypes::ACTUAL_STRING;
+        }
+
+        if (is_numeric($dataModel)) {
+            return ValueTypes::ACTUAL_NUMERIC;
+        }
+
+        if (is_bool($dataModel)) {
+            return ValueTypes::ACTUAL_BOOL;
+        }
+
+        if ($dataModel === null) {
+            return ValueTypes::ACTUAL_NULL;
+        }
+
+        if (is_array($dataModel)) {
+            return ValueTypes::ACTUAL_ARRAY;
+        }
+
+        if (is_object($dataModel)) {
+            return ValueTypes::ACTUAL_OBJECT;
+        }
+
+        throw new UnknownValueType(
+            'Unknown actual type for: ' . Json::encode($dataModel)
+            . ' in context: (' . $context . ')'
+        );
+    }
+
+    /**
+     * @param mixed  $dataModel
+     * @param string $context
      *
      * @return string
      * @throws UnknownValueType
      */
     public function getType(
         $dataModel,
-        array $options = []
+        string $context = 'undefined'
     ): string {
         if (is_string($dataModel)) {
             return ValueTypes::PRIMITIVE;
@@ -66,10 +81,6 @@ class ValueTypesBasic implements ValueTypes
             return ValueTypes::PRIMITIVE;
         }
 
-        if (IsJsonSerializableObject::invoke($dataModel)) {
-            return ValueTypes::PRIMITIVE;
-        }
-
         if (is_array($dataModel) && IsAssociativeArray::invoke($dataModel)) {
             return ValueTypes::OBJECT;
         }
@@ -82,13 +93,16 @@ class ValueTypesBasic implements ValueTypes
             return ValueTypes::OBJECT;
         }
 
-        throw new UnknownValueType('Unknown type for: ' . Json::encode($dataModel));
+        throw new UnknownValueType(
+            'Unknown type for: ' . Json::encode($dataModel)
+            . ' in context: (' . $context . ')'
+        );
     }
 
     /**
      * @param mixed  $dataModel
      * @param string $type
-     * @param array  $options
+     * @param string $context
      *
      * @return bool
      * @throws UnknownValueType
@@ -96,17 +110,25 @@ class ValueTypesBasic implements ValueTypes
     public function isType(
         $dataModel,
         string $type,
-        array $options = []
+        string $context = 'undefined'
     ): bool {
-        $parsedType = $this->getType($dataModel);
+        $actualType = $this->getActualType($dataModel);
 
-        return ($parsedType === $type);
+        if (!array_key_exists($actualType, self::TYPE_MAP)) {
+            throw new UnknownValueType(
+                'Unknown type for parse type: (' . $actualType . ')'
+                . ' in context: (' . $context . ')'
+                . ' with data: ' . Json::encode($dataModel)
+            );
+        }
+
+        return in_array($type, self::TYPE_MAP[$actualType]);
     }
 
     /**
      * @param mixed  $dataModel
      * @param string $type
-     * @param array  $options
+     * @param string $context
      *
      * @return void
      * @throws UnknownValueType|InvalidValueType
@@ -114,14 +136,15 @@ class ValueTypesBasic implements ValueTypes
     public function assertType(
         $dataModel,
         string $type,
-        array $options = []
+        string $context = 'undefined'
     ) {
-        $parsedType = $this->getType($dataModel);
-
-        if ($parsedType !== $type) {
+        if (!$this->isType($dataModel, $type)) {
+            $parsedType = $this->getType($dataModel);
             throw new InvalidValueType(
-                'Value must be of type: ' . $type
-                . ' got type: ' . $parsedType
+                'Value must be of type: (' . $type . ')'
+                . ' got type: (' . $parsedType . ')'
+                . ' in context: (' . $context . ')'
+                . ' with data: ' . Json::encode($dataModel)
             );
         }
     }

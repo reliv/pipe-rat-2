@@ -44,34 +44,35 @@ class AssertValidWhereAllowedFields implements AssertValidWhere
             return;
         }
 
-        $allowedFields = $request->getAttribute(
+        $allowedFieldConfig = $request->getAttribute(
             WithRequestAttributeAllowedFieldConfig::ATTRIBUTE
         );
 
-        if (empty($allowedFields)) {
+        if (empty($allowedFieldConfig)) {
             throw new InvalidWhere(
                 'No allowed fields found to validate where'
             );
         }
 
         $this->assertValid(
-            $allowedFields,
+            $allowedFieldConfig,
             $where
         );
     }
 
     /**
-     * @param array $allowedFields
+     * @param array $allowedFieldConfig
      * @param array $where
      *
      * @return void
      * @throws InvalidWhere
      */
     protected function assertValid(
-        array $allowedFields,
+        array $allowedFieldConfig,
         array $where
     ) {
-        $allowedProperties = $this->fieldConfig->getProperties($allowedFields);
+        $allowedProperties = $this->fieldConfig->getProperties($allowedFieldConfig);
+        
         if (empty($allowedProperties) && is_array($where)) {
             throw new InvalidWhere(
                 'Where is not allowed: ' . Json::encode($where)

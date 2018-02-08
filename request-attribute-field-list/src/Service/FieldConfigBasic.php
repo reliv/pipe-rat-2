@@ -17,6 +17,9 @@ class FieldConfigBasic implements FieldConfig
             ValueTypes::PRIMITIVE,
             ValueTypes::OBJECT,
             ValueTypes::COLLECTION,
+            ValueTypes::PRIMITIVE_COLLECTION,
+            ValueTypes::OBJECT_COLLECTION,
+            ValueTypes::COLLECTION_COLLECTION,
         ];
 
     protected $example
@@ -66,7 +69,7 @@ class FieldConfigBasic implements FieldConfig
      */
     public function assertValidType($type)
     {
-        if (!array_key_exists($type, $this->validTypes)) {
+        if (!in_array($type, $this->validTypes)) {
             throw new UnknownFieldType(
                 'Unknown field type: ' . Json::encode($type)
             );

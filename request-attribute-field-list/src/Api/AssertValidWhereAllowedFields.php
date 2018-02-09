@@ -82,7 +82,7 @@ class AssertValidWhereAllowedFields implements AssertValidWhere
         foreach ($where as $fieldName => $whereValue) {
             if (!array_key_exists($fieldName, $allowedProperties)) {
                 throw new InvalidWhere(
-                    'Field is not allowed in where: ' . $fieldName
+                    'Field is not allowed in where: (' . $fieldName . ')'
                 );
             }
 

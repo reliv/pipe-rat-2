@@ -13,6 +13,7 @@ interface FieldConfig
 {
     const PRIMITIVE = ValueTypes::PRIMITIVE;
     const OBJECT = ValueTypes::OBJECT;
+    /** @deprecated Use more specific collection */
     const COLLECTION = ValueTypes::COLLECTION;
     const PRIMITIVE_COLLECTION = ValueTypes::PRIMITIVE_COLLECTION;
     const OBJECT_COLLECTION = ValueTypes::OBJECT_COLLECTION;
@@ -90,6 +91,7 @@ interface FieldConfig
      * @param string $type
      * @param array  $properties
      * @param bool   $include
+     * @param array  $otherConfigs
      *
      * @return array
      * @throws UnknownFieldType
@@ -97,6 +99,7 @@ interface FieldConfig
     public function buildFieldConfig(
         string $type,
         array $properties = [],
-        bool $include = false
+        bool $include = false,
+        array $otherConfigs = []
     ): array;
 }

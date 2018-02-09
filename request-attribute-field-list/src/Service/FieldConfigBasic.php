@@ -24,41 +24,59 @@ class FieldConfigBasic implements FieldConfig
 
     protected $example
         = [
-            '_type' => 'object',
-            '_properties' => [
+            self::KEY_TYPE => 'object',
+            self::KEY_PROPERTIES => [
                 'name' => [
                     // (json-encode-able) int, string, bool, null, array, basic object
-                    '_type' => 'primitive'
+                    self::KEY_TYPE => self::PRIMITIVE
                 ],
                 'date' => [
                     // object, null
-                    '_type' => 'object',
+                    self::KEY_TYPE => self::OBJECT,
+                    self::KEY_PROPERTIES => [
+                        'date' => [
+                            self::KEY_TYPE => self::PRIMITIVE
+                        ],
+                    ],
                     // Will this be included be default
                     '_include' => true,
-                    '_properties' => [],
                 ],
                 'skus' => [
-                    '_type' => 'collection', // array, traversable
+                    '_type' => self::OBJECT_COLLECTION, // array, traversable
                     // If it has properties, it but be a collection of objects, else is collection of primitives
                     '_properties' => [
                         'number' => [
-                            '_type' => 'primitive'
+                            self::KEY_TYPE => self::PRIMITIVE
                         ],
                         'properties' => [
-                            '_type' => 'collection',
-                            '_properties' => [
+                            self::KEY_TYPE => self::OBJECT_COLLECTION,
+                            self::KEY_PROPERTIES => [
                                 'type' => [
-                                    '_type' => 'primitive'
+                                    self::KEY_TYPE => 'primitive'
                                 ]
                             ],
                         ]
                     ],
                 ],
                 'tags' => [
-                    '_type' => 'collection', // array, traversable
+                    // array, traversable
+                    self::KEY_TYPE => self::PRIMITIVE_COLLECTION,
                     // no properties = primitive
                 ],
+                'nest' => [
+                    // array, traversable
+                    self::KEY_TYPE => self::COLLECTION_COLLECTION,
+                    self::KEY_PROPERTIES => [
+                        self::KEY_TYPE => self::OBJECT_COLLECTION,
+                        self::KEY_PROPERTIES => [
+                            'egg' => [
+                                self::KEY_TYPE => self::PRIMITIVE
+                            ],
+                        ],
+                    ],
+                ],
             ],
+            self::KEY_INCLUDE => true,
         ];
 
     /**
@@ -170,6 +188,7 @@ class FieldConfigBasic implements FieldConfig
      * @param string $type
      * @param array  $properties
      * @param bool   $include
+     * @param array  $otherConfigs
      *
      * @return array
      * @throws UnknownFieldType
@@ -177,29 +196,55 @@ class FieldConfigBasic implements FieldConfig
     public function buildFieldConfig(
         string $type,
         array $properties = [],
-        bool $include = false
+        bool $include = false,
+        array $otherConfigs = []
     ): array {
         if ($type === ValueTypes::PRIMITIVE) {
-            return [
-                self::KEY_TYPE => ValueTypes::PRIMITIVE,
-                self::KEY_INCLUDE => $include,
-            ];
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::PRIMITIVE;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+
+            return $otherConfigs;
         }
 
         if ($type === ValueTypes::OBJECT) {
-            return [
-                self::KEY_TYPE => ValueTypes::OBJECT,
-                self::KEY_INCLUDE => $include,
-                self::KEY_PROPERTIES => $properties,
-            ];
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::OBJECT;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+            $otherConfigs[self::KEY_PROPERTIES] = $properties;
+
+            return $otherConfigs;
+        }
+
+        if ($type === ValueTypes::PRIMITIVE_COLLECTION) {
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::PRIMITIVE_COLLECTION;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+
+            return $otherConfigs;
+        }
+
+        if ($type === ValueTypes::OBJECT_COLLECTION) {
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::OBJECT_COLLECTION;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+            $otherConfigs[self::KEY_PROPERTIES] = $properties;
+
+            return $otherConfigs;
+        }
+
+        if ($type === ValueTypes::COLLECTION_COLLECTION) {
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::COLLECTION_COLLECTION;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+            $otherConfigs[self::KEY_PROPERTIES] = $properties;
+
+            return $otherConfigs;
         }
 
         if ($type === ValueTypes::COLLECTION) {
-            return [
-                self::KEY_TYPE => ValueTypes::COLLECTION,
-                self::KEY_INCLUDE => $include,
-                self::KEY_PROPERTIES => $properties,
-            ];
+            $otherConfigs[self::KEY_TYPE] = ValueTypes::COLLECTION;
+            $otherConfigs[self::KEY_INCLUDE] = $include;
+            if (!empty($properties)) {
+                $otherConfigs[self::KEY_PROPERTIES] = $properties;
+            }
+
+            return $otherConfigs;
         }
 
         static::assertValidType($type);

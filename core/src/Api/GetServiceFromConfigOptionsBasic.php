@@ -52,16 +52,18 @@ class GetServiceFromConfigOptionsBasic implements GetServiceFromConfigOptions
 
         if (empty($serviceName)) {
             throw new \Exception(
-                "Service name option does not exist with service key: " . self::SERVICE_NAME
-                . " in class: " . get_class($this)
+                "Service name option does not exist with service key: (" . self::SERVICE_NAME .')'
+                . " in class: (" . get_class($this) .')'
+                . " for service type: (" . $serviceInterfaceClass .')'
+
             );
         }
 
         if (!$this->serviceContainer->has($serviceName)) {
             throw new \Exception(
-                "Service does not exist: {$serviceName}"
-                . " with service key: " . self::SERVICE_NAME
-                . " in class: " . get_class($this)
+                "Service does not exist: ({$serviceName})"
+                . " with service key: (" . self::SERVICE_NAME .')'
+                . " in class: (" . get_class($this) .')'
             );
         }
 
@@ -69,9 +71,9 @@ class GetServiceFromConfigOptionsBasic implements GetServiceFromConfigOptions
 
         if (!$service instanceof $serviceInterfaceClass) {
             throw new \Exception(
-                "Service must be of type: " . $serviceInterfaceClass
-                . " with service key: " . self::SERVICE_NAME
-                . " in class: " . get_class($this)
+                "Service must be of type: (" . $serviceInterfaceClass .')'
+                . " with service key: (" . self::SERVICE_NAME .')'
+                . " in class: (" . get_class($this) .')'
             );
         }
 

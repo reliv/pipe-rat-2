@@ -84,7 +84,7 @@ class AssertValidFieldsAllowedFields extends AssertValidFieldsFormat implements 
             // IF no whitelist config, then error
             if (!array_key_exists($fieldName, $allowedFieldConfigProperties)) {
                 throw new InvalidFields(
-                    'Field is not allowed: ' . $fieldName
+                    'Field is not allowed: (' . $fieldName . ')'
                 );
             }
 

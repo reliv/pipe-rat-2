@@ -3,7 +3,6 @@
 namespace Reliv\PipeRat2\DataExtractor\Api;
 
 use Reliv\PipeRat2\Core\Json;
-use Reliv\PipeRat2\DataValueTypes\Exception\UnknownValueType;
 use Reliv\PipeRat2\DataValueTypes\Service\ValueTypes;
 use Reliv\PipeRat2\Options\Options;
 use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
@@ -27,9 +26,9 @@ class ExtractByType implements Extract
             FieldConfig::PRIMITIVE => 'extractPrimitive',
             FieldConfig::OBJECT => 'extractObject',
             FieldConfig::COLLECTION => 'extractCollection',
-            FieldConfig::PRIMITIVE_COLLECTION => 'extractCollection',
-            FieldConfig::OBJECT_COLLECTION => 'extractCollection',
-            FieldConfig::COLLECTION_COLLECTION => 'extractCollection',
+            FieldConfig::PRIMITIVE_COLLECTION => 'extractPrimitiveCollection',
+            FieldConfig::OBJECT_COLLECTION => 'extractObjectCollection',
+            FieldConfig::COLLECTION_COLLECTION => 'extractCollectionCollection',
         ];
 
     /**
@@ -58,6 +57,8 @@ class ExtractByType implements Extract
         $dataModel,
         array $fieldConfig = []
     ) {
+        $fieldConfig[self::OPTION_CONTEXT] = '**root**';
+
         return $this->extract(
             $dataModel,
             $fieldConfig
@@ -112,6 +113,7 @@ class ExtractByType implements Extract
             self::OPTION_CONTEXT,
             self::DEFAULT_CONTEXT
         );
+
         $this->valueTypes->assertType(
             $dataModel,
             ValueTypes::PRIMITIVE,
@@ -193,10 +195,184 @@ class ExtractByType implements Extract
      * @return array|bool|int|null|string
      * @throws \Exception
      */
+    public function extractPrimitiveCollection(
+        $dataModel,
+        array $fieldConfig = []
+    ) {
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::PRIMITIVE_COLLECTION
+        );
+
+        $this->fieldConfig->assertIsType(
+            $fieldConfig,
+            FieldConfig::PRIMITIVE_COLLECTION
+        );
+
+        $array = [];
+        foreach ($dataModel as $value) {
+            $array[] = $this->extractPrimitive(
+                $value,
+                $this->fieldConfig->buildFieldConfig(
+                    FieldConfig::PRIMITIVE,
+                    [],
+                    true,
+                    [self::OPTION_CONTEXT => $context]
+                )
+            );
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param array|object $dataModel
+     * @param array        $fieldConfig
+     *
+     * @return array|bool|int|null|string
+     * @throws \Exception
+     */
+    public function extractObjectCollection(
+        $dataModel,
+        array $fieldConfig = []
+    ) {
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::OBJECT_COLLECTION
+        );
+
+        $this->fieldConfig->assertIsType(
+            $fieldConfig,
+            FieldConfig::OBJECT_COLLECTION
+        );
+
+        if (!$this->fieldConfig->hasProperties($fieldConfig)) {
+            throw new InvalidFieldConfig(
+                'Object collection extractor requires a property list'
+                . ' in context: (' . $context . ')'
+                . ' for field config: ' . Json::encode($fieldConfig)
+            );
+        }
+
+        $properties = $this->fieldConfig->getProperties($fieldConfig);
+        $array = [];
+
+        foreach ($dataModel as $object) {
+            $array[] = $this->extractObject(
+                $object,
+                $this->fieldConfig->buildFieldConfig(
+                    FieldConfig::OBJECT,
+                    $properties,
+                    true,
+                    [self::OPTION_CONTEXT => $context]
+                )
+            );
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param array|object $dataModel
+     * @param array        $fieldConfig
+     *
+     * @return array|bool|int|null|string
+     * @throws \Exception
+     */
+    public function extractCollectionCollection(
+        $dataModel,
+        array $fieldConfig = []
+    ) {
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+
+        $this->valueTypes->assertType(
+            $dataModel,
+            ValueTypes::COLLECTION_COLLECTION
+        );
+
+        $this->fieldConfig->assertIsType(
+            $fieldConfig,
+            FieldConfig::COLLECTION_COLLECTION
+        );
+
+        if (!$this->fieldConfig->hasProperties($fieldConfig)) {
+            throw new InvalidFieldConfig(
+                'Object collection-collection extractor requires field-config as properties'
+                . ' in context: (' . $context . ')'
+                . ' for field config: ' . Json::encode($fieldConfig)
+            );
+        }
+
+        $subSubFieldConfig = $this->fieldConfig->getProperties($fieldConfig);
+
+        if (!$this->fieldConfig->hasType($subSubFieldConfig)) {
+            throw new InvalidFieldConfig(
+                'Object collection-collection extractor requires field-config as properties to have type'
+                . ' in context: (' . $context . ')'
+                . ' for field config: ' . Json::encode($fieldConfig)
+            );
+        }
+
+        $subSubType = $this->fieldConfig->getType($subSubFieldConfig);
+        $subSubProperties = $this->fieldConfig->getProperties($subSubFieldConfig);
+
+        $array = [];
+
+        foreach ($dataModel as $subCollection) {
+            $subArray = [];
+            foreach ($subCollection as $subSubCollection) {
+                $subArray[] = $this->extract(
+                    $subSubCollection,
+                    $this->fieldConfig->buildFieldConfig(
+                        $subSubType,
+                        $subSubProperties,
+                        true,
+                        [self::OPTION_CONTEXT => $context]
+                    )
+                );
+            }
+
+            $array[] = $subArray;
+        }
+
+        return $array;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @param array|object $dataModel
+     * @param array        $fieldConfig
+     *
+     * @return array|bool|int|null|string
+     * @throws \Exception
+     */
     public function extractCollection(
         $dataModel,
         array $fieldConfig = []
     ) {
+        $context = Options::get(
+            $fieldConfig,
+            self::OPTION_CONTEXT,
+            self::DEFAULT_CONTEXT
+        );
+
         $this->valueTypes->assertType(
             $dataModel,
             ValueTypes::COLLECTION
@@ -209,33 +385,28 @@ class ExtractByType implements Extract
 
         // Primitive
         if (!$this->fieldConfig->hasProperties($fieldConfig)) {
-            $array = [];
-            foreach ($dataModel as $value) {
-                $array[] = $this->extractPrimitive(
-                    $value,
-                    [
-                        FieldConfig::KEY_TYPE => FieldConfig::PRIMITIVE,
-                    ]
-                );
-            }
-
-            return $array;
-        }
-
-        // If we have property list, must be a collection of objects
-        $properties = $this->fieldConfig->getProperties($fieldConfig);
-        $array = [];
-
-        foreach ($dataModel as $object) {
-            $array[] = $this->extractObject(
-                $object,
-                [
-                    FieldConfig::KEY_TYPE => FieldConfig::OBJECT,
-                    FieldConfig::KEY_PROPERTIES => $properties
-                ]
+            return $this->extractPrimitiveCollection(
+                $dataModel,
+                $this->fieldConfig->buildFieldConfig(
+                    FieldConfig::PRIMITIVE_COLLECTION,
+                    [],
+                    true,
+                    [self::OPTION_CONTEXT => $context]
+                )
             );
         }
 
-        return $array;
+        // Object
+        return $this->extractObjectCollection(
+            $dataModel,
+            $this->fieldConfig->buildFieldConfig(
+                FieldConfig::OBJECT_COLLECTION,
+                $this->fieldConfig->getProperties($fieldConfig),
+                true,
+                [self::OPTION_CONTEXT => $context]
+            )
+        );
+
+        // NOTE: collection-collection not supported
     }
 }

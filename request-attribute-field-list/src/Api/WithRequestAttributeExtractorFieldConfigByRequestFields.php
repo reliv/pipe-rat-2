@@ -72,18 +72,6 @@ class WithRequestAttributeExtractorFieldConfigByRequestFields implements WithReq
             $requestFieldConfig
         );
 
-
-//        ddd(
-//            'requestFieldList',
-//            $requestFieldList,
-//            'allowedFieldConfig',
-//            $allowedFieldConfig,
-//            'requestFieldConfig',
-//            $requestFieldConfig,
-//            'extractorFieldConfig',
-//            $extractorFieldConfig
-//        );
-
         return $request->withAttribute(self::ATTRIBUTE, $extractorFieldConfig);
     }
 }

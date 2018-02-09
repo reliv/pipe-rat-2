@@ -22,6 +22,7 @@ interface ValueTypes
     const OBJECT = 'object';
 
     /**
+     * @deprecated Use more specific collection
      * array, traversable of unknown values
      */
     const COLLECTION = 'collection';

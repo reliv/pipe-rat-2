@@ -15,7 +15,7 @@ class ExtractNoop implements Extract
      *
      * @return array
      */
-    public function __invoke($dataModel, array $options)
+    public function __invoke($dataModel, array $options = [])
     {
         return $dataModel;
     }

@@ -2,6 +2,8 @@
 
 namespace Reliv\PipeRat2\Core;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponseBasic;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetDataModelDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
@@ -16,6 +18,8 @@ use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesFromConfigOptionsBasic;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServicesOptionsFromConfigOptionsBasic;
+use Reliv\PipeRat2\Core\Api\ObjectToArray;
+use Reliv\PipeRat2\Core\Api\ObjectToArrayBasic;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBodyDataResponse;
 
@@ -32,6 +36,9 @@ class ModuleConfig
         return [
             'dependencies' => [
                 'config_factories' => [
+                    BuildFailDataResponse::class => [
+                        'class' => BuildFailDataResponseBasic::class,
+                    ],
                     GetDataModel::class => [
                         'class' => GetDataModelDataResponse::class,
                     ],
@@ -66,6 +73,10 @@ class ModuleConfig
                         'arguments' => [
                             GetServiceOptionsFromConfigOptionsBasic::class
                         ]
+                    ],
+
+                    ObjectToArray::class => [
+                        'class' => ObjectToArrayBasic::class
                     ],
 
                     ResponseWithDataBody::class => [

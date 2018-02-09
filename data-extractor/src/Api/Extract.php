@@ -7,16 +7,16 @@ namespace Reliv\PipeRat2\DataExtractor\Api;
  */
 interface Extract
 {
-    const OPTION_PROPERTY_LIST = OptionsExtract::PROPERTY_LIST;
-    const OPTION_PROPERTY_DEPTH_LIMIT = OptionsExtract::PROPERTY_DEPTH_LIMIT;
-
     /**
      * extract and return data if possible
      *
      * @param object|array $dataModel
-     * @param array        $options
+     * @param array        $fieldConfig
      *
-     * @return array
+     * @return array|string|int|bool|null
      */
-    public function __invoke($dataModel, array $options);
+    public function __invoke(
+        $dataModel,
+        array $fieldConfig = []
+    );
 }

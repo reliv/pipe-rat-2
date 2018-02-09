@@ -11,6 +11,7 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
     - data-validate - Validating data from client
     - repository - Common repository methods
     - request-attributes - Common query params ('where', 'fields', 'limit', 'order', 'skip', etc...)
+    - request-attributes-validate - Validate the params
     - request-format - Data format parsing the request data
     - response-format - Data format for response (JSON, etc...)
     - response-headers - Common headers for response (caching etc...)
@@ -37,6 +38,9 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
 
             RequestAttributes::configKey()
             => RequestAttributes::class,
+
+            RequestAttributesValidate::configKey()
+            => RequestAttributesValidate::class,
 
             /** <response-mutators> */
             ResponseHeaders::configKey()
@@ -69,21 +73,27 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
                 RequestAcl::OPTION_SERVICE_OPTIONS => [
                     IsAllowedNotConfigured::OPTION_MESSAGE
                     => IsAllowedNotConfigured::DEFAULT_MESSAGE
-                        . ' for pipe-rat-2 resource: "thing"'
-                        . ' in file: __FILE__',
+                        . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                        . ' in file: "{pipe-rat-2-config.source-config-file}"',
                 ],
             ],
 
             RequestAttributes::configKey() => [
                 RequestAttributes::OPTION_SERVICE_NAMES => [
+                    WithRequestAttributeFields::class
+                    => WithRequestAttributeUrlEncodedFields::class,
+
+                    WithRequestAttributeAllowedFieldConfig::class
+                    => WithRequestAttributeAllowedFieldConfigFromOptions::class,
+
+                    WithRequestAttributeExtractorFieldConfig::class
+                    => WithRequestAttributeExtractorFieldConfigByRequestFields::class,
+
                     WithRequestAttributeWhere::class
                     => WithRequestAttributeUrlEncodedWhere::class,
 
                     WithRequestAttributeWhereMutator::class
                     => WithRequestAttributeWhereMutatorNoop::class,
-
-                    WithRequestAttributeFields::class
-                    => WithRequestAttributeUrlEncodedFields::class,
 
                     WithRequestAttributeOrder::class
                     => WithRequestAttributeUrlEncodedOrder::class,
@@ -96,10 +106,21 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
                 ],
 
                 RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                    WithRequestAttributeWhere::class => [
-                        WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                    WithRequestAttributeAllowedFieldConfig::class => [
+                        WithRequestAttributeAllowedFieldConfigFromOptions::OPTION_ALLOWED_FIELDS
+                        /* @todo Over-ride with YOUR FieldsConfig */
+                        => [
+                            FieldConfig::KEY_TYPE => FieldConfig::COLLECTION,
+                            FieldConfig::KEY_PROPERTIES => [],
+                            FieldConfig::KEY_INCLUDE => true,
+                        ],
                     ]
                 ],
+            ],
+            
+            RequestAttributesValidate::configKey() => [
+                RequestAttributesValidate::OPTION_SERVICE_NAME
+                => WithRequestValidAttributesAsserts::class,
             ],
 
             /** <response-mutators> */
@@ -120,21 +141,19 @@ This PSR7 compliant PHP library that uses Zend\Expressive Middleware config at i
             ],
 
             ResponseDataExtractor::configKey() => [
-                ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractCollectionPropertyGetter::class,
-                ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                    ExtractCollectionPropertyGetter::OPTION_PROPERTY_LIST => null,
-                    ExtractCollectionPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
-                ],
+                ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractByType::class,
             ],
             /** </response-mutators> */
 
             RepositoryFind::configKey() => [
                 RepositoryFind::OPTION_SERVICE_NAME
-                => Find::class,
+                => FindNotConfigured::class,
 
                 RepositoryFind::OPTION_SERVICE_OPTIONS => [
-                    Find::OPTION_ENTITY_CLASS_NAME
-                    => MyThingEntity::class',
+                    FindNotConfigured::OPTION_MESSAGE
+                    => FindNotConfigured::DEFAULT_MESSAGE
+                        . ' for pipe-rat-2 resource: "{pipe-rat-2-config.resource-name}"'
+                        . ' in file: "{pipe-rat-2-config.source-config-file}"',
                 ],
             ],
         ],

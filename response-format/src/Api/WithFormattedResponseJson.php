@@ -5,6 +5,7 @@ namespace Reliv\PipeRat2\ResponseFormat\Api;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\Options\Options;
 
 /**
@@ -74,11 +75,7 @@ class WithFormattedResponseJson implements WithFormattedResponse
         $dataModel = $this->getDataModel->__invoke($response);
 
         $body = $response->getBody();
-        $content = json_encode($dataModel, $jsonEncodeOptions);
-        $err = json_last_error();
-        if ($err !== JSON_ERROR_NONE) {
-            throw new \Exception('json_encode failed to encode: ' . var_export($dataModel, true));
-        }
+        $content = Json::encode($dataModel, $jsonEncodeOptions);
 
         $body->rewind();
         $body->write($content);

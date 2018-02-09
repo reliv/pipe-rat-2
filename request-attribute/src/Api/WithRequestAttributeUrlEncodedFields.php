@@ -4,7 +4,6 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reliv\PipeRat2\RequestAttribute\Exception\InvalidRequestAttribute;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -30,7 +29,6 @@ class WithRequestAttributeUrlEncodedFields implements WithRequestAttributeFields
      * @param array                  $options
      *
      * @return ServerRequestInterface
-     * @throws InvalidRequestAttribute
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -41,20 +39,6 @@ class WithRequestAttributeUrlEncodedFields implements WithRequestAttributeFields
             $request,
             self::URL_KEY
         );
-
-        if ($fields === null) {
-            return $request;
-        }
-
-        if (!is_array($fields)) {
-            throw new InvalidRequestAttribute(
-                'Fields must be array'
-            );
-        }
-
-        foreach ($fields as $key => $value) {
-            $fields[$key] = ($value == 'true' || $value == '1' ? true : false);
-        }
 
         return $request->withAttribute(self::ATTRIBUTE, $fields);
     }

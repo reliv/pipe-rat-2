@@ -6,7 +6,7 @@ use Reliv\PipeRat2\Acl\Api\IsAllowedNotConfigured;
 use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractCollectionPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\Repository\Api\FindNotConfigured;
 use Reliv\PipeRat2\Repository\Http\RepositoryFind;
@@ -22,7 +22,14 @@ use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeUrlEncodedWhere;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhere;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutator;
 use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeWhereMutatorNoop;
+use Reliv\PipeRat2\RequestAttribute\Api\WithRequestValidAttributesAsserts;
 use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributes;
+use Reliv\PipeRat2\RequestAttribute\Http\RequestAttributesValidate;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeAllowedFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeAllowedFieldConfigFromOptions;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfigByRequestFields;
+use Reliv\PipeRat2\RequestAttributeFieldList\Service\FieldConfig;
 use Reliv\PipeRat2\RequestFormat\Api\WithParsedBodyJson;
 use Reliv\PipeRat2\RequestFormat\Http\RequestFormat;
 use Reliv\PipeRat2\ResponseFormat\Api\WithFormattedResponseJson;
@@ -51,6 +58,9 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey()
                 => RequestAttributes::class,
+
+                RequestAttributesValidate::configKey()
+                => RequestAttributesValidate::class,
 
                 /** <response-mutators> */
                 ResponseHeaders::configKey()
@@ -89,14 +99,20 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
 
                 RequestAttributes::configKey() => [
                     RequestAttributes::OPTION_SERVICE_NAMES => [
+                        WithRequestAttributeFields::class
+                        => WithRequestAttributeUrlEncodedFields::class,
+
+                        WithRequestAttributeAllowedFieldConfig::class
+                        => WithRequestAttributeAllowedFieldConfigFromOptions::class,
+
+                        WithRequestAttributeExtractorFieldConfig::class
+                        => WithRequestAttributeExtractorFieldConfigByRequestFields::class,
+
                         WithRequestAttributeWhere::class
                         => WithRequestAttributeUrlEncodedWhere::class,
 
                         WithRequestAttributeWhereMutator::class
                         => WithRequestAttributeWhereMutatorNoop::class,
-
-                        WithRequestAttributeFields::class
-                        => WithRequestAttributeUrlEncodedFields::class,
 
                         WithRequestAttributeOrder::class
                         => WithRequestAttributeUrlEncodedOrder::class,
@@ -109,10 +125,21 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                     ],
 
                     RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                        WithRequestAttributeWhere::class => [
-                            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
+                        WithRequestAttributeAllowedFieldConfig::class => [
+                            WithRequestAttributeAllowedFieldConfigFromOptions::OPTION_ALLOWED_FIELDS
+                            /* @todo Over-ride with YOUR FieldsConfig */
+                            => [
+                                FieldConfig::KEY_TYPE => FieldConfig::COLLECTION,
+                                FieldConfig::KEY_PROPERTIES => [],
+                                FieldConfig::KEY_INCLUDE => true,
+                            ],
                         ]
                     ],
+                ],
+
+                RequestAttributesValidate::configKey() => [
+                    RequestAttributesValidate::OPTION_SERVICE_NAME
+                    => WithRequestValidAttributesAsserts::class,
                 ],
 
                 /** <response-mutators> */
@@ -133,11 +160,7 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
                 ],
 
                 ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractCollectionPropertyGetter::class,
-                    ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_LIST => null,
-                        ExtractCollectionPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
-                    ],
+                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractByType::class,
                 ],
                 /** </response-mutators> */
 
@@ -161,9 +184,10 @@ class RouteConfigFind extends RouteConfigAbstract implements RouteConfig
     protected static function defaultPriorities(): array
     {
         return [
-            RequestFormat::configKey() => 700,
-            RequestAcl::configKey() => 600,
-            RequestAttributes::configKey() => 500,
+            RequestFormat::configKey() => 800,
+            RequestAcl::configKey() => 700,
+            RequestAttributes::configKey() => 600,
+            RequestAttributesValidate::configKey() => 500,
 
             /** <response-mutators> */
             ResponseHeaders::configKey() => 400,

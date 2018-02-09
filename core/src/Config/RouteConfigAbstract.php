@@ -31,19 +31,21 @@ abstract class RouteConfigAbstract
 
         $defaultConfig = static::defaultConfig();
 
-        $name = static::getValue(
+        $config = $configOverride;
+
+        $config['name'] = static::getValue(
             $configOverride,
             'name',
             $defaultConfig['name']
         );
 
-        $path = static::getValue(
+        $config['path'] = static::getValue(
             $configOverride,
             'path',
             $defaultConfig['path']
         );
 
-        $allowedMethods = static::getValue(
+        $config['allowed_methods'] = static::getValue(
             $configOverride,
             'allowed_methods',
             $defaultConfig['allowed_methods']
@@ -61,15 +63,7 @@ abstract class RouteConfigAbstract
             $defaultConfig['options']
         );
 
-        $config = [
-            'name' => $name,
-            'path' => $path,
-            'middleware' => [],
-            'options' => [],
-            'allowed_methods' => $allowedMethods,
-        ];
-
-        $config['options'] = self::merge($defaultConfig['options'], $options);
+        $config['options'] = self::mergeOptions($defaultConfig['options'], $options);
 
         $middlewareServices = self::merge($defaultConfig['middleware'], $middlewareServices);
 
@@ -84,6 +78,8 @@ abstract class RouteConfigAbstract
             $queue->insert($key, $priority);
             $index--;
         }
+
+        $config['middleware'] = [];
 
         foreach ($queue as $key) {
             $config['middleware'][$key] = $middlewareServices[$key];
@@ -109,12 +105,46 @@ abstract class RouteConfigAbstract
     {
         /**
          * NOTE: This means overriding the config, completely removes the default values
+         *
          * @var string $name
          * @var array  $serviceConfig
          */
         foreach ($defaults as $name => $serviceConfig) {
             if (!array_key_exists($name, $overrides)) {
                 $overrides[$name] = $serviceConfig;
+            }
+        }
+
+        return $overrides;
+    }
+
+    /**
+     * Merge over-rides 2 layers deep
+     *
+     * @param array $defaults
+     * @param array $overrides
+     *
+     * @return array
+     */
+    protected static function mergeOptions(array $defaults, array $overrides)
+    {
+        /**
+         * We go one layer deeper here
+         *
+         * @var string $name
+         * @var array  $serviceConfig
+         */
+        foreach ($defaults as $name => $serviceConfig) {
+            if (!array_key_exists($name, $overrides)) {
+                $overrides[$name] = $serviceConfig;
+                continue;
+            }
+
+            foreach ($serviceConfig as $key => $value) {
+                // NOTE: This means overriding the config, completely removes the default values
+                if (!array_key_exists($key, $overrides[$name])) {
+                    $overrides[$name][$key] = $serviceConfig[$key];
+                }
             }
         }
 
@@ -133,6 +163,7 @@ abstract class RouteConfigAbstract
 
     /**
      * @return array
+     * @throws \Exception
      */
     protected static function defaultParams(): array
     {
@@ -184,6 +215,7 @@ abstract class RouteConfigAbstract
      * @param array  $params
      *
      * @return array
+     * @throws \Exception
      */
     protected static function prepareParams(
         string $resourceName,

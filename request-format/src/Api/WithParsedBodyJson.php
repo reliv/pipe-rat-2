@@ -4,6 +4,8 @@ namespace Reliv\PipeRat2\RequestFormat\Api;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Exception\JsonError;
+use Reliv\PipeRat2\Core\Json;
 use Reliv\PipeRat2\RequestFormat\Exception\RequestFormatDecodeFail;
 
 /**
@@ -25,11 +27,11 @@ class WithParsedBodyJson implements WithParsedBody
         array $options = []
     ): ServerRequestInterface {
         $contents = $request->getBody()->getContents();
-        $body = json_decode($contents, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        try {
+            $body = Json::decode($contents, true);
+        } catch (JsonError $exception) {
             throw new RequestFormatDecodeFail(
-                "Invalid JSON in request body: \n" . $contents
+                $exception->getMessage()
             );
         }
 

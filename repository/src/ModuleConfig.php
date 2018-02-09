@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\Repository;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -123,9 +124,10 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryDeleteById::DEFAULT_ID_PARAM],
                             ['literal' => RepositoryDeleteById::DEFAULT_BAD_REQUEST_STATUS_CODE],
-                            ['literal' => RepositoryDeleteById::DEFAULT_BAD_REQUEST_MESSAGE],
+                            ['literal' => RepositoryDeleteById::DEFAULT_BAD_REQUEST_REASON_FAILED],
                         ],
                     ],
                     RepositoryExists::class => [
@@ -133,9 +135,10 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryExists::DEFAULT_ID_PARAM],
                             ['literal' => RepositoryExists::DEFAULT_BAD_REQUEST_STATUS_CODE],
-                            ['literal' => RepositoryExists::DEFAULT_BAD_REQUEST_MESSAGE],
+                            ['literal' => RepositoryExists::DEFAULT_BAD_REQUEST_REASON_MISSING_ID],
                         ],
                     ],
                     RepositoryFind::class => [
@@ -143,6 +146,7 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryFind::DEFAULT_NOT_FOUND_STATUS_CODE],
                             ['literal' => RepositoryFind::DEFAULT_NOT_FOUND_MESSAGE],
                         ],
@@ -152,9 +156,10 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryFindById::DEFAULT_ID_PARAM],
                             ['literal' => RepositoryFindById::DEFAULT_BAD_REQUEST_STATUS_CODE],
-                            ['literal' => RepositoryFindById::DEFAULT_BAD_REQUEST_MESSAGE],
+                            ['literal' => RepositoryFindById::DEFAULT_BAD_REQUEST_REASON_MISSING_ID],
                             ['literal' => RepositoryFindById::DEFAULT_NOT_FOUND_STATUS_CODE],
                             ['literal' => RepositoryFindById::DEFAULT_NOT_FOUND_MESSAGE],
                         ],
@@ -164,6 +169,7 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryFindOne::DEFAULT_NOT_FOUND_STATUS_CODE],
                             ['literal' => RepositoryFindOne::DEFAULT_NOT_FOUND_MESSAGE],
                         ],
@@ -173,9 +179,10 @@ class ModuleConfig
                             GetOptions::class,
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
+                            BuildFailDataResponse::class,
                             ['literal' => RepositoryUpdateProperties::DEFAULT_ID_PARAM],
                             ['literal' => RepositoryUpdateProperties::DEFAULT_BAD_REQUEST_STATUS_CODE],
-                            ['literal' => RepositoryUpdateProperties::DEFAULT_BAD_REQUEST_MESSAGE],
+                            ['literal' => RepositoryUpdateProperties::DEFAULT_BAD_REQUEST_REASON_MISSING_ID],
                             ['literal' => RepositoryUpdateProperties::DEFAULT_NOT_FOUND_STATUS_CODE],
                             ['literal' => RepositoryUpdateProperties::DEFAULT_NOT_FOUND_MESSAGE],
                         ],

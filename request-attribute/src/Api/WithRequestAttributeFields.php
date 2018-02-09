@@ -7,5 +7,5 @@ namespace Reliv\PipeRat2\RequestAttribute\Api;
  */
 interface WithRequestAttributeFields extends WithRequestAttribute
 {
-    const ATTRIBUTE = 'pipe-rat-request-attribute-fields-param';
+    const ATTRIBUTE = 'pipe-rat-2-request-attribute-fields-param';
 }

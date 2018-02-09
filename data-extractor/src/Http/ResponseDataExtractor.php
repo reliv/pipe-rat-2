@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\DataExtractor\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
@@ -11,8 +12,10 @@ use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\ResponseWithDataBody;
 use Reliv\PipeRat2\Core\Http\MiddlewareWithConfigOptionsServiceOptionAbstract;
 use Reliv\PipeRat2\DataExtractor\Api\Extract;
-use Reliv\PipeRat2\Options\Options;
-use Reliv\PipeRat2\RequestAttribute\Api\WithRequestAttributeFields;
+use Reliv\PipeRat2\DataValueTypes\Exception\ValueTypeException;
+use Reliv\PipeRat2\RequestAttributeFieldList\Api\WithRequestAttributeExtractorFieldConfig;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\FieldTypeException;
+use Reliv\PipeRat2\RequestAttributeFieldList\Exception\InvalidFieldConfig;
 
 /**
  * @author James Jervis - https://github.com/jerv13
@@ -29,14 +32,8 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
         return 'response-data-extractor';
     }
 
-    /**
-     * @var GetDataModel
-     */
     protected $getDataModel;
-
-    /**
-     * @var ResponseWithDataBody
-     */
+    protected $buildFailDataResponse;
     protected $responseWithDataBody;
 
     /**
@@ -44,6 +41,7 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
      * @param GetDataModel                       $getDataModel
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param ResponseWithDataBody               $responseWithDataBody
      */
     public function __construct(
@@ -51,9 +49,11 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
         GetDataModel $getDataModel,
+        BuildFailDataResponse $buildFailDataResponse,
         ResponseWithDataBody $responseWithDataBody
     ) {
         $this->getDataModel = $getDataModel;
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->responseWithDataBody = $responseWithDataBody;
         parent::__construct(
             $getOptions,
@@ -88,115 +88,42 @@ class ResponseDataExtractor extends MiddlewareWithConfigOptionsServiceOptionAbst
             Extract::class
         );
 
-        $extractOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
-            $options
-        );
-
-        $extractOptions[Extract::OPTION_PROPERTY_LIST] = $this->buildPropertyListOption(
-            $request,
-            $extractOptions
+        // Filtered field config
+        $fieldConfig = $request->getAttribute(
+            WithRequestAttributeExtractorFieldConfig::ATTRIBUTE,
+            []
         );
 
         $dataModel = $this->getDataModel->__invoke(
             $response
         );
 
-        if (!is_array($dataModel) && !is_object($dataModel)) {
-            return $response;
+        try {
+            $dataArray = $extract->__invoke(
+                $dataModel,
+                $fieldConfig
+            );
+        } catch (ValueTypeException $exception) {
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $exception->getMessage(),
+                400,
+                [],
+                'Bad Request: Value Type'
+            );
+        } catch (FieldTypeException $exception) {
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $exception->getMessage(),
+                400,
+                [],
+                'Bad Request: Field Type'
+            );
         }
 
-        $dataArray = $extract->__invoke(
-            $dataModel,
-            $extractOptions
+        return $this->responseWithDataBody->__invoke(
+            $response,
+            $dataArray
         );
-
-        return $this->responseWithDataBody->__invoke($response, $dataArray);
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param array                  $extractOptions
-     *
-     * @return array|null
-     */
-    public function buildPropertyListOption(
-        ServerRequestInterface $request,
-        array $extractOptions
-    ) {
-        $requestedFields = $request->getAttribute(
-            WithRequestAttributeFields::ATTRIBUTE,
-            null
-        );
-
-        $extractorPropertyList = Options::get(
-            $extractOptions,
-            Extract::OPTION_PROPERTY_LIST,
-            null
-        );
-
-        // Nothing to be done
-        if ($requestedFields === null && $extractorPropertyList === null) {
-            return null;
-        }
-
-        if ($extractorPropertyList === null && is_array($requestedFields)) {
-            return $requestedFields;
-        }
-
-        if ($requestedFields === null && is_array($extractorPropertyList)) {
-            return $extractorPropertyList;
-        }
-
-        if (!is_array($requestedFields)) {
-            $requestedFields = $extractorPropertyList;
-        }
-
-        return $this->buildPropertyList(
-            $extractorPropertyList,
-            $requestedFields
-        );
-    }
-
-    /**
-     * @param array $extractorPropertyList
-     * @param array $requestedFields
-     * @param array $list
-     *
-     * @return array
-     */
-    protected function buildPropertyList(
-        array $extractorPropertyList,
-        array $requestedFields,
-        array &$list = []
-    ) {
-        foreach ($requestedFields as $filterProperty => $value) {
-            // If it is not set in default, we ignore
-            if (!array_key_exists($filterProperty, $extractorPropertyList)) {
-                continue;
-            }
-
-            // If it is set false in default, we ignore
-            if ($extractorPropertyList[$filterProperty] === false) {
-                continue;
-            }
-
-            // We can turn them off if they are disabled
-            if ($extractorPropertyList[$filterProperty] === true) {
-                $list[$filterProperty] = (bool)$requestedFields[$filterProperty];
-                continue;
-            }
-
-            // If they are arrays, then we check sub values
-            if (is_array($extractorPropertyList[$filterProperty]) && is_array($value)) {
-                $this->buildPropertyList(
-                    $extractorPropertyList[$filterProperty],
-                    $requestedFields[$filterProperty],
-                    $list[$filterProperty]
-                );
-                continue;
-            }
-        }
-
-        return $list;
     }
 }

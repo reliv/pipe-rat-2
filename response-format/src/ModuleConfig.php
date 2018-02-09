@@ -2,11 +2,12 @@
 
 namespace Reliv\PipeRat2\ResponseFormat;
 
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetDataModel;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
+use Reliv\PipeRat2\DataExtractor\Api\ExtractByType;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptType;
 use Reliv\PipeRat2\ResponseFormat\Api\IsRequestValidAcceptTypeBasic;
 use Reliv\PipeRat2\ResponseFormat\Api\IsResponseFormattable;
@@ -53,7 +54,7 @@ class ModuleConfig
                         'arguments' => [
                             IsResponseFormattable::class,
                             GetDataModel::class,
-                            ExtractPropertyGetter::class,
+                            ExtractByType::class,
                             ['literal' => WithFormattedResponseFileData::DEFAULT_CONTENT_TYPE],
                             ['literal' => WithFormattedResponseFileData::DEFAULT_FILE_NAME],
                             ['literal' => WithFormattedResponseFileData::DEFAULT_FILE_BASE_64_PROPERTY],
@@ -90,6 +91,7 @@ class ModuleConfig
                             GetServiceFromConfigOptions::class,
                             GetServiceOptionsFromConfigOptions::class,
                             IsRequestValidAcceptType::class,
+                            BuildFailDataResponse::class,
                             ['literal' => ResponseFormat::DEFAULT_ACCEPTS],
                             ['literal' => ResponseFormat::DEFAULT_NOT_ALLOWED_STATUS_CODE],
                             ['literal' => ResponseFormat::DEFAULT_NOT_ALLOWED_STATUS_MESSAGE],

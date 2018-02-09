@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\Repository\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -21,16 +22,12 @@ class RepositoryFindOne extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_CRITERIA = 'criteria';
     const OPTION_ORDER_BY = 'order-by';
-    const OPTION_BAD_REQUEST_STATUS_CODE = 'bad-request-status-code';
-    const OPTION_BAD_REQUEST_STATUS_MESSAGE = 'bad-request-status-message';
     const OPTION_NOT_FOUND_STATUS_CODE = 'not-found-status-code';
     const OPTION_NOT_FOUND_STATUS_MESSAGE = 'not-found-status-message';
 
     const DEFAULT_ID_PARAM = 'id';
-    const DEFAULT_BAD_REQUEST_STATUS_CODE = 400;
-    const DEFAULT_BAD_REQUEST_MESSAGE = 'Bad Request';
     const DEFAULT_NOT_FOUND_STATUS_CODE = 404;
-    const DEFAULT_NOT_FOUND_MESSAGE = 'Not Found';
+    const DEFAULT_NOT_FOUND_MESSAGE = 'Not Found: Find One';
 
     /**
      * @return string
@@ -40,6 +37,7 @@ class RepositoryFindOne extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'repository-delete-by-id';
     }
 
+    protected $buildFailDataResponse;
     protected $defaultNotFoundStatusCode = self::DEFAULT_NOT_FOUND_STATUS_CODE;
     protected $defaultNotFoundMessage = self::DEFAULT_NOT_FOUND_MESSAGE;
 
@@ -47,6 +45,7 @@ class RepositoryFindOne extends MiddlewareWithConfigOptionsServiceOptionAbstract
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param int                                $defaultNotFoundStatusCode
      * @param string                             $defaultNotFoundMessage
      */
@@ -54,9 +53,11 @@ class RepositoryFindOne extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        BuildFailDataResponse $buildFailDataResponse,
         int $defaultNotFoundStatusCode = self::DEFAULT_NOT_FOUND_STATUS_CODE,
         string $defaultNotFoundMessage = self::DEFAULT_NOT_FOUND_MESSAGE
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultNotFoundStatusCode = $defaultNotFoundStatusCode;
         $this->defaultNotFoundMessage = $defaultNotFoundMessage;
 
@@ -136,8 +137,9 @@ class RepositoryFindOne extends MiddlewareWithConfigOptionsServiceOptionAbstract
                 $this->defaultNotFoundMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage

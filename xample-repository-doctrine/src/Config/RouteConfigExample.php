@@ -7,7 +7,6 @@ use Reliv\PipeRat2\Acl\Http\RequestAcl;
 use Reliv\PipeRat2\Core\Config\RouteConfig;
 use Reliv\PipeRat2\Core\Config\RouteConfigAbstract;
 use Reliv\PipeRat2\Core\DataResponse;
-use Reliv\PipeRat2\DataExtractor\Api\ExtractPropertyGetter;
 use Reliv\PipeRat2\DataExtractor\Http\ResponseDataExtractor;
 use Reliv\PipeRat2\DataValidate\Api\Validate;
 use Reliv\PipeRat2\DataValidate\Http\RequestDataValidate;
@@ -31,6 +30,10 @@ use Reliv\PipeRat2\XampleRepositoryDoctrine\Entity\XampleEntity;
  */
 class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
 {
+    /**
+     * @return array
+     * @throws \Exception
+     */
     protected static function defaultParams(): array
     {
         $defaultParams = parent::defaultParams();
@@ -39,6 +42,9 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
         return $defaultParams;
     }
 
+    /**
+     * @return array
+     */
     protected static function defaultConfig(): array
     {
         return [
@@ -113,12 +119,6 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                         WithRequestAttributeWhereMutator::class
                         => WithRequestAttributeWhereMutatorNoop::class,
                     ],
-
-                    RequestAttributes::OPTION_SERVICE_NAMES_OPTIONS => [
-                        WithRequestAttributeWhere::class => [
-                            WithRequestAttributeUrlEncodedWhere::OPTION_ALLOW_DEEP_WHERES => false,
-                        ]
-                    ],
                 ],
 
                 RequestDataValidate::configKey() => [
@@ -147,14 +147,6 @@ class RouteConfigExample extends RouteConfigAbstract implements RouteConfig
                         WithFormattedResponseJson::OPTION_JSON_ENCODING_OPTIONS => JSON_PRETTY_PRINT,
                         WithFormattedResponseJson::OPTION_CONTENT_TYPE => 'application/json',
                         WithFormattedResponseJson::OPTION_FORMATTABLE_RESPONSE_CLASSES => [DataResponse::class]
-                    ],
-                ],
-
-                ResponseDataExtractor::configKey() => [
-                    ResponseDataExtractor::OPTION_SERVICE_NAME => ExtractPropertyGetter::class,
-                    ResponseDataExtractor::OPTION_SERVICE_OPTIONS => [
-                        ExtractPropertyGetter::OPTION_PROPERTY_LIST => [],
-                        ExtractPropertyGetter::OPTION_PROPERTY_DEPTH_LIMIT => 1,
                     ],
                 ],
                 /** </response-mutators> */

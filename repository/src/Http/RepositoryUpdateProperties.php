@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\Repository\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -19,13 +20,13 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
 {
     const OPTION_ID_PARAM = 'id-param-name';
     const OPTION_BAD_REQUEST_STATUS_CODE = 'bad-request-status-code';
-    const OPTION_BAD_REQUEST_STATUS_MESSAGE = 'bad-request-status-message';
+    const OPTION_BAD_REQUEST_REASON_MISSING_ID = 'bad-request-reason-missing-id';
     const OPTION_NOT_FOUND_STATUS_CODE = 'not-found-status-code';
     const OPTION_NOT_FOUND_STATUS_MESSAGE = 'not-found-status-message';
 
     const DEFAULT_ID_PARAM = 'id';
     const DEFAULT_BAD_REQUEST_STATUS_CODE = 400;
-    const DEFAULT_BAD_REQUEST_MESSAGE = 'Bad Request';
+    const DEFAULT_BAD_REQUEST_REASON_MISSING_ID = 'Bad Request: Update Properties Requires ID';
     const DEFAULT_NOT_FOUND_STATUS_CODE = 404;
     const DEFAULT_NOT_FOUND_MESSAGE = 'Not Found';
 
@@ -37,9 +38,10 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
         return 'repository-update-properties';
     }
 
+    protected $buildFailDataResponse;
     protected $defaultIdParam = self::DEFAULT_ID_PARAM;
     protected $defaultBadRequestStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE;
-    protected $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_MESSAGE;
+    protected $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_REASON_MISSING_ID;
     protected $defaultNotFoundStatusCode = self::DEFAULT_NOT_FOUND_STATUS_CODE;
     protected $defaultNotFoundMessage = self::DEFAULT_NOT_FOUND_MESSAGE;
 
@@ -47,6 +49,7 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param string                             $defaultIdParam
      * @param int                                $defaultBadRequestStatusCode
      * @param string                             $defaultBadRequestMessage
@@ -57,12 +60,14 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        BuildFailDataResponse $buildFailDataResponse,
         string $defaultIdParam = self::DEFAULT_ID_PARAM,
         int $defaultBadRequestStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE,
-        string $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_MESSAGE,
+        string $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_REASON_MISSING_ID,
         int $defaultNotFoundStatusCode = self::DEFAULT_NOT_FOUND_STATUS_CODE,
         string $defaultNotFoundMessage = self::DEFAULT_NOT_FOUND_MESSAGE
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultIdParam = $defaultIdParam;
         $this->defaultBadRequestStatusCode = $defaultBadRequestStatusCode;
         $this->defaultBadRequestMessage = $defaultBadRequestMessage;
@@ -104,10 +109,6 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
             $options
         );
 
-        $findByIdOptions = $this->getServiceOptionsFromConfigOptions->__invoke(
-            $options
-        );
-
         $idParamName = Options::get(
             $options,
             self::OPTION_ID_PARAM,
@@ -125,12 +126,13 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
 
             $failMessage = Options::get(
                 $options,
-                self::OPTION_BAD_REQUEST_STATUS_MESSAGE,
+                self::OPTION_BAD_REQUEST_REASON_MISSING_ID,
                 $this->defaultBadRequestMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage
@@ -144,6 +146,8 @@ class RepositoryUpdateProperties extends MiddlewareWithConfigOptionsServiceOptio
             $properties,
             $updatePropertiesOptions
         );
+
+        // @todo What if not found
 
         return new DataResponseBasic(
             $result

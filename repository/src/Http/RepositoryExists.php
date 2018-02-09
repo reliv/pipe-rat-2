@@ -4,6 +4,7 @@ namespace Reliv\PipeRat2\Repository\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Reliv\PipeRat2\Core\Api\BuildFailDataResponse;
 use Reliv\PipeRat2\Core\Api\GetOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceFromConfigOptions;
 use Reliv\PipeRat2\Core\Api\GetServiceOptionsFromConfigOptions;
@@ -19,11 +20,11 @@ class RepositoryExists extends MiddlewareWithConfigOptionsServiceOptionAbstract
 {
     const OPTION_ID_PARAM = 'id-param-name';
     const OPTION_BAD_REQUEST_STATUS_CODE = 'bad-request-status-code';
-    const OPTION_BAD_REQUEST_STATUS_MESSAGE = 'bad-request-status-message';
+    const OPTION_BAD_REQUEST_REASON_MISSING_ID = 'bad-request-reason-missing-id';
 
     const DEFAULT_ID_PARAM = 'id';
     const DEFAULT_BAD_REQUEST_STATUS_CODE = 400;
-    const DEFAULT_BAD_REQUEST_MESSAGE = 'Bad Request';
+    const DEFAULT_BAD_REQUEST_REASON_MISSING_ID = 'Bad Request: Exists Requires ID';
 
     /**
      * @return string
@@ -33,14 +34,16 @@ class RepositoryExists extends MiddlewareWithConfigOptionsServiceOptionAbstract
         return 'repository-exists';
     }
 
+    protected $buildFailDataResponse;
     protected $defaultIdParam = self::DEFAULT_ID_PARAM;
     protected $defaultBadRequestStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE;
-    protected $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_MESSAGE;
+    protected $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_REASON_MISSING_ID;
 
     /**
      * @param GetOptions                         $getOptions
      * @param GetServiceFromConfigOptions        $getServiceFromConfigOptions
      * @param GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions
+     * @param BuildFailDataResponse              $buildFailDataResponse
      * @param string                             $defaultIdParam
      * @param int                                $defaultBadRequestStatusCode
      * @param string                             $defaultBadRequestMessage
@@ -49,10 +52,12 @@ class RepositoryExists extends MiddlewareWithConfigOptionsServiceOptionAbstract
         GetOptions $getOptions,
         GetServiceFromConfigOptions $getServiceFromConfigOptions,
         GetServiceOptionsFromConfigOptions $getServiceOptionsFromConfigOptions,
+        BuildFailDataResponse $buildFailDataResponse,
         string $defaultIdParam = self::DEFAULT_ID_PARAM,
         int $defaultBadRequestStatusCode = self::DEFAULT_BAD_REQUEST_STATUS_CODE,
-        string $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_MESSAGE
+        string $defaultBadRequestMessage = self::DEFAULT_BAD_REQUEST_REASON_MISSING_ID
     ) {
+        $this->buildFailDataResponse = $buildFailDataResponse;
         $this->defaultIdParam = $defaultIdParam;
         $this->defaultBadRequestStatusCode = $defaultBadRequestStatusCode;
         $this->defaultBadRequestMessage = $defaultBadRequestMessage;
@@ -109,12 +114,13 @@ class RepositoryExists extends MiddlewareWithConfigOptionsServiceOptionAbstract
 
             $failMessage = Options::get(
                 $options,
-                self::OPTION_BAD_REQUEST_STATUS_MESSAGE,
+                self::OPTION_BAD_REQUEST_REASON_MISSING_ID,
                 $this->defaultBadRequestMessage
             );
 
-            return new DataResponseBasic(
-                null,
+            return $this->buildFailDataResponse->__invoke(
+                $request,
+                $failMessage,
                 $failStatusCode,
                 [],
                 $failMessage

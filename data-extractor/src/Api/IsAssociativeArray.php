@@ -24,6 +24,11 @@ class IsAssociativeArray
         }
 
         // @todo what do we do with empty arrays?
+        // it's the consumer's responsibility to determine that an array is empty and respond accordingly.
+        // an empty array is in a superstate of being both associative and non-associative at the same time.
+        // therefore asking  "is this associative" would always return true,
+        // but asking "is this sequential" would *also* always return true.
+        // and remember, in php, all arrays are *technically* associative no matter what.
 
         return true;
     }

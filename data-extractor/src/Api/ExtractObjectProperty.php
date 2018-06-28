@@ -36,6 +36,11 @@ class ExtractObjectProperty
         $dataModel
     ) {
         if (is_array($dataModel) && IsAssociativeArray::invoke($dataModel)) {
+            if (!array_key_exists($property, $dataModel)) {
+                throw new InvalidValueType(
+                    'Could not get value for field: ' . $property
+                );
+            }
             return $dataModel[$property];
         }
 

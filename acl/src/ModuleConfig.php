@@ -37,11 +37,7 @@ class ModuleConfig
                             ['literal' => IsAllowedNotConfigured::DEFAULT_ERROR_TYPE],
                         ],
                     ],
-                    IsAllowedRcmUser::class => [
-                        'arguments' => [
-                            \RcmUser\Api\Acl\IsAllowed::class
-                        ],
-                    ],
+                    IsAllowedRcmUser::class => [],
                     RequestAcl::class => [
                         'arguments' => [
                             GetOptions::class,

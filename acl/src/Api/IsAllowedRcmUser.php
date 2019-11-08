@@ -14,20 +14,6 @@ class IsAllowedRcmUser implements IsAllowed
     const OPTION_PRIVILEGE = 'privilege';
 
     /**
-     * @var \RcmUser\Api\Acl\IsAllowed
-     */
-    protected $isAllowed;
-
-    /**
-     * @param \RcmUser\Api\Acl\IsAllowed $isAllowed
-     */
-    public function __construct(
-        \RcmUser\Api\Acl\IsAllowed $isAllowed
-    ) {
-        $this->isAllowed = $isAllowed;
-    }
-
-    /**
      * @param ServerRequestInterface $request
      * @param array                  $options
      *
@@ -38,25 +24,6 @@ class IsAllowedRcmUser implements IsAllowed
         ServerRequestInterface $request,
         array $options = []
     ): bool {
-        $resourceId = Options::get(
-            $options,
-            self::OPTION_RESOURCE_ID
-        );
-
-        if (empty($resourceId)) {
-            throw new \Exception('ResourceId is required');
-        }
-
-        $privilege = Options::get(
-            $options,
-            self::OPTION_PRIVILEGE,
-            null
-        );
-
-        return $this->isAllowed->__invoke(
-            $request,
-            $resourceId,
-            $privilege
-        );
+        return false; //This was disabled in the ACL 2 project because it didn't follow new ACL rules.
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Reliv\PipeRat2\Acl;
 
+use Rcm\RequestContext\RequestContext;
 use Reliv\PipeRat2\Acl\Api\IsAllowed;
 use Reliv\PipeRat2\Acl\Api\IsAllowedAny;
 use Reliv\PipeRat2\Acl\Api\IsAllowedNone;
@@ -37,7 +38,11 @@ class ModuleConfig
                             ['literal' => IsAllowedNotConfigured::DEFAULT_ERROR_TYPE],
                         ],
                     ],
-                    IsAllowedRcmUser::class => [],
+                    IsAllowedRcmUser::class => [
+                        'arguments' => [
+                            RequestContext::class
+                        ]
+                    ],
                     RequestAcl::class => [
                         'arguments' => [
                             GetOptions::class,

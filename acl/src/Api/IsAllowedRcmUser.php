@@ -5,6 +5,8 @@ namespace Reliv\PipeRat2\Acl\Api;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Rcm\Acl\AclActions;
+use Rcm\Acl\AssertIsAllowed;
+use Rcm\Acl\NotAllowedException;
 use Reliv\PipeRat2\Options\Options;
 
 /**

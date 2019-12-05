@@ -44,8 +44,8 @@ class IsAllowedRcmUser implements IsAllowed
         $assertIsAllowed = $this->requestContext->get(AssertIsAllowed::class);
 
         try {
-            //Note that "legacy-global-admin-functionality" is temporary and will be removed eventually.
-            $assertIsAllowed->__invoke(AclActions::EXECUTE, ['type' => 'legacy-global-admin-functionality']);
+            //Note that "legacyPipeRatHttpApisGlobal" is temporary and will be removed eventually.
+            $assertIsAllowed->__invoke(AclActions::EXECUTE, ['type' => 'legacyPipeRatHttpApisGlobal']);
 
             return true;
         } catch (NotAllowedException $e) {
